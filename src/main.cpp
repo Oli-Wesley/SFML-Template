@@ -1,6 +1,5 @@
-#include "Libraries/SceneManager/SceneManager.h"
-#include "Libraries/Singletons/GameInfo.h"
-#include "Libraries/Singletons/Settings.h"
+#include "Libraries/Libs.h"
+#include "Scenes/scenes.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -18,9 +17,10 @@ int main()
   // A Clock starts counting as soon as it's created
   sf::Clock clock;
 
-  // initialise an instance of the state_manager, and set the scene to Title
-  // which acts as the startpoint for the game.
+  // initialise an instance of the state_manager, then add all scenes. 
   GameInfo::getInstance()->Scenes = new SceneManager;
+  //GameInfo::getInstance()->Scenes->addScene(new TitleScene());
+  //GameInfo::getInstance()->Scenes->switchScene("Title");
 
   // Game loop: run the program as long as the window is open
   while (GameInfo::getInstance()->window->isOpen())
@@ -57,8 +57,8 @@ int main()
     // call the current scene to render
     GameInfo::getInstance()->Scenes->render();
 
-    // Only Change scene once the scene has finished updating and rendering ect...
-    GameInfo::getInstance()->Scenes->changeScene();
+    // Only Change scene once the scene has finished updating and rendering ect, prevents double switches and nullptrs where onExit has been called during update and before render
+    GameInfo::getInstance()->Scenes->switchToTargetScene();
   }
   return 0;
 }

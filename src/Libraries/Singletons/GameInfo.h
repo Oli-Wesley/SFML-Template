@@ -10,9 +10,10 @@ class GameInfo
   // Public accessor for the singleton instance
   static GameInfo* getInstance();
 
-  // GameInfo values
+  // GameInfo values (MUST HAVES)
   sf::RenderWindow* window = nullptr;
   SceneManager* Scenes     = nullptr;
+  // Game specific values
 
  private:
   // Constructor is private to enforce singleton

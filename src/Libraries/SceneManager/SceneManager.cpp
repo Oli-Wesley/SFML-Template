@@ -18,7 +18,7 @@ void SceneManager::switchScene(std::string state_id)
 	target_state_id = state_id;
 }
 
-void SceneManager::changeScene()
+void SceneManager::switchToTargetScene()
 {
 	if (current_state == nullptr) {
 		for (int i = 0; i < states.size(); i++)
@@ -57,6 +57,18 @@ void SceneManager::changeScene()
 // adds a scene to the sceneManager.
 void SceneManager::addScene(SceneInterface* state)
 {
+	state->initID();
+	std::cout << "Added Scene: `" << state->getStateID() << "`: " << state
+		<< std::endl;
+	states.append(state);
+}
+
+void SceneManager::addScene(SceneInterface* state, bool switch_to_scene)
+{
+	if (switch_to_scene) {
+		switchScene(state->getStateID());
+	}
+
 	state->initID();
 	std::cout << "Added Scene: `" << state->getStateID() << "`: " << state
 		<< std::endl;

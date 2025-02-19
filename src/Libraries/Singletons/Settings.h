@@ -18,6 +18,7 @@ class Settings
   float sfx_volume    = 0.5f;
   float music_volume  = 0.5f;
 
+  // game specific settings
   sf::Keyboard::Key up_key    = sf::Keyboard::Key::W;
   sf::Keyboard::Key down_key  = sf::Keyboard::Key::S;
   sf::Keyboard::Key left_key  = sf::Keyboard::Key::A;

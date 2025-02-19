@@ -14,8 +14,9 @@ class SceneManager
 
   // scene methods. 
   void switchScene(std::string state_id);
-  void changeScene();
+  void switchToTargetScene();
   void addScene(SceneInterface* state);
+  void addScene(SceneInterface* state, bool switch_to_scene = false);
 
 
   // passed to the current scene
