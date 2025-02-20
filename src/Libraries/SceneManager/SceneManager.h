@@ -16,7 +16,6 @@ class SceneManager
   void switchScene(std::string state_id);
   void switchToTargetScene();
   void addScene(SceneInterface* state);
-  void addScene(SceneInterface* state, bool switch_to_scene = false);
 
 
   // passed to the current scene
@@ -25,14 +24,16 @@ class SceneManager
   void handleEvent(sf::Event);
   void outputInfo();
 
+  SceneInterface* getCurrentScene() { return current_scene; };
+
  private:
   // pointer to current state.
-  SceneInterface* current_state = nullptr;
-  std::string target_state_id   = "";
+  SceneInterface* current_scene = nullptr;
+  std::string target_scene_id   = "";
 
   // pointers to state instances.
 
-  DynamicArray<SceneInterface*> states;
+  DynamicArray<SceneInterface*> scenes;
 };
 
 #endif // !STATE_MANAGER_H

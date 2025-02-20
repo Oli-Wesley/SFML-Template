@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "../Singletons/GameInfo.h"
 
 GameObject::GameObject()
 {
@@ -94,6 +95,17 @@ bool GameObject::isActive()
 	return is_active;
 }
 
+void GameObject::destroy() 
+{
+  is_destroy = true; 
+  onDestroy();
+}
+
+bool GameObject::isDestroyed()
+{
+  return is_destroy;
+}
+
 void GameObject::setLayer(int _layer)
 {
 	layer = _layer;
@@ -148,16 +160,21 @@ void GameObject::setPosition(float x, float y, PlacementInfo placementinfo)
 
 bool GameObject::checkPointIntersection(sf::Vector2i _position)
 {
-	sf::FloatRect bounds = getRect();
+  if (is_collidable)
+  {
+    sf::FloatRect bounds = getRect();
 
-	// Check if the point is inside the bounds
-	return (
-		bounds.left <= _position.x && _position.x <= bounds.left + bounds.width &&
-		bounds.top <= _position.y && _position.y <= bounds.top + bounds.height);
+    // Check if the point is inside the bounds
+    return (
+      bounds.left <= _position.x && _position.x <= bounds.left + bounds.width &&
+      bounds.top <= _position.y && _position.y <= bounds.top + bounds.height);
+  }
 }
 
 bool GameObject::checkBoxIntersection(GameObject* other)
 {
+  if (is_collidable)
+  {
 	// apply position, scale so bounds are most up to date.
 	sf::FloatRect bounds = getRect();
 	sf::FloatRect other_rect = other->getRect();
@@ -167,34 +184,53 @@ bool GameObject::checkBoxIntersection(GameObject* other)
 		bounds.left + bounds.width > other_rect.left &&
 		bounds.top < other_rect.top + other_rect.height &&
 		bounds.top + bounds.height > other_rect.top);
+  }
+}
+
+bool GameObject::checkOnScreen()
+{
+  sf::FloatRect bounds = getRect();
+  sf::Vector2u screen = GameInfo::getInstance()->window->getSize();
+
+return !(
+    bounds.left + bounds.width < 0 || 
+    bounds.left > screen.x ||         
+    bounds.top + bounds.height < 0 || 
+    bounds.top > screen.y             
+  );
 }
 
 GameObject::CollisionInfo GameObject::checkCollision(GameObject* other)
 {
-	sf::FloatRect this_rect = getRect();
-	sf::FloatRect other_rect = other->getRect();
+  if (is_collidable)
+  {
+    sf::FloatRect this_rect  = getRect();
+    sf::FloatRect other_rect = other->getRect();
 
-	// check if it intersects with the other rect, can skip over checking side if
-	// it doesn't.
-	if (checkBoxIntersection(other))
-	{
-		// get smallest overlap to find side.
-		float top_overlap = (this_rect.top + this_rect.height) - other_rect.top;
-		float bottom_overlap = (other_rect.top + other_rect.height) - this_rect.top;
-		float left_overlap = (this_rect.left + this_rect.width) - other_rect.left;
-		float right_overlap = (other_rect.left + other_rect.width) - this_rect.left;
+    // check if it intersects with the other rect, can skip over checking side
+    // if it doesn't.
+    if (checkBoxIntersection(other))
+    {
+      // get smallest overlap to find side.
+      float top_overlap = (this_rect.top + this_rect.height) - other_rect.top;
+      float bottom_overlap =
+        (other_rect.top + other_rect.height) - this_rect.top;
+      float left_overlap = (this_rect.left + this_rect.width) - other_rect.left;
+      float right_overlap =
+        (other_rect.left + other_rect.width) - this_rect.left;
 
-		float smallest_overlap =
-			std::min({ top_overlap, bottom_overlap, left_overlap, right_overlap });
+      float smallest_overlap =
+        std::min({ top_overlap, bottom_overlap, left_overlap, right_overlap });
 
-		if (smallest_overlap == top_overlap)
-			return GameObject::CollisionInfo::Top;
-		else if (smallest_overlap == right_overlap)
-			return GameObject::CollisionInfo::Right;
-		else if (smallest_overlap == bottom_overlap)
-			return GameObject::CollisionInfo::Bottom;
-		else if (smallest_overlap == left_overlap)
-			return GameObject::CollisionInfo::Left;
-	}
-	return GameObject::CollisionInfo::NoCollision;
+      if (smallest_overlap == top_overlap)
+        return GameObject::CollisionInfo::Top;
+      else if (smallest_overlap == right_overlap)
+        return GameObject::CollisionInfo::Right;
+      else if (smallest_overlap == bottom_overlap)
+        return GameObject::CollisionInfo::Bottom;
+      else if (smallest_overlap == left_overlap)
+        return GameObject::CollisionInfo::Left;
+    }
+    return GameObject::CollisionInfo::NoCollision;
+  }
 }

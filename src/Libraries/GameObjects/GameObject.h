@@ -29,8 +29,9 @@ public:
 		RT,
 		RB
 	};
+	
 	GameObject();
-	~GameObject();
+	virtual ~GameObject();
 
 	// setters and getters for all class vars
 	Vector2* getVector();
@@ -55,13 +56,22 @@ public:
 	void setActive(bool _val);
 	bool isActive();
 
+	void destroy();
+    bool isDestroyed();
+
 	void setLayer(int _layer);
 	int getLayer();
 
 	void setPosition(float x, float y, PlacementInfo placementinfo);
 	bool checkPointIntersection(sf::Vector2i position);
 	bool checkBoxIntersection(GameObject* other);
+    bool checkOnScreen();
 	CollisionInfo checkCollision(GameObject* other);
+
+	// can be overwritten in subclasses, but not needed. 
+	virtual void
+    onCollision(GameObject* other_gameObject, CollisionInfo collision_info) {};
+    virtual void onDestroy() {};
 
 	// implemented by sub classes.
 	virtual sf::FloatRect getRect() = 0;
@@ -69,9 +79,7 @@ public:
 	virtual void update(float dt) = 0;
 	virtual void render() = 0;
 	virtual void handleEvent(sf::Event) = 0;
-
-	
-
+    
 protected:
 	int layer = 1;
 	Vector2* vector = new Vector2(0, 0);
@@ -79,8 +87,13 @@ protected:
 	Vector2* scale = new Vector2(1, 1);
 	sf::Color colour = sf::Color::White;
 	std::string obj_id = "Unknown";
+
+	// state flags.
 	bool is_active = true;
 	bool is_drawn = true;
+    bool is_collidable = true;
+
+    bool is_destroy  = false;
 };
 
 #endif // BREAKOUT_GAMEOBJECT_H

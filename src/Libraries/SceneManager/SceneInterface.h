@@ -16,7 +16,34 @@ class SceneInterface
     sortGameObjects();
     for (int i = 0; i < game_objects.size(); i++)
     {
-      game_objects[i]->render();
+      if (game_objects[i]->checkOnScreen())
+          game_objects[i]->render();
+    }
+  }
+  
+  void checkDestroyed() {
+    for (int i = 0; i < game_objects.size(); i++)
+    {
+      if (game_objects[i]->isDestroyed())
+      {
+        delete game_objects[i];
+        game_objects.pop(i);
+      }
+    }
+  }
+
+  void checkCollisions() {
+    for (int i = 0; i < game_objects.size(); i++)
+    {
+      for (int ii = 0; ii < game_objects.size(); ii++)
+      {
+        if (i != ii)
+        {
+          GameObject::CollisionInfo colinfo = game_objects[i]->checkCollision(game_objects[ii]);
+          if (colinfo != GameObject::NoCollision)
+            game_objects[i]->onCollision(game_objects[ii], colinfo);
+        }
+      }
     }
   }
 
@@ -32,6 +59,8 @@ class SceneInterface
     }
     return nullptr;
   }
+
+  void addGameObject(GameObject* new_obj) { game_objects.append(new_obj); };
 
   virtual void init()                       = 0;
   virtual void update(float dt)             = 0;

@@ -109,34 +109,24 @@ class DynamicArray
   // removes and returns element at specified Index.
   T pop(int index)
   {
-    index = checkValidIndex(index);
-    T data;
-    int current_pos = 0;
-    T* new_array    = new T[array_capacity];
+    index = checkValidIndex(index); // Ensure valid index
 
-    for (int i = 0; i < array_size; i++)
+    T data = array_data[index]; // Store element to be removed
+
+    // Shift elements to fill the removed slot
+    for (int i = index; i < array_size - 1; i++)
     {
-      if (i != index)
-      {
-        // add to new array.
-        new_array[current_pos] = array_data[i];
-        current_pos++;
-      }
-      else
-      {
-        data = array_data[i];
-      }
+      array_data[i] = array_data[i + 1];
     }
-    array_size--;
 
-    delete[] array_data;
-    array_data = new_array;
+    array_size--; // Reduce size
 
-    // check if array needs shrinking.
-    if (array_size - 1 < array_capacity - array_capacity * 0.5)
+    // Check if array needs shrinking
+    if (array_size < array_capacity / 2)
     {
-      reAlloc(array_capacity - array_capacity * 0.5);
+      reAlloc(array_capacity / 2);
     }
+
     return data;
   };
 
@@ -169,6 +159,17 @@ class DynamicArray
     index = checkValidIndex(index);
 
     return array_data[index];
+  }
+
+  void outputInfo() \
+  {
+    std::cout << "ARRAY INFO: \nsize: " << array_size
+              << "\ncapacity: " << array_capacity << "\ndata: (";
+    for (int i = 0; i < array_size; i++)
+    {
+      std::cout << array_data[i] << ", ";
+    }
+    std::cout << ")\n";
   }
 
  private:

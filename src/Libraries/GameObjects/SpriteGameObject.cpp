@@ -5,19 +5,22 @@
 
 SpriteGameObject::SpriteGameObject()
 {
+
 }
 
 SpriteGameObject::~SpriteGameObject()
 {
     for (int i = 0; i < textures.size(); i++) {
-        delete textures.pop(i);
+      delete textures[i]; 
+        textures.pop(i);
     }
+    delete sprite;
 }
 
 sf::FloatRect SpriteGameObject::getRect() {
-  sprite.setScale(scale->x, scale->y);
-  sprite.setPosition(position->x, position->y);
-  sf::FloatRect bounds = sprite.getGlobalBounds();
+  sprite->setScale(scale->x, scale->y);
+  sprite->setPosition(position->x, position->y);
+  sf::FloatRect bounds = sprite->getGlobalBounds();
   return bounds;
 }
 
@@ -37,11 +40,12 @@ bool SpriteGameObject::addFrame(std::string _path)
     textures.append(temp_tex);
     if (textures.size() == 1)
     {
-      sprite.setTexture(*textures[0], true);
+      sprite->setTexture(*textures[0], true);
       cur_texture_frame = 0;
     }
     return true;
   }
+  std::cout << "failed to load image from: " << _path << std::endl;
   return false;
 }
 
@@ -52,22 +56,22 @@ void SpriteGameObject::render()
     // set texture frame.
     if (cur_texture_frame != target_texture_frame)
     {
-      sprite.setTexture(*textures[target_texture_frame], true);
+      sprite->setTexture(*textures[target_texture_frame], true);
       cur_texture_frame = target_texture_frame;
     }
     // set sprite colour
-    if (sprite.getColor() != colour)
+    if (sprite->getColor() != colour)
     {
-      sprite.setColor(colour);
+      sprite->setColor(colour);
     }
 
     // apply position, scale, colour ect(this seems pretty inexpensive so I
     // think no need for if statements)
-    sprite.setPosition(position->x, position->y);
-    sprite.setScale(scale->x, scale->y);
+    sprite->setPosition(position->x, position->y);
+    sprite->setScale(scale->x, scale->y);
 
     // draw to window
-    GameInfo::getInstance()->window->draw(sprite);
+    GameInfo::getInstance()->window->draw(*sprite);
   }
 }
 

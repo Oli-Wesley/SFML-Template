@@ -6,8 +6,8 @@
 class SpriteGameObject : public GameObject
 {
  public:
-	 SpriteGameObject();
-	 ~SpriteGameObject();
+  SpriteGameObject();
+  virtual ~SpriteGameObject();
 
   virtual void update(float dt)       = 0;
   virtual void handleEvent(sf::Event) = 0;
@@ -24,9 +24,9 @@ class SpriteGameObject : public GameObject
   void render();
 
  protected:
-  sf::Sprite sprite;
+  sf::Sprite* sprite = new sf::Sprite;
   DynamicArray<sf::Texture*> textures;
-  int cur_texture_frame = -1;
+  int cur_texture_frame    = -1;
   int target_texture_frame = 0;
 };
 
