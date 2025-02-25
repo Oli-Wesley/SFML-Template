@@ -18,8 +18,7 @@ SpriteGameObject::~SpriteGameObject()
 }
 
 sf::FloatRect SpriteGameObject::getRect() {
-  sprite->setScale(scale->x, scale->y);
-  sprite->setPosition(position->x, position->y);
+  updateSprite();
   sf::FloatRect bounds = sprite->getGlobalBounds();
   return bounds;
 }
@@ -53,25 +52,30 @@ void SpriteGameObject::render()
 {
   if (is_drawn)
   {
-    // set texture frame.
-    if (cur_texture_frame != target_texture_frame)
-    {
-      sprite->setTexture(*textures[target_texture_frame], true);
-      cur_texture_frame = target_texture_frame;
-    }
-    // set sprite colour
-    if (sprite->getColor() != colour)
-    {
-      sprite->setColor(colour);
-    }
-
-    // apply position, scale, colour ect(this seems pretty inexpensive so I
-    // think no need for if statements)
-    sprite->setPosition(position->x, position->y);
-    sprite->setScale(scale->x, scale->y);
+    updateSprite();
 
     // draw to window
     GameInfo::getInstance()->window->draw(*sprite);
   }
+}
+
+void SpriteGameObject::updateSprite() 
+{
+  // set texture frame.
+  if (cur_texture_frame != target_texture_frame)
+  {
+    sprite->setTexture(*textures[target_texture_frame], true);
+    cur_texture_frame = target_texture_frame;
+  }
+  // set sprite colour
+  if (sprite->getColor() != colour)
+  {
+    sprite->setColor(colour);
+  }
+
+  // apply position, scale, colour ect(this seems pretty inexpensive so I
+  // think no need for if statements)
+  sprite->setPosition(position->x + offset->x, position->y + offset->y);
+  sprite->setScale(scale->x, scale->y);
 }
 

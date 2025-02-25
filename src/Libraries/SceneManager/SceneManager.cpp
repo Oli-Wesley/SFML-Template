@@ -38,8 +38,8 @@ void SceneManager::switchToTargetScene()
     {
       if (scenes[i]->getStateID() == target_scene_id)
       {
-        current_scene->onExit();
         current_scene = scenes[i];
+        old_scene->onExit();
         current_scene->onEnter();
         std::cout << "Switched scene to: `" << current_scene->getStateID()
                   << "` from: `" << old_scene->getStateID() << "`" << std::endl;
@@ -105,5 +105,20 @@ void SceneManager::outputInfo()
   {
     std::cout << "SceneManagerInfo: \n CurrentState: " << "NULLPTR"
               << std::endl;
+  }
+}
+
+void SceneManager::sendMessage(std::string _message) 
+{
+  if (current_scene != nullptr)
+  {
+    current_scene->receiveMessage(_message);
+  }
+}
+void SceneManager::sendMessage(std::string _message, int _value) 
+{
+  if (current_scene != nullptr)
+  {
+    current_scene->receiveMessage(_message, _value);
   }
 }

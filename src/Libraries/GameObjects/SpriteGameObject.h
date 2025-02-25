@@ -28,6 +28,7 @@ class SpriteGameObject : public GameObject
   DynamicArray<sf::Texture*> textures;
   int cur_texture_frame    = -1;
   int target_texture_frame = 0;
+  void updateSprite();
 };
 
 #endif

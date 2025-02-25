@@ -10,6 +10,7 @@ GameObject::~GameObject()
 	delete vector;
 	delete position;
 	delete scale;
+    delete offset;
 }
 
 Vector2* GameObject::getVector()
@@ -97,8 +98,10 @@ bool GameObject::isActive()
 
 void GameObject::destroy() 
 {
+  if (!is_destroy)
+    onDestroy();
   is_destroy = true; 
-  onDestroy();
+  
 }
 
 bool GameObject::isDestroyed()

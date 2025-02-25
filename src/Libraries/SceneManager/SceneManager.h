@@ -23,6 +23,8 @@ class SceneManager
   void render();
   void handleEvent(sf::Event);
   void outputInfo();
+  void sendMessage(std::string _message);
+  void sendMessage(std::string _message, int _value);
 
   SceneInterface* getCurrentScene() { return current_scene; };
 

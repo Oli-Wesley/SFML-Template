@@ -84,6 +84,7 @@ protected:
 	int layer = 1;
 	Vector2* vector = new Vector2(0, 0);
 	Vector2* position = new Vector2(0, 0);
+	Vector2* offset = new Vector2(0, 0);
 	Vector2* scale = new Vector2(1, 1);
 	sf::Color colour = sf::Color::White;
 	std::string obj_id = "Unknown";

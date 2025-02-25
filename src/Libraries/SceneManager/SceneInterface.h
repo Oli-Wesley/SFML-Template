@@ -17,11 +17,12 @@ class SceneInterface
     for (int i = 0; i < game_objects.size(); i++)
     {
       if (game_objects[i]->checkOnScreen())
-          game_objects[i]->render();
+        game_objects[i]->render();
     }
   }
-  
-  void checkDestroyed() {
+
+  void checkDestroyed()
+  {
     for (int i = 0; i < game_objects.size(); i++)
     {
       if (game_objects[i]->isDestroyed())
@@ -32,14 +33,16 @@ class SceneInterface
     }
   }
 
-  void checkCollisions() {
+  void checkCollisions()
+  {
     for (int i = 0; i < game_objects.size(); i++)
     {
       for (int ii = 0; ii < game_objects.size(); ii++)
       {
         if (i != ii)
         {
-          GameObject::CollisionInfo colinfo = game_objects[i]->checkCollision(game_objects[ii]);
+          GameObject::CollisionInfo colinfo =
+            game_objects[i]->checkCollision(game_objects[ii]);
           if (colinfo != GameObject::NoCollision)
             game_objects[i]->onCollision(game_objects[ii], colinfo);
         }
@@ -68,6 +71,19 @@ class SceneInterface
   virtual void onEnter()                    = 0;
   virtual void onExit()                     = 0;
   virtual void initID()                     = 0;
+  virtual void receiveMessage(std::string _message)
+  {
+    std::cout << getStateID() << "scene has received a message (" << _message
+              << ") but does not have a way to "
+                 "handle it setup.\n";
+  };
+  virtual void receiveMessage(std::string _message, int _value)
+  {
+    std::cout << getStateID() << "scene has received a message (" << _message
+              << ", " << _value
+              << ") but does not have a way to "
+                 "handle it setup.\n";
+  };
 
  protected:
   std::string stateID = "Unknown"; // Default stateID value
