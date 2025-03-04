@@ -108,17 +108,21 @@ void SceneManager::outputInfo()
   }
 }
 
-void SceneManager::sendMessage(std::string _message) 
+void SceneManager::sendMessage(std::string _message)
 {
   if (current_scene != nullptr)
   {
+    //std::cout << "sent message: (" << _message << ") to scene "
+    //          << current_scene->getStateID() << std::endl;
     current_scene->receiveMessage(_message);
   }
 }
-void SceneManager::sendMessage(std::string _message, int _value) 
+void SceneManager::sendMessage(std::string _message, int _value)
 {
   if (current_scene != nullptr)
   {
+    //std::cout << "sent message: (" << _message << ", " << _value
+    //          << ") to scene " << current_scene->getStateID() << std::endl;
     current_scene->receiveMessage(_message, _value);
   }
 }

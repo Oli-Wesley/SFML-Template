@@ -57,7 +57,7 @@ class SceneInterface
   {
     for (int i = 0; i < game_objects.size(); i++)
     {
-      if (game_objects[i]->getID() == obj_id)
+      if (game_objects[i]->getID() == obj_id && !game_objects[i]->isDestroyed())
         return game_objects[i];
     }
     return nullptr;
