@@ -1,64 +1,38 @@
-#include "Libraries/Libs.h"
-#include "Scenes/scenes.h"
-
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include "Libraries/GameObject.h"
+#include "Libraries/Components/Transform.h"
 
-int main()
-{
-  // create window and give to the gameInfo singleton to hold for other things
-  // to use.
-  GameInfo::getInstance()->window =
-    new sf::RenderWindow(Settings::getInstance()->resolution, "Window");
-  if (Settings::getInstance()->framerate != 0)
-    GameInfo::getInstance()->window->setFramerateLimit(
-      Settings::getInstance()->framerate);
+int main() {
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Component System");
+    window.setFramerateLimit(60);
 
-  // A Clock starts counting as soon as it's created
-  sf::Clock clock;
+    sf::Clock clock;
 
-  // initialise an instance of the state_manager, then add all scenes. 
-  GameInfo::getInstance()->Scenes = new SceneManager;
-  //GameInfo::getInstance()->Scenes->addScene(new TitleScene());
-  //GameInfo::getInstance()->Scenes->switchScene("Title");
+    GameObject* test = new GameObject();
+    GameObject* test2 = new GameObject();
 
-  // Game loop: run the program as long as the window is open
-  while (GameInfo::getInstance()->window->isOpen())
-  {
-    // check all the window's events that were triggered since the last
-    // iteration of the loop
-    sf::Event event;
+    test->GetComponent<Transform>().setLocalPosition(100, 100);
+    test->AddChild(test2);
+    test2->GetComponent<Transform>().setLocalPosition(20, 20);
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().x << ", ";
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().y << std::endl;
+    test2->GetComponent<Transform>().setLocalPosition(-150, -150);
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().x << ", ";
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().y << std::endl;
+    test2->GetComponent<Transform>().setGlobalPosition(50, 50);
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().x << ", ";
+    std::cout << test2->GetComponent<Transform>().getGlobalPosition().y << std::endl;
 
-    // calculate delta time
-    sf::Time time = clock.restart();
-    float dt      = time.asSeconds();
 
-    // handle inputs
-    while (GameInfo::getInstance()->window->pollEvent(event))
-    {
-      // close window if event is closed.
-      if (event.type == sf::Event::Closed)
-      {
-        GameInfo::getInstance()->window->close();
-      }
-      else if (event.type == sf::Event::Resized)
-      {
-        GameInfo::getInstance()->window->setSize(sf::Vector2u(
-          Settings::getInstance()->resolution.width,
-          Settings::getInstance()->resolution.height));
-      }
-      // otherwise pass to the current scene to handle.
-      GameInfo::getInstance()->Scenes->handleEvent(event);
+    while (window.isOpen()) {
+        sf::Event e;
+        while (window.pollEvent(e)) {
+            if (e.type == sf::Event::Closed)
+                window.close();
+        }
+        float dt = clock.restart().asSeconds();
+        window.clear();
+        window.display();
     }
-
-    // pass to current scene to handle update.
-    GameInfo::getInstance()->Scenes->update(dt);
-
-    // call the current scene to render
-    GameInfo::getInstance()->Scenes->render();
-
-    // Only Change scene once the scene has finished updating and rendering ect, prevents double switches and nullptrs where onExit has been called during update and before render
-    GameInfo::getInstance()->Scenes->switchToTargetScene();
-  }
-  return 0;
+    return 0;
 }
