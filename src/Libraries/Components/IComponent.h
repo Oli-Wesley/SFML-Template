@@ -17,6 +17,6 @@ public:
 	virtual void OnDestroy() {}  // Called when the component is destroyed	
 	void setAttatchedTo(GameObject* gameObject);
 protected:
-	GameObject* attatched_to = nullptr;
+	GameObject* attached_to = nullptr;
 };
 

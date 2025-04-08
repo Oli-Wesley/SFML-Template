@@ -31,7 +31,9 @@ public:
 			throw std::runtime_error("Component already exists.");
 			return;
 		}
+		// add component, and set it to be attatched to this gameObject.
 		components[std::type_index(typeid(T))] = component;
+		component->setAttatchedTo(this);
 	}
 
 	template <std::derived_from<IComponent> T>

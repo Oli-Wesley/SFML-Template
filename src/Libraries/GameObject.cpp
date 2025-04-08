@@ -3,9 +3,8 @@
 
 GameObject::GameObject()
 {
-	Transform* temp = new Transform;
-	AddComponent<Transform>(temp);
-	temp->setAttatchedTo(this);
+	// every GameObject NEEDS a transform, so create it here.
+	AddComponent<Transform>(new Transform);
 }
 
 void GameObject::AddChild(GameObject* child)

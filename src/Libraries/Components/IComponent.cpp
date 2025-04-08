@@ -3,5 +3,5 @@
 
 void IComponent::setAttatchedTo(GameObject* gameObject)
 {
-	attatched_to = gameObject;
+	attached_to = gameObject;
 }
