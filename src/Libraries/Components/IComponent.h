@@ -1,22 +1,22 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
 // prototype gameObject so it is happy at compile time.
 class GameObject;
 
 class IComponent {
 public:
-	virtual ~IComponent() {};
+	virtual ~IComponent() = default;
 
-	// Lifecycle hooks (similar to Unity's MonoBehaviour)
-	virtual void Awake() {}      // Called once when the component is initialized
-	virtual void Start() {}      // Called once when the GameObject is enabled
-	virtual void Sleep() {}      // Called once when the GameObject is disabled
-	virtual void Update(float dt) {}     // Called every frame
-	virtual void render(sf::View* _view) {}; // Called when the component is rendered
-	virtual void OnDestroy() {}  // Called when the component is destroyed	
-	void setAttatchedTo(GameObject* gameObject);
+	virtual void start() {}      // Called once when the GameObject is first enabled
+	virtual void onEnable() {}      // Called when the component is enabled
+	virtual void update(float dt) {}     // Called every frame
+	virtual void lateUpdate(float dt) {} // called after update
+	virtual void onDisable() {}      // Called when the GameObject is disabled
+	virtual void onDestroy() {}  // Called when the component is destroyed	
+
+
+	void setGameObject(GameObject* _game_object) { game_object = _game_object;};
 protected:
-	GameObject* attached_to = nullptr;
+	GameObject* game_object = nullptr;
 };
 
