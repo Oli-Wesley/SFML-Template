@@ -12,13 +12,14 @@ public:
 	GameObject();
 	~GameObject();
 	// lifecycle events
+	void physicsUpdate(float dt);
 	void update(float dt);
 	void lateUpdate(float dt);
 	void render(sf::RenderWindow& _window);
 	void destroy();
 
 
-	// usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS.;
+	// usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS. ;
 	template<typename T, typename... Args>
 	T* addComponent(Args&&... args) {
 		static_assert(std::is_base_of<IComponent, T>::value, "T must derive from Component");
@@ -48,7 +49,15 @@ public:
 		return nullptr;
 	}
 
-
+	// returns the component on this gameObject with type.
+	template<typename T>
+	bool hasComponent() {
+		for (IComponent* comp : components) {
+			if (auto casted = dynamic_cast<T*>(comp))
+				return true;
+		}
+		false;
+	}
 	void addChild(GameObject* _game_obj);
 
 	bool isActive();

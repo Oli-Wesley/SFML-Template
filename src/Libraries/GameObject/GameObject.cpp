@@ -1,7 +1,6 @@
 #include "../GameObject.h"
 #include "../Components/Transform.h"
-#include "../Components/IRenderable.h"
-
+#include "../ComponentInterfaces.h"
 GameObject::GameObject()
 {
 	transform.setGameObject(this);
@@ -11,6 +10,23 @@ GameObject::~GameObject()
 {
 	destroy();
 	delete parent;
+}
+
+void GameObject::physicsUpdate(float dt)
+{
+	if (is_active) {
+		for (auto& comp : components) {
+			IPhysicsObject* physics = dynamic_cast<IPhysicsObject*>(comp);
+			if (physics) {
+				physics->physicsUpdate(dt);
+				//return; // TODO: ONLY DO ON HIGHEST IN HEIRARCHY WITH A PHYSICS OBJECT OR ISSUES MAY HAPPEN (I DONT KNOW IF THIS WILL ACTUALLY CAUSE ISSUES, BUT I THINK IT WILL SO LEAVING THIS COMMENT)
+			}
+		}
+		// call on all childeren
+		for (GameObject* child : childeren) {
+			child->physicsUpdate(dt);
+		}
+	}
 }
 
 void GameObject::update(float dt)

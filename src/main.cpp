@@ -10,15 +10,17 @@ int main() {
 
 	GameObject* test = new GameObject();
 	test->addComponent<SpriteRenderer>();
+	test->addComponent<Texture>("../Data/Images/ball.png");
 	test->addComponent<BoxCollider>(true);
+	test->getComponent<BoxCollider>()->setSize(7, 7);
+	test->addComponent<RigidBody>();
+	test->getTransform()->setLocalScale(50, 50);
 
-	GameObject* test2 = new GameObject();
+	// GameObject* test2 = new GameObject();
 
-	test2->addComponent<BoxCollider>(true);
-	test2->getTransform()->setLocalPosition(5, 5);
-	test->addChild(test2);
-
-
+	// test2->addComponent<BoxCollider>(true);
+	// test2->getTransform()->setLocalPosition(5, 5);
+	// test->addChild(test2);
 
 	while (window.isOpen()) {
 		sf::Event e;
@@ -29,13 +31,15 @@ int main() {
 		float dt = clock.restart().asSeconds();
 
 		// update
-		test->getTransform()->move(1, 1);
-		test->getTransform()->modifyScale(0.1, 0.1);
-		test2->getTransform()->modifyScale(0, 0);
+		test->physicsUpdate(dt);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			test->getComponent<RigidBody>()->applyForce(0, -2);
+		// test->getTransform()->move(1, 1);
 
 		// render
 		window.clear(sf::Color::White);
 		test->render(window);
+		
 		window.display();
 	}
 	return 0;
