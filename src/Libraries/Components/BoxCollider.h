@@ -6,6 +6,7 @@
 
 class BoxCollider : public IRenderable {
 public:
+    bool is_trigger = false ;
     BoxCollider() = default;
     BoxCollider(bool debug) { is_debug_drawn = debug; };
     // Position
@@ -21,7 +22,7 @@ public:
     void setSize(float _x, float _y);
 
     // debug rendering
-    void render(sf::RenderWindow& window) override;
+    void render(sf::RenderWindow* window) override;
 protected:
 
     // box Collider has a seperate position and size than transform, allowing it to be offset and sized differently (it will still move and scale with the transform.

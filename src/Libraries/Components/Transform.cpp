@@ -88,8 +88,9 @@ void Transform::move(float _x, float _y)
 
 void Transform::move(sf::Vector2f _distance)
 {
-
-	position += _distance;
+	// make sure distance is not 0
+	if (sqrt(_distance.x * _distance.x + _distance.y * _distance.y) >= 0.0000000001)
+		position += _distance;
 }
 
 void Transform::setGlobalScale(float _s_x, float _s_y)

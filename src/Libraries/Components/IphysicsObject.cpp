@@ -20,7 +20,7 @@ void IPhysicsObject::setVelocity(sf::Vector2f val)
 	velocity = val;
 }
 
-sf::Vector2f IPhysicsObject::getVelocity()
+sf::Vector2f* IPhysicsObject::getVelocity()
 {
-	return velocity;
+	return &velocity;
 }

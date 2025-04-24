@@ -2,6 +2,7 @@
 #include "IComponent.h"
 
 class IScriptableBehaviour : public IComponent {
+public:
 	// other functions not defined by IComponent that scripts may need.
 	virtual void onTriggerEnter(GameObject*) {}; // Called when entering a trigger.
 	virtual void onTriggerStay(GameObject*) {}; // Called every frame inside a trigger.

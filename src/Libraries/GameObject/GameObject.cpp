@@ -1,9 +1,11 @@
 #include "../GameObject.h"
 #include "../Components/Transform.h"
 #include "../ComponentInterfaces.h"
-GameObject::GameObject()
+GameObject::GameObject(std::string _name)
 {
 	transform.setGameObject(this);
+	name = _name;
+
 }
 
 GameObject::~GameObject()
@@ -59,7 +61,7 @@ void GameObject::lateUpdate(float dt)
 // will need to go in GameSystem. as currently it is done in heirarchal order which causes all parents to be drawn ontop of childeren. 
 // (this will also likely be nice for camera stuff in future). ZHEIGHT IS IMPLEMENTED IN TRANSFORM but is currently unused.
 // IDEAS FOR IMPLEMENTATION Change this function to take a std::vector<Irenderable*>*, recursively add all instances of IRenderable then pass this to the gameSystem to sort and render.
-void GameObject::render(sf::RenderWindow& _window)
+void GameObject::render(sf::RenderWindow* _window)
 {
 	if (is_active) {
 		for (auto& comp : components) {
@@ -129,6 +131,11 @@ void GameObject::setMaintained(bool val)
 	is_maintained = val;
 }
 
+std::vector<IComponent*> GameObject::getAllComponents()
+{
+	return components;
+}
+
 Transform* GameObject::getTransform()
 {
 	return &transform;
@@ -147,4 +154,9 @@ GameObject* GameObject::getParent()
 void GameObject::setParent(GameObject* _parent)
 {
 	parent = _parent;
+}
+
+std::string GameObject::getName()
+{
+	return name;
 }

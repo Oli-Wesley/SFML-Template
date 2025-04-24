@@ -39,7 +39,7 @@ void BoxCollider::setSize(float _x, float _y)
 	setSize(sf::Vector2(_x, _y));
 }
 
-void BoxCollider::render(sf::RenderWindow& window)
+void BoxCollider::render(sf::RenderWindow* window)
 {
 	if (is_debug_drawn) {
 		// this is quite expensive to do every frame, but like its debug so idc 
@@ -48,6 +48,6 @@ void BoxCollider::render(sf::RenderWindow& window)
 		rect.setFillColor(sf::Color::Transparent);
 		rect.setOutlineColor(sf::Color::Red);
 		rect.setOutlineThickness(-2);
-		window.draw(rect);
+		window->draw(rect);
 	}
 }

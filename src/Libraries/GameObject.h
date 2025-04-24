@@ -9,15 +9,16 @@
 
 class GameObject {
 public:
-	GameObject();
+	GameObject(std::string _name);
 	~GameObject();
 	// lifecycle events
 	void physicsUpdate(float dt);
 	void update(float dt);
 	void lateUpdate(float dt);
-	void render(sf::RenderWindow& _window);
+	void render(sf::RenderWindow* _window);
 	void destroy();
 
+	// Template functions so have to go here bc I dont understand how to make them work elsewhere...
 
 	// usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS. ;
 	template<typename T, typename... Args>
@@ -58,19 +59,25 @@ public:
 		}
 		false;
 	}
+
+
 	void addChild(GameObject* _game_obj);
 
 	bool isActive();
 	void setActive(bool);
 	bool isMaintained();
 	void setMaintained(bool);
+	std::vector<IComponent*> getAllComponents();
 
 	Transform* getTransform();
 	std::vector<GameObject*> getChilderen();
 	GameObject* getParent();
 	void setParent(GameObject*);
 
+	std::string getName();
+
 protected:
+	std::string name;
 	std::vector<IComponent*> components;
 	bool is_active = true;
 	bool is_maintained = false;

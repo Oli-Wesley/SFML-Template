@@ -13,7 +13,6 @@ public:
 	bool setTexture(sf::Texture* _texture);
 	sf::Texture* getTexture();
 	
-
 private:
 	sf::Texture texture;
 	std::string tex_path = "";
