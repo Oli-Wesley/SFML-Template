@@ -166,6 +166,7 @@ void PhysiscsSystem::resolveCollision(GameObject* a, GameObject* b, RigidBody* r
 
 	// collision response
 
+	//get velocity, default to 0 if null.
 	sf::Vector2f velA = rbA ? *rbA->getVelocity() : sf::Vector2f(0, 0);
 	sf::Vector2f velB = rbB ? *rbB->getVelocity() : sf::Vector2f(0, 0);
 
@@ -179,7 +180,6 @@ void PhysiscsSystem::resolveCollision(GameObject* a, GameObject* b, RigidBody* r
 		rbA ? rbA->bouncyness : 0.0f,
 		rbB ? rbB->bouncyness : 0.0f
 	);
-
 
 	float invMassA = (rbA && !rbA->is_static) ? 1.0f / rbA->mass : 0.0f;
 	float invMassB = (rbB && !rbB->is_static) ? 1.0f / rbB->mass : 0.0f;

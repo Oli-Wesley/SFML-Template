@@ -34,12 +34,12 @@ void GameSystem::start()
 
 void GameSystem::start(std::string start_scene)
 {
-	switchScene(start_scene);
-	changeScene();
-	start();
+	switchScene(start_scene); // change target scene.
+	changeScene(); // actually change into the scene.
+	start(); // call the other start function that contains the gameLoop.
 }
 
-void GameSystem::Add(Scene* scene, std::string scene_name)
+void GameSystem::addScene(Scene* scene, std::string scene_name)
 {
 	scenes.emplace(scene_name, scene);
 }

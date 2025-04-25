@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Libraries/Components.h"
-#include "Libraries/Scene.h"
+#include "Libraries/GameEngine.h"
 
 class testScene : public Scene {
 public:

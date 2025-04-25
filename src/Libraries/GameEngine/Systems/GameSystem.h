@@ -10,7 +10,7 @@ public:
 	static GameSystem* get();
 	void start();
 	void start(std::string start_scene);
-	void Add(Scene* scene, std::string scene_name);
+	void addScene(Scene* scene, std::string scene_name);
 	void switchScene(std::string);
 	void Remove(std::string scene_name);
 	GameObject* findGameObject(std::string _id);
@@ -24,14 +24,16 @@ protected:
 	std::string target_scene;
 	Scene* currentScene;
 
+	//window settings.
 	sf::RenderWindow* window = nullptr;
 	sf::Clock clock;
 	sf::VideoMode resolution = sf::VideoMode(800, 600);
 	std::string window_title = "ComponentSystem";
-	int framerate = 60;
+	int framerate = 90;
 
+	// physics system
 	float accumulator = 0.0f;
-	const float physics_timestep = 1.0f / 70.0f; // Fixed 70Hz update
+	const float physics_timestep = 1.0f / 90.0f; // Fixed 90Hz update
 
 	// GameLoop, functions run in this order.
 	void fixedUpdate(float dt);
