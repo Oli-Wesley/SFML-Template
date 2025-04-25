@@ -14,19 +14,36 @@ GameObject::~GameObject()
 	delete parent;
 }
 
-void GameObject::physicsUpdate(float dt)
+void GameObject::physicsUpdate(float timestep)
 {
 	if (is_active) {
 		for (auto& comp : components) {
 			IPhysicsObject* physics = dynamic_cast<IPhysicsObject*>(comp);
 			if (physics) {
-				physics->physicsUpdate(dt);
+				physics->physicsUpdate(timestep);
 				//return; // TODO: ONLY DO ON HIGHEST IN HEIRARCHY WITH A PHYSICS OBJECT OR ISSUES MAY HAPPEN (I DONT KNOW IF THIS WILL ACTUALLY CAUSE ISSUES, BUT I THINK IT WILL SO LEAVING THIS COMMENT)
 			}
 		}
 		// call on all childeren
 		for (GameObject* child : childeren) {
-			child->physicsUpdate(dt);
+			child->physicsUpdate(timestep);
+		}
+	}
+}
+
+void GameObject::fixedUpdate(float timestep)
+{
+	if (is_active) {
+		for (auto& comp : components) {
+			IScriptableBehaviour* scriptable = dynamic_cast<IScriptableBehaviour*>(comp);
+			if (scriptable) {
+				scriptable->fixedUpdate(timestep);
+				//return; // TODO: ONLY DO ON HIGHEST IN HEIRARCHY WITH A PHYSICS OBJECT OR ISSUES MAY HAPPEN (I DONT KNOW IF THIS WILL ACTUALLY CAUSE ISSUES, BUT I THINK IT WILL SO LEAVING THIS COMMENT)
+			}
+		}
+		// call on all childeren
+		for (GameObject* child : childeren) {
+			child->fixedUpdate(timestep);
 		}
 	}
 }

@@ -8,4 +8,4 @@ int main() {
 	// start game
 	GameSystem::get()->start("test");
 	return 0;
-}
+}	

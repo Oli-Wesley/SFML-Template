@@ -12,7 +12,8 @@ public:
 	GameObject(std::string _name);
 	~GameObject();
 	// lifecycle events
-	void physicsUpdate(float dt);
+	void fixedUpdate(float timestep);
+	void physicsUpdate(float timestep);
 	void update(float dt);
 	void lateUpdate(float dt);
 	void render(sf::RenderWindow* _window);

@@ -30,8 +30,12 @@ protected:
 	std::string window_title = "ComponentSystem";
 	int framerate = 60;
 
+	float accumulator = 0.0f;
+	const float physics_timestep = 1.0f / 70.0f; // Fixed 70Hz update
+
 	// GameLoop, functions run in this order.
-	void runPhysics(float dt);
+	void fixedUpdate(float dt);
+	void runPhysics(float timestep); 
 	void update(float dt);
 	void lateUpdate(float dt);
 	void render();

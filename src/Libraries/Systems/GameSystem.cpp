@@ -28,7 +28,7 @@ void GameSystem::start()
 			if (e.type == sf::Event::Closed)
 				window->close();
 		}
-		runGameLoop(clock.restart().asSeconds());
+		runGameLoop(clock.restart().asSeconds()); // pass time since last frame as dt to the current gameLoop.
 	}
 }
 
@@ -61,21 +61,42 @@ GameObject* GameSystem::findGameObject(std::string _id)
 
 void GameSystem::runGameLoop(float dt)
 {
-	runPhysics(dt);
+	fixedUpdate(dt); // physics called in here aswell.
 	update(dt);
 	lateUpdate(dt);
 	render();
 	changeScene();
 }
 
-void GameSystem::runPhysics(float dt)
+void GameSystem::runPhysics(float timestep)
 {
 	if (currentScene != nullptr)
 	{
-		currentScene->SceneRoot->physicsUpdate(dt);
+		currentScene->SceneRoot->physicsUpdate(timestep);
 		PhysiscsSystem::get()->handleCollisions(currentScene->game_objects);
 	}
 }
+
+// thanks https://gafferongames.com/post/fix_your_timestep/
+void GameSystem::fixedUpdate(float dt)
+{
+	// Clamp to avoid limit timestep if something goes very wrong...
+	const float maxDeltaTime = 0.25f;
+	dt = std::min(dt, maxDeltaTime);
+
+	accumulator += dt;
+
+	while (accumulator >= physics_timestep)
+	{
+		runPhysics(physics_timestep);
+		if (currentScene && currentScene->SceneRoot)
+		{
+			currentScene->SceneRoot->fixedUpdate(physics_timestep);
+		}
+		accumulator -= physics_timestep;
+	}
+}
+
 
 void GameSystem::update(float dt)
 {

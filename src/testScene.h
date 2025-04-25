@@ -46,7 +46,7 @@ public:
 		game_objects.push_back(box);
 
 		// --- Hitter ---
-		GameObject* box2 = new GameObject("Bouncer");
+		GameObject* box2 = new GameObject("Bouncer1");
 		box2->getTransform()->setLocalPosition(300, 100);
 		box2->getTransform()->setLocalScale(10, 10);
 		SceneRoot->addChild(box2);
@@ -64,7 +64,7 @@ public:
 		game_objects.push_back(box2);
 
 		// --- Hitter2 ---
-		GameObject* box3 = new GameObject("Hitter2");
+		GameObject* box3 = new GameObject("Bouncer2");
 		box3->getTransform()->setLocalPosition(500, 350);
 		box3->getTransform()->setLocalScale(10, 50);
 		SceneRoot->addChild(box3);
