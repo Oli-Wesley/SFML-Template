@@ -74,11 +74,15 @@ public:
 
 		// background
 		GameObject* background = new GameObject("background");
+		scene_root->addChild(background);
 		background->getTransform()->setLocalZheight(-1);
 		background->getTransform()->setLocalScale(8, 9);
 		background->addComponent <SpriteRenderer>();
 		background->addComponent <Texture>("../Data/Images/GamePlayBackground.png");
 
-		scene_root->addChild(background);
+
+		scene_root->addChild(PrefabRegistry::get()->InstantiatePrefab("test", 10, 10));
+
+		
 	}
 };

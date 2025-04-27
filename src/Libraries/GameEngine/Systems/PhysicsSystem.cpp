@@ -30,7 +30,7 @@ void PhysiscsSystem::handleCollisions(const std::vector<GameObject*>& gameObject
 			if (!colB) continue;
 
 			if (checkCollision(colA, colB)) {
-				bool isTrigger = colA->is_trigger || colB->is_trigger;
+				bool isTrigger = objA->getComponent<RigidBody>()->is_trigger || objB->getComponent<RigidBody>()->is_trigger;
 
 				currentCollisions.push_back({ objA, objB, isTrigger });
 

@@ -6,7 +6,6 @@
 
 class BoxCollider : public IRenderable {
 public:
-    bool is_trigger = false ;
     BoxCollider() = default;
     BoxCollider(bool debug) { is_debug_drawn = debug; };
     // Position
