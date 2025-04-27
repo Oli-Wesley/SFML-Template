@@ -5,14 +5,11 @@
 class testScene : public Scene {
 public:
 	void load() override {
-		// Create root
-		SceneRoot = new GameObject("SceneRoot");
-
 		// --- FLOOR ---
 		GameObject* floor = new GameObject("Floor");
 		floor->getTransform()->setLocalPosition({ 0, 500 });
 		floor->getTransform()->setLocalScale(35, 10);
-		SceneRoot->addChild(floor);
+		scene_root->addChild(floor);
 
 		auto* floorCol = floor->addComponent<BoxCollider>();
 		floorCol->setSize(16, 8);
@@ -28,7 +25,7 @@ public:
 		GameObject* box = new GameObject("Bouncer");
 		box->getTransform()->setLocalPosition(100, 100);
 		box->getTransform()->setLocalScale(10, 10);
-		SceneRoot->addChild(box);
+		scene_root->addChild(box);
 		box->addComponent<SpriteRenderer>();
 		box->addComponent<Texture>("../Data/Images/ball.png");
 		auto* boxCol = box->addComponent<BoxCollider>();
@@ -44,7 +41,7 @@ public:
 		GameObject* box2 = new GameObject("Bouncer1");
 		box2->getTransform()->setLocalPosition(300, 100);
 		box2->getTransform()->setLocalScale(15, 15);
-		SceneRoot->addChild(box2);
+		scene_root->addChild(box2);
 		box2->addComponent<SpriteRenderer>();
 		box2->addComponent<Texture>("../Data/Images/ball.png");
 		auto* box2Col = box2->addComponent<BoxCollider>();
@@ -60,7 +57,7 @@ public:
 		GameObject* box3 = new GameObject("Bouncer2");
 		box3->getTransform()->setLocalPosition(500, 350);
 		box3->getTransform()->setLocalScale(10, 10);
-		SceneRoot->addChild(box3);
+		scene_root->addChild(box3);
 
 		box3->addComponent<SpriteRenderer>();
 		box3->addComponent<Texture>("../Data/Images/ball.png");
@@ -82,6 +79,6 @@ public:
 		background->addComponent <SpriteRenderer>();
 		background->addComponent <Texture>("../Data/Images/GamePlayBackground.png");
 
-		SceneRoot->addChild(background);
+		scene_root->addChild(background);
 	}
 };

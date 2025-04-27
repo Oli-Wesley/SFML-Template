@@ -72,8 +72,8 @@ void GameSystem::runPhysics(float timestep)
 {
 	if (currentScene != nullptr)
 	{
-		currentScene->SceneRoot->physicsUpdate(timestep);
-		PhysiscsSystem::get()->handleCollisions(currentScene->SceneRoot->getAllChilderenWithComponent<BoxCollider>());
+		currentScene->scene_root->physicsUpdate(timestep);
+		PhysiscsSystem::get()->handleCollisions(currentScene->scene_root->getAllChilderenWithComponent<BoxCollider>());
 	}
 }
 
@@ -91,9 +91,9 @@ void GameSystem::fixedUpdate(float dt)
 	{
 		runPhysics(physics_timestep);
 		std::vector<GameObject*> test;
-		if (currentScene && currentScene->SceneRoot)
+		if (currentScene && currentScene->scene_root)
 		{
-			currentScene->SceneRoot->fixedUpdate(physics_timestep);
+			currentScene->scene_root->fixedUpdate(physics_timestep);
 		}
 		accumulator -= physics_timestep;
 	}
@@ -103,20 +103,20 @@ void GameSystem::fixedUpdate(float dt)
 void GameSystem::update(float dt)
 {
 	if (currentScene != nullptr)
-		currentScene->SceneRoot->update(dt);
+		currentScene->scene_root->update(dt);
 }
 
 void GameSystem::lateUpdate(float dt)
 {
 	if (currentScene != nullptr)
-		currentScene->SceneRoot->lateUpdate(dt);
+		currentScene->scene_root->lateUpdate(dt);
 }
 
 void GameSystem::render()
 {
 	window->clear(sf::Color::White);
 	if (currentScene != nullptr) {
-		std::vector<IRenderable*> renderables = currentScene->SceneRoot->render();
+		std::vector<IRenderable*> renderables = currentScene->scene_root->render();
 		// simple bubble sort implimentation, sort the list based on layer.
 		bool changed = 1;
 		IRenderable* hold;
@@ -148,9 +148,10 @@ void GameSystem::changeScene()
 {
 	if (scenes[target_scene] != currentScene) {
 		// TODO pass persistent objects between scenes.
+		GameObject* dont_destroy = nullptr;
 		if (currentScene != nullptr)
-			currentScene->unload();
+			dont_destroy = currentScene->unload();
 		currentScene = scenes[target_scene];
-		currentScene->load();
+		currentScene->load(dont_destroy);
 	}
 }

@@ -19,6 +19,8 @@ public:
 	void lateUpdate(float dt);
 	std::vector<IRenderable*> render();
 	void destroy();
+	void destroy(bool destroy_children);
+
 
 	// Template functions so have to go here bc I dont understand how to make them work elsewhere...
 

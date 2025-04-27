@@ -13,7 +13,6 @@ GameObject::GameObject(std::string _name)
 GameObject::~GameObject()
 {
 	destroy();
-	delete parent;
 }
 
 // update physics with given timestep (affects all children aswell)
@@ -113,6 +112,16 @@ void GameObject::destroy()
 
 	// empty components registry
 	components.clear();
+}
+
+void GameObject::destroy(bool destroy_children)
+{
+	if (destroy_children)
+		for (GameObject* child : childeren) {
+			child->destroy(true);
+			delete child;
+		}
+	destroy(); // call other function to destroy components.
 }
 
 void GameObject::addChild(GameObject* _game_ob)
