@@ -1,6 +1,8 @@
 #include "../GameObject.h"
 #include "../Components/Transform.h"
 #include "../ComponentInterfaces.h"
+
+
 GameObject::GameObject(std::string _name)
 {
 	transform.setGameObject(this);
@@ -14,6 +16,7 @@ GameObject::~GameObject()
 	delete parent;
 }
 
+// update physics with given timestep (affects all children aswell)
 void GameObject::physicsUpdate(float timestep)
 {
 	if (is_active) {
@@ -78,20 +81,23 @@ void GameObject::lateUpdate(float dt)
 // will need to go in GameSystem. as currently it is done in heirarchal order which causes all parents to be drawn ontop of childeren. 
 // (this will also likely be nice for camera stuff in future). ZHEIGHT IS IMPLEMENTED IN TRANSFORM but is currently unused.
 // IDEAS FOR IMPLEMENTATION Change this function to take a std::vector<Irenderable*>*, recursively add all instances of IRenderable then pass this to the gameSystem to sort and render.
-void GameObject::render(sf::RenderWindow* _window)
+std::vector<IRenderable*> GameObject::render()
 {
+	std::vector<IRenderable*> result;
 	if (is_active) {
 		for (auto& comp : components) {
 			IRenderable* renderable = dynamic_cast<IRenderable*>(comp);
 			if (renderable) {
-				renderable->render(_window);
+				result.push_back(renderable);
 			}
 		}
 		// call on all childeren
 		for (GameObject* child : childeren) {
-			child->render(_window);
+			std::vector<IRenderable*> childRenderables = child->render();
+			result.insert(result.end(), childRenderables.begin(), childRenderables.end());
 		}
 	}
+	return result;
 }
 
 void GameObject::destroy()
@@ -138,19 +144,25 @@ void GameObject::setActive(bool val)
 	}
 }
 
-bool GameObject::isMaintained()
-{
-	return is_maintained;
-}
-
-void GameObject::setMaintained(bool val)
-{
-	is_maintained = val;
-}
-
 std::vector<IComponent*> GameObject::getAllComponents()
 {
 	return components;
+}
+
+std::vector<GameObject*> GameObject::getAllChilderen()
+{
+	std::vector<GameObject*> result;
+
+	for (GameObject* child : childeren) {
+		result.push_back(child);
+
+		// get all children from the child.
+		std::vector<GameObject*> sub_children = child->getAllChilderen();
+		result.insert(result.end(), sub_children.begin(), sub_children.end());
+	}
+
+	// return up the chain
+	return result;
 }
 
 Transform* GameObject::getTransform()

@@ -29,7 +29,7 @@ protected:
 	sf::Clock clock;
 	sf::VideoMode resolution = sf::VideoMode(800, 600);
 	std::string window_title = "ComponentSystem";
-	int framerate = 90;
+	int framerate = 165;
 
 	// physics system
 	float accumulator = 0.0f;

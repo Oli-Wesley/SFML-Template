@@ -11,11 +11,11 @@ public:
 		// --- FLOOR ---
 		GameObject* floor = new GameObject("Floor");
 		floor->getTransform()->setLocalPosition({ 0, 500 });
-		floor->getTransform()->setLocalScale(35, 1);
+		floor->getTransform()->setLocalScale(35, 10);
 		SceneRoot->addChild(floor);
 
-		auto* floorCol = floor->addComponent<BoxCollider>(false);
-		floorCol->setSize({ 16, 8 });
+		auto* floorCol = floor->addComponent<BoxCollider>();
+		floorCol->setSize(16, 8);
 
 		floor->addComponent<SpriteRenderer>();
 		floor->addComponent<Texture>("../Data/Images/Box.png");
@@ -23,8 +23,6 @@ public:
 		auto* floorRb = floor->addComponent<RigidBody>();
 		floorRb->is_static = true;
 		floorRb->bouncyness = 0.8f;
-
-		game_objects.push_back(floor);
 
 		// --- BOUNCER ---
 		GameObject* box = new GameObject("Bouncer");
@@ -42,12 +40,10 @@ public:
 		rb->mass = 1.5f;
 		rb->applyForce(250, 0);
 
-		game_objects.push_back(box);
-
 		// --- Hitter ---
 		GameObject* box2 = new GameObject("Bouncer1");
 		box2->getTransform()->setLocalPosition(300, 100);
-		box2->getTransform()->setLocalScale(10, 10);
+		box2->getTransform()->setLocalScale(15, 15);
 		SceneRoot->addChild(box2);
 		box2->addComponent<SpriteRenderer>();
 		box2->addComponent<Texture>("../Data/Images/ball.png");
@@ -57,15 +53,13 @@ public:
 		auto* rb2 = box2->addComponent<RigidBody>();
 		rb2->bouncyness = 0.8f;
 		rb2->friction = 0.2f;
-		rb2->mass = 1.0;
+		rb2->mass = 2.0;
 		rb2->applyForce(-150, 0);
-
-		game_objects.push_back(box2);
 
 		// --- Hitter2 ---
 		GameObject* box3 = new GameObject("Bouncer2");
 		box3->getTransform()->setLocalPosition(500, 350);
-		box3->getTransform()->setLocalScale(10, 50);
+		box3->getTransform()->setLocalScale(10, 10);
 		SceneRoot->addChild(box3);
 
 		box3->addComponent<SpriteRenderer>();
@@ -79,8 +73,15 @@ public:
 		rb3->bouncyness = 0.8f;
 		rb3->friction = 0.2f;
 		rb3->mass = 1.0f;
-		rb3->applyForce(-100, 100);
+		rb3->applyForce(-300, 100);
 
-		game_objects.push_back(box3);
+		// background
+		GameObject* background = new GameObject("background");
+		background->getTransform()->setLocalZheight(-1);
+		background->getTransform()->setLocalScale(8, 9);
+		background->addComponent <SpriteRenderer>();
+		background->addComponent <Texture>("../Data/Images/GamePlayBackground.png");
+
+		SceneRoot->addChild(background);
 	}
 };

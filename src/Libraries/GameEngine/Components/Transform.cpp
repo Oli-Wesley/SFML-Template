@@ -95,7 +95,7 @@ void Transform::move(sf::Vector2f _distance)
 
 void Transform::setGlobalScale(float _s_x, float _s_y)
 {
-	setGlobalScale(sf::Vector2f(_s_x, _s_x));
+	setGlobalScale(sf::Vector2f(_s_x, _s_y));
 }
 
 void Transform::setGlobalScale(sf::Vector2f _scale)
@@ -128,7 +128,7 @@ sf::Vector2f Transform::getLocalScale()
 
 void Transform::setLocalScale(float _s_x, float _s_y)
 {
-	setLocalScale(sf::Vector2f(_s_x, _s_x));
+	setLocalScale(sf::Vector2f(_s_x, _s_y));
 }
 
 void Transform::setLocalScale(sf::Vector2f _scale)

@@ -7,6 +7,6 @@
 class IRenderable : public IComponent {
 public:
     virtual void render(sf::RenderWindow* window) = 0;
-    float getRenderOrder();
+    virtual float getRenderOrder();
     virtual ~IRenderable() = default;
 };

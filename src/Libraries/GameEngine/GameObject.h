@@ -4,6 +4,7 @@
 #include <vector>
 #include <typeindex>
 #include "Components/IComponent.h"  
+#include "Components/IRenderable.h"  
 #include "Components/Transform.h"
 #include <SFML/Graphics.hpp>
 
@@ -16,7 +17,7 @@ public:
 	void physicsUpdate(float timestep);
 	void update(float dt);
 	void lateUpdate(float dt);
-	void render(sf::RenderWindow* _window);
+	std::vector<IRenderable*> render();
 	void destroy();
 
 	// Template functions so have to go here bc I dont understand how to make them work elsewhere...
@@ -51,6 +52,19 @@ public:
 		return nullptr;
 	}
 
+	template<typename T>
+	std::vector<GameObject*> getAllChilderenWithComponent() {
+		std::vector<GameObject*> all_children = getAllChilderen();
+
+		// remove elements from the list that do not have the asked for component.
+		for (int i = 0; i < all_children.size(); i++) {
+			if (!all_children[i]->hasComponent<T>()) {
+				all_children.erase(all_children.begin() + i);
+			}
+		}
+		return all_children;
+	}
+
 	// returns the component on this gameObject with type.
 	template<typename T>
 	bool hasComponent() {
@@ -66,9 +80,10 @@ public:
 
 	bool isActive();
 	void setActive(bool);
-	bool isMaintained();
-	void setMaintained(bool);
 	std::vector<IComponent*> getAllComponents();
+
+	// get all children (including childeren of childeren)
+	std::vector<GameObject*> getAllChilderen();
 
 	Transform* getTransform();
 	std::vector<GameObject*> getChilderen();
@@ -81,7 +96,6 @@ protected:
 	std::string name;
 	std::vector<IComponent*> components;
 	bool is_active = true;
-	bool is_maintained = false;
 	std::vector<GameObject*> childeren;
 	Transform transform;
 	GameObject* parent = nullptr;

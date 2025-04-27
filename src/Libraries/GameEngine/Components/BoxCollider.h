@@ -23,6 +23,7 @@ public:
 
     // debug rendering
     void render(sf::RenderWindow* window) override;
+    float getRenderOrder() override;
 protected:
 
     // box Collider has a seperate position and size than transform, allowing it to be offset and sized differently (it will still move and scale with the transform.

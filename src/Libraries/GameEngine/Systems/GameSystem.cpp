@@ -73,22 +73,24 @@ void GameSystem::runPhysics(float timestep)
 	if (currentScene != nullptr)
 	{
 		currentScene->SceneRoot->physicsUpdate(timestep);
-		PhysiscsSystem::get()->handleCollisions(currentScene->game_objects);
+		PhysiscsSystem::get()->handleCollisions(currentScene->SceneRoot->getAllChilderenWithComponent<BoxCollider>());
 	}
 }
 
 // thanks https://gafferongames.com/post/fix_your_timestep/
 void GameSystem::fixedUpdate(float dt)
 {
-	// Clamp to avoid limit timestep if something goes very wrong...
+	// Clamp to limit timestep if something goes very wrong...
 	const float maxDeltaTime = 0.25f;
 	dt = std::min(dt, maxDeltaTime);
 
 	accumulator += dt;
 
+	// this allows for multiple physics ticks to be ran in a single frame, or none at all if it's not needed.
 	while (accumulator >= physics_timestep)
 	{
 		runPhysics(physics_timestep);
+		std::vector<GameObject*> test;
 		if (currentScene && currentScene->SceneRoot)
 		{
 			currentScene->SceneRoot->fixedUpdate(physics_timestep);
@@ -113,8 +115,32 @@ void GameSystem::lateUpdate(float dt)
 void GameSystem::render()
 {
 	window->clear(sf::Color::White);
-	if (currentScene != nullptr)
-		currentScene->SceneRoot->render(window);
+	if (currentScene != nullptr) {
+		std::vector<IRenderable*> renderables = currentScene->SceneRoot->render();
+		// simple bubble sort implimentation, sort the list based on layer.
+		bool changed = 1;
+		IRenderable* hold;
+		int length = renderables.size();
+
+		while (changed)
+		{
+			changed = 0;
+			for (int index = 0; index < length - 1; index++)
+			{
+				if (renderables[index]->getRenderOrder() > renderables[index + 1]->getRenderOrder())
+				{
+					hold = renderables[index];
+					renderables[index] = renderables[index + 1];
+					renderables[index + 1] = hold;
+					changed = 1;
+				}
+			}
+		}
+		for (IRenderable* var : renderables)
+		{
+			var->render(window);
+		}
+	}
 	window->display();
 }
 

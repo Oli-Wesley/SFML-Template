@@ -44,10 +44,18 @@ void BoxCollider::render(sf::RenderWindow* window)
 	if (is_debug_drawn) {
 		// this is quite expensive to do every frame, but like its debug so idc 
 		sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(getCollider().width, getCollider().height));
-		rect.setPosition({getCollider().left, getCollider().top });
+		rect.setPosition({ getCollider().left, getCollider().top });
 		rect.setFillColor(sf::Color::Transparent);
 		rect.setOutlineColor(sf::Color::Red);
 		rect.setOutlineThickness(-2);
 		window->draw(rect);
 	}
+}
+
+float BoxCollider::getRenderOrder()
+{
+	// returns the renderOrder, used for sorting the render_queue so elements get drawn in the correct order. (forces this to be very high, so debug boxes are always drawn on top.
+
+	return game_object->getTransform()->getGlobalZheight() + 100.0f;
+
 }
