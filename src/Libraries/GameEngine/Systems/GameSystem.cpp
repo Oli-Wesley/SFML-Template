@@ -68,6 +68,37 @@ void GameSystem::runGameLoop(float dt)
 	changeScene();
 }
 
+void GameSystem::setTitle(std::string _title)
+{
+	window_title = _title;
+	if (window != nullptr)
+		window->setTitle(_title);
+}
+
+void GameSystem::setResolution(sf::Vector2i res)
+{
+	resolution = sf::VideoMode(res.x, res.y);
+	if (window != nullptr)
+		window->setSize(sf::Vector2u(resolution.width, resolution.height));
+}
+
+void GameSystem::setResolution(int x, int y)
+{
+	setResolution(sf::Vector2(x, y));
+}
+
+void GameSystem::setFramerate(float _framerate)
+{
+	framerate = _framerate;
+	if (window != nullptr)
+		window->setFramerateLimit(framerate);
+}
+
+void GameSystem::setPhysicsTimestep(float tickspersecond)
+{
+	physics_timestep = 1.0f / tickspersecond;
+}
+
 void GameSystem::runPhysics(float timestep)
 {
 	if (currentScene != nullptr)

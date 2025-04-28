@@ -2,6 +2,7 @@
 #include "../GameObject.h"
 #include <unordered_map>
 #include "../Scene.h"
+#include "SFML/System/Vector2.hpp"
 #include <SFML/Graphics.hpp>
 
 class GameSystem
@@ -16,6 +17,12 @@ public:
 	GameObject* findGameObject(std::string _id);
 	void runGameLoop(float dt);
 
+	void setTitle(std::string _title);
+	void setResolution(sf::Vector2i res);
+	void setResolution(int x, int y);
+	void setFramerate(float framerate);
+	void setPhysicsTimestep(float tickspersecond);
+
 protected:
 	static GameSystem* instance;
 
@@ -28,12 +35,12 @@ protected:
 	sf::RenderWindow* window = nullptr;
 	sf::Clock clock;
 	sf::VideoMode resolution = sf::VideoMode(800, 600);
-	std::string window_title = "ComponentSystem";
-	int framerate = 165;
+	std::string window_title = "Window";
+	int framerate = 60;
 
 	// physics system
 	float accumulator = 0.0f;
-	const float physics_timestep = 1.0f / 90.0f; // Fixed 90Hz update
+	float physics_timestep = 1.0f / 60.0f; // 60Hz update
 
 	// GameLoop, functions run in this order.
 	void fixedUpdate(float dt);

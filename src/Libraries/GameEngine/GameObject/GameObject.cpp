@@ -40,7 +40,6 @@ void GameObject::fixedUpdate(float timestep)
 			IScriptableBehaviour* scriptable = dynamic_cast<IScriptableBehaviour*>(comp);
 			if (scriptable) {
 				scriptable->fixedUpdate(timestep);
-				//return; // TODO: ONLY DO ON HIGHEST IN HEIRARCHY WITH A PHYSICS OBJECT OR ISSUES MAY HAPPEN (I DONT KNOW IF THIS WILL ACTUALLY CAUSE ISSUES, BUT I THINK IT WILL SO LEAVING THIS COMMENT)
 			}
 		}
 		// call on all childeren
