@@ -35,10 +35,13 @@ void GameSystem::start(std::string start_scene)
 		while (window->pollEvent(e))
 		{
 			if (e.type == sf::Event::Closed) {
-				// unload current scene
-				currentScene->unload();
-				// destroy dont_destroy to allow anything attatched to it to run its unload functions.
-				currentScene->dont_destroy = nullptr;
+				if (currentScene)
+				{
+					// unload current scene
+					currentScene->unload();
+					// destroy dont_destroy to allow anything attatched to it to run its unload functions.
+					currentScene->dont_destroy = nullptr;
+				}
 				// close the window.
 				window->close();
 				return;
