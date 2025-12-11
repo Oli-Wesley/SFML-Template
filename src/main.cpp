@@ -1,64 +1,22 @@
-#include "Libraries/Libs.h"
-#include "Scenes/scenes.h"
+#include "Libraries/GameEngine.h"
+#include "Scenes/GameScene.h"
+#include "Scenes/TitleScene.h"
+#include "Scenes/GameOverScene.h"
+#include "Libraries/GameEngine/Components.h"
+#include "Libraries/GameEngine/Systems/PrefabRegistry.h"
+#include "Prefabs/PrefabLoader.h" // need to include as this registers all the prefabs.
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
+int main() {
+	srand(time(0)); // setup random numbers
+	// Add Scenes
+	GameSystem* sys = GameSystem::get();
+	// set window settings (not needed, there are default values)
+	sys->setFramerate(120);
+	sys->setTitle("GameEngine");
+	sys->setResolution(960, 540);
 
-int main()
-{
-  // create window and give to the gameInfo singleton to hold for other things
-  // to use.
-  GameInfo::getInstance()->window =
-    new sf::RenderWindow(Settings::getInstance()->resolution, "Window");
-  if (Settings::getInstance()->framerate != 0)
-    GameInfo::getInstance()->window->setFramerateLimit(
-      Settings::getInstance()->framerate);
+	// start game (anything after this in main will not be called untill the game is stopped).
+	sys->start("TitleScene");
 
-  // A Clock starts counting as soon as it's created
-  sf::Clock clock;
-
-  // initialise an instance of the state_manager, then add all scenes. 
-  GameInfo::getInstance()->Scenes = new SceneManager;
-  //GameInfo::getInstance()->Scenes->addScene(new TitleScene());
-  //GameInfo::getInstance()->Scenes->switchScene("Title");
-
-  // Game loop: run the program as long as the window is open
-  while (GameInfo::getInstance()->window->isOpen())
-  {
-    // check all the window's events that were triggered since the last
-    // iteration of the loop
-    sf::Event event;
-
-    // calculate delta time
-    sf::Time time = clock.restart();
-    float dt      = time.asSeconds();
-
-    // handle inputs
-    while (GameInfo::getInstance()->window->pollEvent(event))
-    {
-      // close window if event is closed.
-      if (event.type == sf::Event::Closed)
-      {
-        GameInfo::getInstance()->window->close();
-      }
-      else if (event.type == sf::Event::Resized)
-      {
-        GameInfo::getInstance()->window->setSize(sf::Vector2u(
-          Settings::getInstance()->resolution.width,
-          Settings::getInstance()->resolution.height));
-      }
-      // otherwise pass to the current scene to handle.
-      GameInfo::getInstance()->Scenes->handleEvent(event);
-    }
-
-    // pass to current scene to handle update.
-    GameInfo::getInstance()->Scenes->update(dt);
-
-    // call the current scene to render
-    GameInfo::getInstance()->Scenes->render();
-
-    // Only Change scene once the scene has finished updating and rendering ect, prevents double switches and nullptrs where onExit has been called during update and before render
-    GameInfo::getInstance()->Scenes->switchToTargetScene();
-  }
-  return 0;
+	return 0;
 }
