@@ -13,6 +13,7 @@ void TitleScene::load()
 
   background->addComponent<SpriteRenderer>();
   Texture* tex = background->addComponent<Texture>();
-  tex->setTexture(AssetDatabase::get()->getTexture("Pixelartimages/Title Screen"));
+  tex->setTexture(AssetDatabase::getTexture("Pixelartimages/Title Screen"));
 
+  AudioSystem::playSound("FolderTest/Guitar"); // HELL YEAH WE HAVE SOUNDS!
 }

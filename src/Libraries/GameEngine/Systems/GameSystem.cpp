@@ -2,6 +2,7 @@
 #include "../Scene.h"
 #include "PhysicsSystem.h"
 #include <iostream>
+#include "AudioSystem.h"
 
 // Define the static member variable
 GameSystem* GameSystem::instance = nullptr;
@@ -17,7 +18,6 @@ GameSystem* GameSystem::get()
 
 void GameSystem::start(std::string start_scene)
 {
-
 	std::cout << "PRESS F1 To Show scene_root Tree\n";
 	std::cout << "PRESS F2 To Show dont_destroy Tree\n";
 	std::cout << "PRESS F3 To Toggle Debug\n";
@@ -102,6 +102,7 @@ void GameSystem::runGameLoop(float dt)
 	update(dt); // first update tick
 	lateUpdate(dt); // second update tick 
 	render(); // render everything to screen
+	AudioSystem::setupPlayers(); // play all sounds that have been added this tick.
 	changeScene(); // change scene (at the end to allow the tick to finish)
 	flushDestroyQueue();
 }
