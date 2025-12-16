@@ -3,6 +3,15 @@
 #include "Texture.h"
 #include "Transform.h"
 
+void SpriteRenderer::start()
+{
+	if (game_object->hasComponent<Texture>()) {
+		sf::Texture* tex = game_object->getComponent<Texture>()->getTexture();
+		if (tex)
+			sprite.setTexture(*tex);
+	}
+}
+
 void SpriteRenderer::render(sf::RenderWindow* target)
 {
 	// update sprite position based onGameobject

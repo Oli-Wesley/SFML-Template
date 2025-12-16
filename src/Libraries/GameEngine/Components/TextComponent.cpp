@@ -1,6 +1,7 @@
 #include "TextComponent.h"
 #include "../GameObject.h"
 #include "TextRenderer.h"
+#include "../Tools/AssetDatabase.h"
 #include <memory>
 
 void TextComponent::setString(const std::string& str)
@@ -9,18 +10,9 @@ void TextComponent::setString(const std::string& str)
 	updateRenderer();
 }
 
-void TextComponent::setFont(std::unique_ptr<sf::Font>& newFont)
-{
-	font = std::move(newFont);
-	font->setSmooth(false); // disable smoothing bc it looks ass
-	updateRenderer();
-}
-
 void TextComponent::setFont(std::string path)
 {
-	std::unique_ptr<sf::Font> f = std::make_unique<sf::Font>();
-	f->loadFromFile(path);
-	setFont(f);
+	font = AssetDatabase::getFont(path);
 }
 
 void TextComponent::setCharacterSize(unsigned int size)
@@ -47,7 +39,7 @@ const std::string& TextComponent::getString() const
 }
 sf::Font* TextComponent::getFont() const
 {
-	return font.get();
+	return font;
 }
 unsigned int TextComponent::getCharacterSize() const
 {

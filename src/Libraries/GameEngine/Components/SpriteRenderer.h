@@ -5,6 +5,7 @@
 class SpriteRenderer : public IRenderable
 {
 public:
+	void start() override;
 	void render(sf::RenderWindow* target) override;
 	sf::Sprite* getSprite();
 

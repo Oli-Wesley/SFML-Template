@@ -13,7 +13,6 @@ public:
 	TextComponent() = default;
 
 	void setString(const std::string& str);
-	void setFont(std::unique_ptr<sf::Font>& font);
 	void setFont(std::string path);
 	void setCharacterSize(unsigned int size);
 	void setFillColor(const sf::Color& color);
@@ -29,7 +28,7 @@ private:
 	void updateRenderer();
 
 	std::string text;
-	std::unique_ptr<sf::Font> font;
+	sf::Font* font;
 	unsigned int charSize;
 	sf::Color fillColor;
 	sf::Text::Style textStyle;
