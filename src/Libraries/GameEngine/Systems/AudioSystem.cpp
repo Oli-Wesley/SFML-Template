@@ -40,6 +40,27 @@ bool AudioSystem::playSound(std::string sound_id)
 	return playSound(sound_id, 50); // if no volume given, presume 50;
 }
 
+bool AudioSystem::playMusic(std::string sound_id, bool loop, int volume)
+{
+    AudioSystem* asy = get();
+    std::string music_path = "../Data/Music/";
+    MusicInfo music_info;
+    if (!music_info.music->openFromFile(music_path + sound_id)) {
+        return false;
+    }
+    
+    music_info.music->setLoop(loop);
+    music_info.volume = volume;
+    music_info.id = sound_id;
+    asy->music.push_back(std::move(music_info));
+    return true;
+}
+
+bool AudioSystem::playMusic(std::string sound_id, bool loop)
+{
+    return playMusic(sound_id, loop, 50);
+}
+
 // setup players (actually plays the sounds)
 void AudioSystem::setupPlayers()
 {
@@ -66,6 +87,13 @@ void AudioSystem::setupPlayers()
             asy->audio_players.erase(asy->audio_players.begin() + i);
         }
     }
+
+    // remove Music Players that have finished Playing.
+    for (int i = asy->music.size() - 1; i >= 0; --i)
+    {
+        if (asy->music[i].music->getStatus() == sf::Sound::Stopped)
+        {
+            asy->music.erase(asy->music.begin() + i);
+        }
+    }
 }
-
-
