@@ -7,13 +7,13 @@ void TitleScene::load()
 
   // background
   GameObject* background = scene_root->addChild(std::make_unique<GameObject>("background"));
-  background->getTransform()->setLocalPosition(0, 0);
-  background->getTransform()->setLocalScale(5, 5);
-  background->getTransform()->setLocalZheight(-5);
+  Transform* background_transform = background->getTransform();
+  background_transform->setLocalPosition(0, 0);
+  background_transform->setLocalScale(5, 5);
+  background_transform->setLocalZheight(-5);
 
   background->addComponent<SpriteRenderer>();
-  Texture* tex = background->addComponent<Texture>();
-  tex->setTexture(AssetDatabase::getTexture("Pixelartimages/Title Screen"));
+  background->addComponent<Texture>("Backgrounds/Title_Screen");
 
-  AudioSystem::playSound("FolderTest/Guitar"); // HELL YEAH WE HAVE SOUNDS!
+  AudioSystem::playSound("FolderTest/Guitar");
 }
