@@ -16,7 +16,8 @@ int main() {
 	sys->setTitle("Game Engine");
 	sys->setResolution(960, 540);
 
-	AssetDatabase* asd = AssetDatabase::get();
+	AssetDatabase* asd = AssetDatabase::get(); // get asset database (first time getting loads all the assets)
+
 
 	// start game (anything after this in main will not be called untill the game is stopped).
 	sys->start("TitleScene");

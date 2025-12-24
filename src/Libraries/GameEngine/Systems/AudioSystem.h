@@ -21,7 +21,6 @@ public:
 
 protected:
 	struct SoundInfo {
-		sf::SoundBuffer* buffer = nullptr;
 		std::string id;
 		int volume = 50;
 	};

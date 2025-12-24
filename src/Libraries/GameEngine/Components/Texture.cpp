@@ -20,18 +20,18 @@ bool Texture::setTexture(std::string _path)
 	return setTexture(AssetDatabase::getTexture(_path));
 }
 
-bool Texture::setTexture(sf::Texture* _texture)
+bool Texture::setTexture(sf::Texture _texture)
 {
-	if (game_object->hasComponent<SpriteRenderer>() && _texture != nullptr)
+	if (game_object->hasComponent<SpriteRenderer>())
 	{
 		texture = _texture;
-		game_object->getComponent<SpriteRenderer>()->getSprite()->setTexture(*texture, true);
+		game_object->getComponent<SpriteRenderer>()->getSprite().setTexture(texture, true);
 		return true;
 	}
 	return false;
 }
 
-sf::Texture* Texture::getTexture()
+sf::Texture& Texture::getTexture()
 {
 	return texture;
 }

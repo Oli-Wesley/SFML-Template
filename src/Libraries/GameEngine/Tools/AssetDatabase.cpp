@@ -1,6 +1,7 @@
 #include "AssetDatabase.h"
 #include <filesystem>
 #include <iostream>
+#include "../Systems/GameSystem.h"
 // Define the static member variable
 AssetDatabase* AssetDatabase::instance = nullptr;
 
@@ -13,35 +14,38 @@ AssetDatabase* AssetDatabase::get()
 	return instance;
 }
 
-sf::Texture* AssetDatabase::getTexture(std::string path)
+const sf::Texture& AssetDatabase::getTexture(std::string path)
 {
 	AssetDatabase* asd = get();
 
 	auto it = asd->textures.find(path);
 	if (it != asd->textures.end()) {
-		return &it->second;
+		return it->second;
 	}
-	return nullptr;
+	std::cout << "Warning: texture file is not found (" << path << ")\n";
+	return (getTexture("EngineCore/Missing_Tex"));
 }
 
-sf::SoundBuffer* AssetDatabase::getSound(std::string path)
+const sf::SoundBuffer& AssetDatabase::getSound(std::string path)
 {
 	AssetDatabase* asd = get();
 	auto it = asd->sounds.find(path);
 	if (it != asd->sounds.end()) {
-		return &it->second;
+		return it->second;
 	}
-	return nullptr;
+	std::cout << "Warning: sound file is not found (" << path << ")\n";
+	return getSound("EngineCore/Missing_Sound");
 }
 
-sf::Font* AssetDatabase::getFont(std::string path)
+const sf::Font& AssetDatabase::getFont(std::string path)
 {
 	AssetDatabase* asd = get();
 	auto it = asd->fonts.find(path);
 	if (it != asd->fonts.end()) {
-		return &it->second;
+		return it->second;
 	}
-	return nullptr;
+	std::cout << "Warning: font file is not found (" << path << ")\n";
+	return getFont("EngineCore/Comic Sans MS"); 
 }
 
 AssetDatabase::AssetDatabase()
@@ -55,10 +59,10 @@ AssetDatabase::AssetDatabase()
 	);
 
 	loadAssets<sf::SoundBuffer>(
-		"../Data/Sound Effects",
+		"../Data/Sounds",
 		{ "wav", "ogg" },
 		sounds,
-		"Sound Effects"
+		"Sound"
 	);
 
 	loadAssets<sf::Font>(
@@ -87,5 +91,6 @@ std::vector<std::string> AssetDatabase::getAllPathsInDirectory(std::string direc
 
 void AssetDatabase::print(std::string string)
 {
-	std::cout << string;
+	if (GameSystem::get()->isDebug())
+		std::cout << string;
 }

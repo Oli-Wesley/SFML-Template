@@ -19,7 +19,7 @@ public:
 	void setStyle(sf::Text::Style style);
 
 	const std::string& getString() const;
-	sf::Font* getFont() const;
+	sf::Font& getFont();
 	unsigned int getCharacterSize() const;
 	sf::Color getFillColor() const;
 	sf::Text::Style getStyle() const;
@@ -28,7 +28,7 @@ private:
 	void updateRenderer();
 
 	std::string text;
-	sf::Font* font;
+	sf::Font font;
 	unsigned int charSize;
 	sf::Color fillColor;
 	sf::Text::Style textStyle;

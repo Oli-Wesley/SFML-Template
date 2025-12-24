@@ -15,5 +15,5 @@ void TitleScene::load()
   background->addComponent<SpriteRenderer>();
   background->addComponent<Texture>("Backgrounds/Title_Screen");
 
-  AudioSystem::playSound("FolderTest/Guitar");
+  AudioSystem::playSound("Folder_Test/Guitar");
 }

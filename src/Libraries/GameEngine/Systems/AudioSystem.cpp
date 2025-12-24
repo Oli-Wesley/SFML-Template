@@ -16,22 +16,11 @@ AudioSystem* AudioSystem::get()
 // plays a sound sound id as path without file extension e.g playerSounds/hit
 bool AudioSystem::playSound(std::string sound_id, int volume)
 {
-    AudioSystem* asy = get();
-
-    sf::SoundBuffer* sound = AssetDatabase::getSound(sound_id);
-    // if no sound, print and return. 
-    if (!sound) {
-        std::cout << "Could not play sound: (" << sound_id
-            << ") as it does not exist in asset database.\n";
-        return false;
-    }
-    
     //setup info and move to sound queue.
     SoundInfo info;
     info.id = sound_id;
     info.volume = volume;
-    info.buffer = sound;
-    asy->sound_queue.push_back(std::move(info));
+    get()->sound_queue.push_back(std::move(info));
     return true;
 }
 
@@ -40,9 +29,9 @@ bool AudioSystem::playSound(std::string sound_id)
 	return playSound(sound_id, 50); // if no volume given, presume 50;
 }
 
+// currently untested
 bool AudioSystem::playMusic(std::string sound_id, bool loop, int volume)
 {
-    AudioSystem* asy = get();
     std::string music_path = "../Data/Music/";
     MusicInfo music_info;
     if (!music_info.music->openFromFile(music_path + sound_id)) {
@@ -50,9 +39,10 @@ bool AudioSystem::playMusic(std::string sound_id, bool loop, int volume)
     }
     
     music_info.music->setLoop(loop);
+    music_info.music->play();
     music_info.volume = volume;
     music_info.id = sound_id;
-    asy->music.push_back(std::move(music_info));
+    get()->music.push_back(std::move(music_info));
     return true;
 }
 
@@ -69,7 +59,7 @@ void AudioSystem::setupPlayers()
     for (SoundInfo& sound_info : asy->sound_queue)
     {
         PlayerInfo player_info;
-        player_info.player = std::make_unique<sf::Sound>(*sound_info.buffer);
+        player_info.player = std::make_unique<sf::Sound>(AssetDatabase::getSound(sound_info.id));
         player_info.player->setVolume(sound_info.volume);
         player_info.player->play();
         player_info.id = sound_info.id;

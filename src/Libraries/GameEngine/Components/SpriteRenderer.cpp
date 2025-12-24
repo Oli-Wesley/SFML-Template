@@ -6,9 +6,8 @@
 void SpriteRenderer::start()
 {
 	if (game_object->hasComponent<Texture>()) {
-		sf::Texture* tex = game_object->getComponent<Texture>()->getTexture();
-		if (tex)
-			sprite.setTexture(*tex);
+		sf::Texture tex = game_object->getComponent<Texture>()->getTexture();
+		sprite.setTexture(tex);
 	}
 }
 
@@ -23,7 +22,7 @@ void SpriteRenderer::render(sf::RenderWindow* target)
 	target->draw(sprite);
 }
 
-sf::Sprite* SpriteRenderer::getSprite()
+sf::Sprite& SpriteRenderer::getSprite()
 {
-	return &sprite;
+	return sprite;
 }

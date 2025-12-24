@@ -151,7 +151,7 @@ bool GameSystem::isDebug()
 void GameSystem::setDebug(bool flag)
 {
 	is_debug = flag;
-	std::cout << "Toggled Debug: " << is_debug << "\n";
+	std::cout << "Debug state: " << is_debug << "\n";
 }
 
 sf::RenderWindow* GameSystem::getWindow()
@@ -214,41 +214,42 @@ void GameSystem::lateUpdate(float dt)
 
 void GameSystem::render()
 {
-	if (currentScene != nullptr)
+	if (currentScene == nullptr)
 	{
-		window->clear(currentScene->getSceneColor());
-		// get all renderables from the scene (scene_root and dont_destroy)
-		std::vector<IRenderable*> renderables = currentScene->scene_root->render();
-		std::vector<IRenderable*> other = currentScene->dont_destroy->render();
-		renderables.insert(renderables.end(), other.begin(), other.end());
-		// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
-		bool changed = 1;
-		IRenderable* hold;
-		int length = renderables.size();
-		while (changed)
+		window->clear(sf::Color::White); // still clear screen to white if the scene is nullptr
+		window->display();
+		return;
+	}
+	window->clear(currentScene->getSceneColor());
+	// get all renderables from the scene (scene_root and dont_destroy)
+	std::vector<IRenderable*> renderables = currentScene->scene_root->render();
+	std::vector<IRenderable*> other = currentScene->dont_destroy->render();
+	renderables.insert(renderables.end(), other.begin(), other.end());
+	// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
+	bool changed = 1;
+	IRenderable* hold;
+	int length = renderables.size();
+	while (changed)
+	{
+		changed = 0;
+		for (int index = 0; index < length - 1; index++)
 		{
-			changed = 0;
-			for (int index = 0; index < length - 1; index++)
+			if (
+				renderables[index]->getRenderOrder() >
+				renderables[index + 1]->getRenderOrder())
 			{
-				if (
-					renderables[index]->getRenderOrder() >
-					renderables[index + 1]->getRenderOrder())
-				{
-					hold = renderables[index];
-					renderables[index] = renderables[index + 1];
-					renderables[index + 1] = hold;
-					changed = 1;
-				}
+				hold = renderables[index];
+				renderables[index] = renderables[index + 1];
+				renderables[index + 1] = hold;
+				changed = 1;
 			}
 		}
-		// render now sorted list
-		for (IRenderable* var : renderables)
-		{
-			var->render(getWindow());
-		}
 	}
-	else
-		window->clear(sf::Color::White); // still clear screen to white if the scene is nullptr
+	// render now sorted list
+	for (IRenderable* var : renderables)
+	{
+		var->render(getWindow());
+	}		
 	window->display();
 }
 

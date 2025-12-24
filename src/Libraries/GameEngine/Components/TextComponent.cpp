@@ -37,7 +37,7 @@ const std::string& TextComponent::getString() const
 {
 	return text;
 }
-sf::Font* TextComponent::getFont() const
+sf::Font& TextComponent::getFont() 
 {
 	return font;
 }
@@ -62,8 +62,7 @@ void TextComponent::updateRenderer()
 
 	sf::Text* renderText = renderer->getText();
 	renderText->setString(text);
-	if (font)
-		renderText->setFont(*font);
+	renderText->setFont(font);
 	renderer->text_size = charSize;
 	renderText->setFillColor(fillColor);
 	renderText->setStyle(textStyle);

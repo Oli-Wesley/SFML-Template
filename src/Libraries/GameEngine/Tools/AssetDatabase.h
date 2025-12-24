@@ -17,11 +17,11 @@ public:
 	static AssetDatabase* get();
 
 	// Get Texture from path starting in images folder, with the extension removed.
-	static sf::Texture* getTexture(std::string path);
+	static const sf::Texture& getTexture(std::string path);
 	// Get SoundBuffer from path starting in images folder, with the extension removed.
-	static sf::SoundBuffer* getSound(std::string path);
+	static const sf::SoundBuffer& getSound(std::string path);
 	// Get Font from path starting in images folder, with the extension removed.
-	static sf::Font* getFont(std::string path);
+	static const sf::Font& getFont(std::string path);
 protected:
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, sf::SoundBuffer> sounds;
@@ -45,7 +45,7 @@ protected:
 		const std::string& label
 	) 
 	{
-		print("__Loading " + label + "__:\n");
+		print("__Loading " + label + "(s)__:\n");
 
 		std::vector<std::string> files = getAllPathsInDirectory(folder);
 

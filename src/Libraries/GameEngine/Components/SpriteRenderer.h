@@ -7,7 +7,7 @@ class SpriteRenderer : public IRenderable
 public:
 	void start() override;
 	void render(sf::RenderWindow* target) override;
-	sf::Sprite* getSprite();
+	sf::Sprite& getSprite();
 
 private:
 	sf::Sprite sprite; // texture for sprite stored elsewhere in another component
