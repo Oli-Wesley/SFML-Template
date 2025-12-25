@@ -7,15 +7,12 @@ void TitleScene::load()
 	scene_background_color = sf::Color(255, 0, 255);
 
 	// background
-	GameObject* background = scene_root->addChild(std::make_unique<GameObject>("background"));
+	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
 	Transform* background_transform = background->getTransform();
-	background_transform->setLocalPosition(0, 0);
 	background_transform->setLocalScale(5, 5);
 	background_transform->setLocalZheight(-5);
-
-	// setup rendering
-	background->addComponent<SpriteRenderer>();
-	background->addComponent<Texture>("Backgrounds/Title_Screen");
+	// set texture
+	background->getComponent<Texture>()->setTexture("Backgrounds/Title_Screen");
 
 	// test sound playing.
 	AudioSystem::playSound("Folder_Test/Guitar");
@@ -31,6 +28,12 @@ void TitleScene::load()
 	Animator* animator = animation_test->addComponent<Animator>(std::vector<Animation>{
 		Animation("Player/Idle"),
 		Animation("Player/Walk"),
+		Animation("Player/Attack1"),
+		Animation("Player/Attack2"),
+		Animation("Player/Attack3"),
+		Animation("Player/Jump"),
+		Animation("Player/Cry"),
+		Animation("Player/Die"),
 		Animation("Player/Baby")
 	});
 
