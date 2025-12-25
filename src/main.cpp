@@ -15,6 +15,7 @@ int main() {
 	sys->setFramerate(120);
 	sys->setTitle("Game Engine");
 	sys->setResolution(960, 540);
+	// sys->setDebug(1); // can be toggled at runtime using f3, but also can be toggled here to see the loading of assets on startup
 
 	AssetDatabase* asd = AssetDatabase::get(); // get asset database (first time getting loads all the assets)
 

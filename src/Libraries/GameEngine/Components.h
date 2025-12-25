@@ -11,3 +11,4 @@
 #include "Components/Transform.h"
 #include "Components/IScriptableBehaviour.h"
 #include "Components/Draggable.h"
+#include "Components/Animator.h"

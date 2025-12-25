@@ -1,0 +1,6 @@
+framerate : 10
+loop : 1
+frame_count : 4
+texture_id : SpriteSheets/adventurer_sprite_sheet
+texture_size : 32,32
+start_position : 0,192

@@ -1,19 +1,50 @@
 #include "TitleScene.h"
 #include "../Libraries/GameEngine.h"
+#include "../Scripts/S_Button.h"
 
 void TitleScene::load()
 {
-  PrefabRegistry* pref = PrefabRegistry::get();
+	PrefabRegistry* pref = PrefabRegistry::get();
+	scene_background_color = sf::Color(255, 0, 255);
 
-  // background
-  GameObject* background = scene_root->addChild(std::make_unique<GameObject>("background"));
-  Transform* background_transform = background->getTransform();
-  background_transform->setLocalPosition(0, 0);
-  background_transform->setLocalScale(5, 5);
-  background_transform->setLocalZheight(-5);
+	// background
+	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
+	Transform* background_transform = background->getTransform();
+	background_transform->setLocalScale(5, 5);
+	background_transform->setLocalZheight(-5);
+	// set texture
+	background->getComponent<Texture>()->setTexture("Backgrounds/Title_Screen");
 
-  background->addComponent<SpriteRenderer>();
-  background->addComponent<Texture>("Backgrounds/Title_Screen");
+	// test sound playing.
+	AudioSystem::playSound("Folder_Test/Guitar");
 
-  AudioSystem::playSound("Folder_Test/Guitar");
+	GameObject* animation_test = scene_root->addChild(std::make_unique<GameObject>("animation_test"));
+	animation_test->getTransform()->setLocalScale(10, 10);
+	animation_test->getTransform()->setLocalPosition(30, 30);
+
+	animation_test->addComponent<Texture>();
+	animation_test->addComponent<SpriteRenderer>();
+
+	// add animations
+	Animator* animator = animation_test->addComponent<Animator>(std::vector<Animation>{
+		Animation("Player/Idle"),
+		Animation("Player/Walk"),
+		Animation("Player/Attack1"),
+		Animation("Player/Attack2"),
+		Animation("Player/Attack3"),
+		Animation("Player/Jump"),
+		Animation("Player/Cry"),
+		Animation("Player/Die"),
+		Animation("Player/Baby")
+	});
+
+	GameObject* button = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Button"));;
+	button->addComponent<Clickable>();
+	button->getTransform()->setGlobalScale(5, 5);
+	button->getTransform()->setGlobalPosition(420, 400);
+	button->addComponent<BoxCollider>(16, 13)->setPosition(3, 3);
+	button->addScript<S_Button>()->addAnimatorTarget(animator);
+
+
+	animator->playAnimation("Player/Idle");
 }
