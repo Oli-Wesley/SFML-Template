@@ -20,9 +20,10 @@ FetchContent_MakeAvailable(SFML)    # Makes sure SFML and its dependencies are a
 file(GLOB_RECURSE LIBRARY_FILES "src/Libraries/*.cpp" "src/Libraries/*.h", "src/Libraries/*.hpp")
 file(GLOB_RECURSE GAME_OBJECTS "src/GameObjects/*.cpp" "src/GameObjects/*.h", "src/GameObjects/*.hpp")
 file(GLOB_RECURSE SCENES "src/Scenes/*.cpp" "src/Scenes/*.h", "src/Scenes/*.hpp")
+file(GLOB_RECURSE SCRIPTS "src/Scripts/*.cpp" "src/Scripts/*.h", "src/Scripts/*.hpp")
 set(SOURCE_FILES "src/main.cpp" )  # Sets variable SOURCE_FILES to hold names & locations of files that need to be compiled into the application
 
-set (ALL_FILES  ${LIBRARY_FILES} ${SOURCE_FILES} ${GAME_OBJECTS} ${SCENES})
+set (ALL_FILES  ${LIBRARY_FILES} ${SOURCE_FILES} ${GAME_OBJECTS} ${SCENES} ${SCRIPTS})
 add_executable(Template ${ALL_FILES} )  # Names the application and tells compiler which source files to use
 
 target_link_libraries(Template PRIVATE sfml-graphics sfml-window sfml-system sfml-network sfml-audio) # Links the SFML libraries we need to our application
