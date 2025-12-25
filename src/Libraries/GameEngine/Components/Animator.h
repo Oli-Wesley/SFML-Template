@@ -19,6 +19,8 @@ public:
 	bool playAnimation(std::string animation_id);
 	bool playAnimation(std::string animation_id, bool exit_gracefully);
 
+	std::vector<std::string> getAllAnimationIds();
+
 	void update(float dt) override;
 
 

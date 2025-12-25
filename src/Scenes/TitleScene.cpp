@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "../Libraries/GameEngine.h"
+#include "../Scripts/S_Button.h"
 
 void TitleScene::load()
 {
@@ -36,6 +37,13 @@ void TitleScene::load()
 		Animation("Player/Die"),
 		Animation("Player/Baby")
 	});
+
+	GameObject* button = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Button"));;
+	button->addComponent<Clickable>();
+	button->getTransform()->setGlobalScale(5, 5);
+	button->getTransform()->setGlobalPosition(420, 400);
+	button->addComponent<BoxCollider>(16, 13)->setPosition(3, 3);
+	button->addScript<S_Button>()->addAnimatorTarget(animator);
 
 
 	animator->playAnimation("Player/Idle");

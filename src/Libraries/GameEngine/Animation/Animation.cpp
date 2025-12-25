@@ -24,10 +24,9 @@ void Animation::updateAnimation(float dt)
 
 	if (new_frame >= total_frames)
 	{
-		just_finished = true;
-
 		if (is_looping)
 		{
+			just_finished = true;
 			// preserve leftover time for smooth looping
 			time -= total_frames * time_per_frame;
 			current_frame = static_cast<int>(time / time_per_frame);
@@ -55,7 +54,7 @@ sf::IntRect Animation::getCurrentFrameRect()
 
 bool Animation::canExitGracefully()
 {
-	return just_finished || current_state == STATE::STOPPED; // if stopped or just finished reset.
+	return just_finished || getState() == STATE::STOPPED; // if stopped or just finished return true
 }
 
 std::string Animation::getTextureId()
@@ -73,7 +72,8 @@ bool Animation::loadFromFile(std::string path)
 {
 	path = "../Data/Animations/" + path + ".anim";
 	FileParser file;
-	if (file.loadFromFile(path));
+	if (!file.loadFromFile(path))
+		return false;
 
 	std::string animation_id; // name of the animation
 
