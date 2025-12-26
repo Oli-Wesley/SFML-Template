@@ -9,7 +9,7 @@ void TitleScene::load()
 
 	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
 	Camera* camare_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
-	camera->getTransform()->setGlobalPosition(300, 0);
+	camera->getTransform()->setGlobalPosition(960/2, 540/2); // set to middle of screen (where it was before)
 
 	// background
 	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
@@ -36,19 +36,19 @@ void TitleScene::load()
 	// add animations
 	Animator* animator = animation_test->addComponent<Animator>(std::vector<Animation>{
 		Animation("Player/Idle"),
-		Animation("Player/Walk"),
-		Animation("Player/Attack1"),
-		Animation("Player/Attack2"),
-		Animation("Player/Attack3"),
-		Animation("Player/Jump"),
-		Animation("Player/Cry"),
-		Animation("Player/Die"),
-		Animation("Baby/Drink"),
-		Animation("Baby/Idle"),
-		Animation("Baby/Poop"),
-		Animation("Baby/Sit"),
-		Animation("Baby/Walk"),
-		baby_anim // give animator animation by variable 
+			Animation("Player/Walk"),
+			Animation("Player/Attack1"),
+			Animation("Player/Attack2"),
+			Animation("Player/Attack3"),
+			Animation("Player/Jump"),
+			Animation("Player/Cry"),
+			Animation("Player/Die"),
+			Animation("Baby/Drink"),
+			Animation("Baby/Idle"),
+			Animation("Baby/Poop"),
+			Animation("Baby/Sit"),
+			Animation("Baby/Walk"),
+			baby_anim // give animator animation by variable 
 	});
 
 	animator->playAnimation("Player/Idle"); // play animation

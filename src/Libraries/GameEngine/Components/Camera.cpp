@@ -15,7 +15,7 @@ void Camera::render(const std::vector<IRenderable*>& renderables)
 {
 	// move view to transform position.
 	view->setCenter(game_object->getTransform()->getGlobalPosition());
-
+	render_tex.setView(*view);
 	render_tex.clear(background_col);
 	// render to texture.
 	for (IRenderable* obj: renderables)

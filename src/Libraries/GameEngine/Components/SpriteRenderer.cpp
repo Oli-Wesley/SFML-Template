@@ -19,6 +19,7 @@ void SpriteRenderer::render(sf::RenderTarget* target)
 	sprite.setScale(transform->getGlobalScale());
 	sprite.setRotation(transform->getGlobalRotation());
 	sf::Vector2f scale = sprite.getScale();
+
 	target->draw(sprite);
 }
 
