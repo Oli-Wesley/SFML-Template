@@ -7,6 +7,10 @@ void TitleScene::load()
 	PrefabRegistry* pref = PrefabRegistry::get();
 	scene_background_color = sf::Color(255, 0, 255);
 
+	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
+	Camera* camare_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
+	camera->getTransform()->setGlobalPosition(300, 0);
+
 	// background
 	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
 	Transform* background_transform = background->getTransform();

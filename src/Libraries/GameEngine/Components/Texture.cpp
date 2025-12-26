@@ -14,7 +14,6 @@ void Texture::start()
 		setTexture(tex_path);
 }
 
-// TODO: move this to the new assetDatabase system
 bool Texture::setTexture(std::string _path)
 {
 	return setTexture(AssetDatabase::getTexture(_path));

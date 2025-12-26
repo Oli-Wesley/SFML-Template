@@ -49,7 +49,7 @@ void BoxCollider::setSize(float _x, float _y)
 	setSize(sf::Vector2(_x, _y));
 }
 
-void BoxCollider::render(sf::RenderWindow* window)
+void BoxCollider::render(sf::RenderTarget* window)
 {
 	if (GameSystem::get()->isDebug())
 	{

@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include <cmath>
 
-void TextRenderer::render(sf::RenderWindow* target)
+void TextRenderer::render(sf::RenderTarget* target)
 {
 	// update text position based on GameObject
 	text.setPosition(game_object->getTransform()->getGlobalPosition());

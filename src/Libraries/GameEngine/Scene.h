@@ -2,6 +2,8 @@
 #include <SFML/Graphics/Color.hpp>
 #include "SFML/System/Vector2.hpp"
 #include <memory>
+#include <vector>
+#include "Components/Camera.h"
 // prototype gameObject so it is happy at compile time.
 class GameObject;
 
@@ -23,11 +25,16 @@ public:
 
 	void onWindowResize(sf::Vector2i new_size);
 
+	// take in a list of renderables and render them to every camera in that order.
+	std::vector<Camera::CameraOutput> render();
+
 protected:
 	virtual void load() = 0; // Every scene needs a load function.
 	virtual void onUnload() {};
 
-	// black bars around edge of screen (can pick a colour to change them to)
+	// std::vector<std::unique_ptr<Camera>> cameras;
+	
+	// background of the window if nothing is rendered there. (cameras store their own background colour) 
 	sf::Color scene_background_color = sf::Color(0,0,0);
 
 	sf::Vector2i target_resolution = sf::Vector2i(960, 540);

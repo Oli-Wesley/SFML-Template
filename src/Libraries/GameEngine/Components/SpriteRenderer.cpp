@@ -11,7 +11,7 @@ void SpriteRenderer::start()
 	}
 }
 
-void SpriteRenderer::render(sf::RenderWindow* target)
+void SpriteRenderer::render(sf::RenderTarget* target)
 {
 	// update sprite position based onGameobject
 	Transform* transform = game_object->getTransform();

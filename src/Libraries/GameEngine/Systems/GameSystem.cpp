@@ -3,6 +3,7 @@
 #include "PhysicsSystem.h"
 #include <iostream>
 #include "AudioSystem.h"
+#include "../Components/Camera.h"
 
 // Define the static member variable
 GameSystem* GameSystem::instance = nullptr;
@@ -203,7 +204,6 @@ void GameSystem::update(float dt)
 		currentScene->scene_root->update(dt);
 		currentScene->dont_destroy->update(dt);
 	}
-
 }
 
 void GameSystem::lateUpdate(float dt)
@@ -221,35 +221,23 @@ void GameSystem::render()
 		return;
 	}
 	window->clear(currentScene->getSceneColor());
-	// get all renderables from the scene (scene_root and dont_destroy)
-	std::vector<IRenderable*> renderables = currentScene->scene_root->render();
-	std::vector<IRenderable*> other = currentScene->dont_destroy->render();
-	renderables.insert(renderables.end(), other.begin(), other.end());
-	// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
-	bool changed = 1;
-	IRenderable* hold;
-	int length = renderables.size();
-	while (changed)
+
+	// render current scene and keep outputs of all cameras
+	std::vector<Camera::CameraOutput> outputs = currentScene->render();
+	
+	// display what the scene just rendered to the display
+	for (Camera::CameraOutput& var : outputs)
 	{
-		changed = 0;
-		for (int index = 0; index < length - 1; index++)
-		{
-			if (
-				renderables[index]->getRenderOrder() >
-				renderables[index + 1]->getRenderOrder())
-			{
-				hold = renderables[index];
-				renderables[index] = renderables[index + 1];
-				renderables[index + 1] = hold;
-				changed = 1;
-			}
-		}
-	}
-	// render now sorted list
-	for (IRenderable* var : renderables)
-	{
-		var->render(getWindow());
+		sf::Sprite sprite(*var.texture);
+
+		sprite.setPosition(var.screen_rect.left, var.screen_rect.top);
+		sprite.setScale(
+			var.screen_rect.width / var.texture->getSize().x,
+			var.screen_rect.height / var.texture->getSize().y
+		);
+		window->draw(sprite);
 	}		
+	// actually display to screen
 	window->display();
 }
 
