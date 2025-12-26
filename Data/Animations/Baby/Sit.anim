@@ -1,0 +1,6 @@
+framerate : 10
+loop : 1
+frame_count : 12
+texture_id : SpriteSheets/Human_Baby_Sprite_Sheet
+texture_size : 32,32
+start_position : 0,64

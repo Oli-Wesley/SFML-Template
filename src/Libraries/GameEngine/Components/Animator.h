@@ -16,10 +16,12 @@ public:
 	void addAnimation(Animation anim);
 	void addAnimation(std::vector<Animation> anims);
 
+
 	bool playAnimation(std::string animation_id);
 	bool playAnimation(std::string animation_id, bool exit_gracefully);
 
 	std::vector<std::string> getAllAnimationIds();
+	Animation& getAnimation(std::string animationId);
 
 	void update(float dt) override;
 

@@ -25,6 +25,10 @@ void TitleScene::load()
 	animation_test->addComponent<Texture>();
 	animation_test->addComponent<SpriteRenderer>();
 
+	// example of loading from variable if needed (its also possible to make animations entirely through code, though bulky and silly)
+	Animation baby_anim = Animation("Baby/Cry");
+	baby_anim.setSpeed(2);  // example editing of values 
+
 	// add animations
 	Animator* animator = animation_test->addComponent<Animator>(std::vector<Animation>{
 		Animation("Player/Idle"),
@@ -35,8 +39,15 @@ void TitleScene::load()
 		Animation("Player/Jump"),
 		Animation("Player/Cry"),
 		Animation("Player/Die"),
-		Animation("Player/Baby")
+		Animation("Baby/Drink"),
+		Animation("Baby/Idle"),
+		Animation("Baby/Poop"),
+		Animation("Baby/Sit"),
+		Animation("Baby/Walk"),
+		baby_anim // give animator animation by variable 
 	});
+
+	animator->playAnimation("Player/Idle"); // play animation
 
 	GameObject* button = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Button"));;
 	button->addComponent<Clickable>();
@@ -44,7 +55,4 @@ void TitleScene::load()
 	button->getTransform()->setGlobalPosition(420, 400);
 	button->addComponent<BoxCollider>(16, 13)->setPosition(3, 3);
 	button->addScript<S_Button>()->addAnimatorTarget(animator);
-
-
-	animator->playAnimation("Player/Idle");
 }

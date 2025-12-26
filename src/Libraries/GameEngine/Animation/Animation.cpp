@@ -18,7 +18,7 @@ void Animation::updateAnimation(float dt)
 		return;
 
 	just_finished = false;
-	time += dt;
+	time += dt * speed;
 
 	int new_frame = static_cast<int>(time / time_per_frame);
 
@@ -114,6 +114,16 @@ void Animation::setFramerate(int fps)
 
 }
 
+float Animation::getSpeed()
+{
+	return speed;
+}
+
+void Animation::setSpeed(float new_speed)
+{
+	speed = new_speed;
+}
+
 void Animation::setLooping(bool should_loop)
 {
 	is_looping = should_loop;
@@ -143,6 +153,7 @@ void Animation::stop()
 {
 	current_state = Animation::STATE::STOPPED;
 	current_frame = 0;
+	just_finished = false;
 	time = 0;
 }
 

@@ -50,6 +50,11 @@ std::vector<std::string> Animator::getAllAnimationIds()
 	return id;
 }
 
+Animation& Animator::getAnimation(std::string animationId)
+{
+	return animations.at(animationId);
+}
+
 void Animator::update(float dt)
 {
 

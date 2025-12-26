@@ -29,8 +29,11 @@ public:
 	int getFramerate();
 	void setFramerate(int fps); // Framerate in fps (60 = 60fps);
 
-	void setLooping(bool should_loop);
+	float getSpeed();
+	void setSpeed(float new_speed); // speed override 1 = default speed 
+
 	bool isLooping();
+	void setLooping(bool should_loop);
 
 	STATE getState();
 	void play(); // plays animation
@@ -43,13 +46,14 @@ private:
 
 	int framerate = 24;
 	bool is_looping = false;
+	float speed = 1.0f;
 
 	sf::Vector2i texture_size = { 16,16 }; // size of each animation frame in the image. 
 	sf::Vector2i start_position = { 0,0 }; // start position of the animation (if multiple animations are in the same texture)
 	std::string texture_id = "";
 
 	bool just_finished = false;
-	float time_per_frame = 0.04166666666; // time per frame at 24fps.
+	float time_per_frame = 0.04166666666f; // time per frame at 24fps.
 
 	int current_frame = 0; // current frame of the animation
 	int total_frames = 0; // total amount of frames

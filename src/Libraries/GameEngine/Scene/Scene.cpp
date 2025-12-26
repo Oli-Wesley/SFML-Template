@@ -50,3 +50,9 @@ void Scene::onWindowResize(sf::Vector2i new_size)
 	scene_root->getTransform()->setLocalPosition(offset_x, offset_y);
 	dont_destroy->getTransform()->setLocalPosition(offset_x, offset_y);
 }
+
+//std::vector<sf::RenderTexture> Scene::render(const std::vector<IRenderable*> renderables)
+//{
+//	// iterate over cameras 
+//	return std::vector<>();
+//}
