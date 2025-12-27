@@ -2,6 +2,7 @@
 #include "IComponent.h"
 #include "../ScriptableBehaviour.h"
 #include <memory>
+#include <vector>
 
 class IScriptableBehaviour : public IComponent {
 private:

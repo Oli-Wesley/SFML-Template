@@ -52,8 +52,9 @@ void BoxCollider::setSize(float _x, float _y)
 void BoxCollider::render(sf::RenderTarget* target)
 {
 	if (GameSystem::get()->isDebug())
-	{
-		// this is quite expensive to do every frame, but like its debug so idc
+	{	
+		was_rendered = true;
+		// i think this is quite expensive to do every frame, but like its debug so idc
 		sf::RectangleShape rect = sf::RectangleShape(
 			sf::Vector2f(getCollider().width, getCollider().height));
 		rect.setPosition({ getCollider().left, getCollider().top });
@@ -74,11 +75,16 @@ void BoxCollider::render(sf::RenderTarget* target)
 	}
 }
 
+const sf::FloatRect BoxCollider::getGlobalBounds()
+{
+	return getCollider(); // just return collider here. 
+}
+
 float BoxCollider::getRenderOrder()
 {
 	// returns the renderOrder, used for sorting the render_queue so elements get
 	// drawn in the correct order. (forces this to be very high, so debug boxes
 	// are always drawn on top.
 
-	return game_object->getTransform()->getGlobalZheight() + 100.0f;
+	return game_object->getTransform()->getGlobalZheight() + 10000.0f;
 }

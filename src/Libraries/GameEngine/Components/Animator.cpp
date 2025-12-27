@@ -59,7 +59,6 @@ Animation& Animator::getAnimation(std::string animationId)
 
 void Animator::update(float dt)
 {
-
 	// if cant find either texture or sprite component return.
 	if (!getComponents())
 		return;

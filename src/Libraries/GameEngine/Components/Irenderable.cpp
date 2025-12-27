@@ -9,3 +9,13 @@ float IRenderable::getRenderOrder()
 {
 	return game_object->getTransform()->getGlobalZheight();
 }
+
+void IRenderable::resetBeforeRender()
+{
+	was_rendered = false;
+}
+
+const bool IRenderable::wasRenderedLastFrame()
+{
+	return was_rendered;
+}

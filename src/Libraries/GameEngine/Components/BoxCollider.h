@@ -23,6 +23,7 @@ public:
 
 	// debug rendering
 	void render(sf::RenderTarget* target) override;
+	const sf::FloatRect getGlobalBounds() override;
 	float getRenderOrder() override;
 
 protected:

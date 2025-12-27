@@ -18,10 +18,18 @@ void Camera::render(const std::vector<IRenderable*>& renderables)
 	view->setCenter(game_object->getTransform()->getGlobalPosition());
 	render_tex.setView(*view);
 	render_tex.clear(background_col);
+
+	sf::FloatRect viewBounds(view->getCenter().x - view->getSize().x / 2.f,
+		view->getCenter().y - view->getSize().y / 2.f,
+		view->getSize().x,
+		view->getSize().y);
+
 	// render to texture.
 	for (IRenderable* obj : renderables)
 	{
-		obj->render(&render_tex);
+		obj->resetBeforeRender(); // reset was_rendered
+		if (obj->getGlobalBounds().intersects(viewBounds))
+			obj->render(&render_tex); // rended to a texture. 
 	}
 	render_tex.display();
 }

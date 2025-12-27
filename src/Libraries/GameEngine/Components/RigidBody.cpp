@@ -1,5 +1,6 @@
 #include "RigidBody.h"
 #include "../GameObject.h"
+#include <cmath>
 void RigidBody::physicsUpdate(float timestep)
 {
 	// if isnt static, run physics ticks.

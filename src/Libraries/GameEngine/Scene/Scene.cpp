@@ -57,8 +57,8 @@ std::vector<Camera::CameraOutput> Scene::render()
 	std::vector<IRenderable*> renderables = scene_root->render();
 	std::vector<IRenderable*> other = dont_destroy->render();
 	renderables.insert(renderables.end(), other.begin(), other.end());
-	// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
 
+	// sort renderables list
 	std::sort(renderables.begin(), renderables.end(), [](IRenderable* a, IRenderable* b)
 		{
 			return a->getRenderOrder() < b->getRenderOrder();

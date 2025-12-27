@@ -5,6 +5,24 @@
 
 void TextRenderer::render(sf::RenderTarget* target)
 {
+	updateText();
+	was_rendered = true;
+	target->draw(text);
+}
+
+const sf::FloatRect TextRenderer::getGlobalBounds()
+{
+	updateText();
+	return text.getGlobalBounds();
+}
+
+sf::Text* TextRenderer::getText()
+{
+	return &text;
+}
+
+void TextRenderer::updateText()
+{
 	// update text position based on GameObject
 	text.setPosition(game_object->getTransform()->getGlobalPosition());
 
@@ -14,12 +32,5 @@ void TextRenderer::render(sf::RenderTarget* target)
 		std::round(text_pos.x),
 		std::round(text_pos.y)
 	);
-
 	text.setCharacterSize(std::round(text_size * game_object->getTransform()->getGlobalScale().x));
-	target->draw(text);
-}
-
-sf::Text* TextRenderer::getText()
-{
-	return &text;
 }

@@ -13,17 +13,28 @@ void SpriteRenderer::start()
 
 void SpriteRenderer::render(sf::RenderTarget* target)
 {
+	was_rendered = true;
+	updateSprite();
+	target->draw(sprite);
+}
+
+const sf::FloatRect SpriteRenderer::getGlobalBounds()
+{
+	updateSprite();
+	return sprite.getGlobalBounds();
+}
+
+sf::Sprite& SpriteRenderer::getSprite()
+{
+	return sprite;
+}
+
+void SpriteRenderer::updateSprite()
+{
 	// update sprite position based onGameobject
 	Transform* transform = game_object->getTransform();
 	sprite.setPosition(transform->getGlobalPosition());
 	sprite.setScale(transform->getGlobalScale());
 	sprite.setRotation(transform->getGlobalRotation());
 	sf::Vector2f scale = sprite.getScale();
-
-	target->draw(sprite);
-}
-
-sf::Sprite& SpriteRenderer::getSprite()
-{
-	return sprite;
 }

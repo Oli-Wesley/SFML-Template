@@ -215,6 +215,52 @@ Transform* GameObject::getTransform()
 	return transform.get();
 }
 
+
+sf::FloatRect GameObject::getGlobalBounds()
+{
+		for (std::unique_ptr<IComponent>& comp : components) {
+			IRenderable* renderable = dynamic_cast<IRenderable*>(comp.get());
+			if (renderable) {
+				return renderable->getGlobalBounds();
+			}
+		}
+	return sf::FloatRect(0,0,0,0);
+}
+
+
+sf::FloatRect GameObject::getGlobalBoundsWithChilderen()
+{
+	std::vector<IRenderable*> all_active_child_renderables = render();
+	sf::FloatRect size(0, 0, 0, 0);
+	for (IRenderable* i : all_active_child_renderables) {
+		size = helpers::growRectToFit(size, i->getGlobalBounds());
+	}
+	return size;
+}
+
+bool GameObject::wasRenderedLastFrame()
+{
+	if (is_drawn) {
+		for (std::unique_ptr<IComponent>& comp : components) {
+			IRenderable* renderable = dynamic_cast<IRenderable*>(comp.get());
+			if (renderable) {
+				return renderable->wasRenderedLastFrame();
+			}
+		}
+	}
+	return false;
+}
+
+bool GameObject::wasRenderedLastFrameWithChilderen()
+{
+	std::vector<IRenderable*> all_active_child_renderables = render();
+	for (IRenderable* i : all_active_child_renderables) {
+		if (i->wasRenderedLastFrame())
+			return true;
+	}
+	return false;
+}
+
 std::vector<GameObject*> GameObject::getChilderen()
 {
 	std::vector<GameObject*> result;

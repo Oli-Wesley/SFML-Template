@@ -9,6 +9,7 @@
 #include "Components/IRenderable.h"  
 #include "Components/Transform.h"
 #include "Components/IScriptableBehaviour.h"
+#include "Tools/Helpers.h"
 
 class GameObject {
 public:
@@ -142,6 +143,21 @@ public:
     std::vector<GameObject*> getAllChilderen();
 
     Transform* getTransform();
+
+    // gets the Local bounds of all renderable objects on the gameObject
+    // sf::FloatRect getLocalBounds(); 
+    // gets the Global bounds of all renderable objects on the gameObject
+    sf::FloatRect getGlobalBounds();
+
+    // gets the Local bounds of all renderable objects on the gameObject and its children
+    // sf::FloatRect getLocalBoundsWithChilderen();
+    // gets the Global bounds of all renderable objects on the gameObject and its children
+    sf::FloatRect getGlobalBoundsWithChilderen();
+
+    // checks if any of the renderable objects on this object was rendered last frame
+    bool wasRenderedLastFrame();
+    // checks if any of the renderable objects on this object or children were rendered last frame
+    bool wasRenderedLastFrameWithChilderen();
 
     std::vector<GameObject*> getChilderen();
 
