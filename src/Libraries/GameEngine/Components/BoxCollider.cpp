@@ -49,7 +49,7 @@ void BoxCollider::setSize(float _x, float _y)
 	setSize(sf::Vector2(_x, _y));
 }
 
-void BoxCollider::render(sf::RenderTarget* window)
+void BoxCollider::render(sf::RenderTarget* target)
 {
 	if (GameSystem::get()->isDebug())
 	{
@@ -70,7 +70,7 @@ void BoxCollider::render(sf::RenderTarget* window)
 
 		rect.setOutlineThickness(-2);
 		rect.setFillColor(sf::Color(255, 0, 255, 32));
-		window->draw(rect);
+		target->draw(rect);
 	}
 }
 

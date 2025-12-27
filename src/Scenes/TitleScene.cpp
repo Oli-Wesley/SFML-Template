@@ -8,8 +8,15 @@ void TitleScene::load()
 	scene_background_color = sf::Color(255, 0, 255);
 
 	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
-	Camera* camare_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
-	camera->getTransform()->setGlobalPosition(960/2, 540/2); // set to middle of screen (where it was before)
+	Camera* camera_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
+	camera->getTransform()->setGlobalPosition(960/2, 540/2); // set to middle of screen (0,0 = top left);
+	camera_comp->setScreenRect(sf::IntRect(0,0,480, 270)); // set to half the screen size
+
+	// setup second camera (exact same view, just different screen position)
+	GameObject* camera2 = scene_root->addChild(std::make_unique<GameObject>("Camera"));
+	Camera* camera_comp2 = camera2->addComponent<Camera>(sf::Vector2i(960, 540));
+	camera2->getTransform()->setGlobalPosition(960 / 2, 540 / 2); // set to middle of screen (0,0 = top left)
+	camera_comp2->setScreenRect(sf::IntRect(480, 270, 480, 270)); // set to half the screen size
 
 	// background
 	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));

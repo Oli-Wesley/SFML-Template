@@ -28,6 +28,8 @@ public:
 	// take in a list of renderables and render them to every camera in that order.
 	std::vector<Camera::CameraOutput> render();
 
+	std::vector<Camera*> getAllCameras();
+
 protected:
 	virtual void load() = 0; // Every scene needs a load function.
 	virtual void onUnload() {};

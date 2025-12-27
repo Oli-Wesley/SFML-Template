@@ -22,7 +22,7 @@ public:
 	void setSize(float _x, float _y);
 
 	// debug rendering
-	void render(sf::RenderTarget* window) override;
+	void render(sf::RenderTarget* target) override;
 	float getRenderOrder() override;
 
 protected:

@@ -225,6 +225,12 @@ void GameSystem::render()
 	// render current scene and keep outputs of all cameras
 	std::vector<Camera::CameraOutput> outputs = currentScene->render();
 	
+	// sort the list
+	std::sort(outputs.begin(), outputs.end(), [](Camera::CameraOutput a, Camera::CameraOutput b)
+	{
+		return a.z_height > b.z_height;
+	});
+
 	// display what the scene just rendered to the display
 	for (Camera::CameraOutput& var : outputs)
 	{
@@ -232,9 +238,10 @@ void GameSystem::render()
 
 		sprite.setPosition(var.screen_rect.left, var.screen_rect.top);
 		sprite.setScale(
-			var.screen_rect.width / var.texture->getSize().x,
-			var.screen_rect.height / var.texture->getSize().y
+			static_cast<float>(var.screen_rect.width) / static_cast<float>(var.texture->getSize().x),
+			static_cast<float>(var.screen_rect.height) / static_cast<float>(var.texture->getSize().y)
 		);
+
 		window->draw(sprite);
 	}		
 	// actually display to screen

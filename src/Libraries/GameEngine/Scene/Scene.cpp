@@ -58,39 +58,34 @@ std::vector<Camera::CameraOutput> Scene::render()
 	std::vector<IRenderable*> other = dont_destroy->render();
 	renderables.insert(renderables.end(), other.begin(), other.end());
 	// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
-	bool changed = 1;
-	IRenderable* hold;
-	int length = renderables.size();
-	while (changed)
-	{
-		changed = 0;
-		for (int index = 0; index < length - 1; index++)
-		{
-			if (
-				renderables[index]->getRenderOrder() >
-				renderables[index + 1]->getRenderOrder())
-			{
-				hold = renderables[index];
-				renderables[index] = renderables[index + 1];
-				renderables[index + 1] = hold;
-				changed = 1;
-			}
-		}
-	}
 
+	std::sort(renderables.begin(), renderables.end(), [](IRenderable* a, IRenderable* b)
+		{
+			return a->getRenderOrder() < b->getRenderOrder();
+		});
+
+	// get all cameras then render to them. 
+	std::vector<Camera*> cameras = getAllCameras();
+	std::vector<Camera::CameraOutput> outputs;
+	for (Camera* cam : cameras){
+			cam->render(renderables);
+			outputs.push_back(cam->getRenderOutput());
+	}	
+	return outputs;
+}
+
+std::vector<Camera*> Scene::getAllCameras()
+{
 	// get all cameras
 	std::vector<GameObject*> objs = scene_root->getAllChilderenWithComponent<Camera>();
 	std::vector<GameObject*> objs2 = dont_destroy->getAllChilderenWithComponent<Camera>();
 	// merge both into one list
 	objs.insert(objs.end(), objs2.begin(), objs2.end());
-	
-	// render to all cameras and save to be returned to gameManager. 
-	std::vector<Camera::CameraOutput> outputs;
+	// get camera component
+	std::vector<Camera*> cameras;
 	for (GameObject* game_obj : objs) {
-		if (Camera* cam = game_obj->getComponent<Camera>()) {
-			cam->render(renderables);
-			outputs.push_back(cam->getRenderOutput());
-		}
-	}	
-	return outputs;
+		if (Camera* cam = game_obj->getComponent<Camera>())
+			cameras.push_back(cam);
+	}
+	return cameras;
 }

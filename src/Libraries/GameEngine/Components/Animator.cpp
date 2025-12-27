@@ -16,12 +16,14 @@ Animator::Animator(std::vector<Animation> anims)
 	addAnimation(anims);
 }
 
+// TODO: to assetDatabase:
 void Animator::addAnimation(Animation anim)
 {
 	// TODO: some logic to check if anim actually exists. 
 	animations.emplace(anim.getAnimationId(), anim);
 }
 
+// TODO: Move to assetDatabase:
 void Animator::addAnimation(std::vector<Animation> anims)
 {
 	for (Animation anim : anims)
