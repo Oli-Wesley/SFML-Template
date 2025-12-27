@@ -79,13 +79,12 @@ const sf::RenderTexture& Camera::getRenderTexture()
 	return render_tex;
 }
 
-
 sf::Vector2f Camera::convertScreenToWorld(sf::Vector2i pos)
 {
 	sf::RenderWindow* window = GameSystem::get()->getWindow();
 
 	// Mouse in window pixels
-	sf::Vector2i mousePixel = sf::Mouse::getPosition(*window);
+	sf::Vector2f mousePixel = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
 	// Camera screen rectangle (pixels)
 	sf::IntRect rect = getScreenRect();
