@@ -62,6 +62,12 @@ void GameSystem::start(std::string start_scene)
 				else if (e.key.code == sf::Keyboard::F3)
 					setDebug(!isDebug());
 			}
+			else if (e.type == sf::Event::Resized)
+			{
+				// update the view to the new size of the window
+				sf::FloatRect visibleArea(0, 0, e.size.width, e.size.height);
+				window->setView(sf::View(visibleArea));
+			}
 		}
 		runGameLoop(clock.restart().asSeconds()); // pass time since last frame as
 		// dt to the current gameLoop.
@@ -197,7 +203,7 @@ void GameSystem::fixedUpdate(float dt)
 		accumulator -= physics_timestep;
 	}
 }
-
+	
 void GameSystem::update(float dt)
 {
 	if (currentScene != nullptr) {
@@ -264,8 +270,6 @@ void GameSystem::changeScene()
 			currentScene->load(std::move(dont_destroy));
 		else
 			std::cout << "FAILED TO LOAD SCENE, SCENE EXISTS BUT RETURNS NULLPTR";
-		// resize to window size.
-		currentScene->onWindowResize(sf::Vector2i(resolution.width, resolution.height));
 	}
 }
 

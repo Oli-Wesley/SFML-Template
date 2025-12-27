@@ -14,7 +14,7 @@ public:
 	struct CameraOutput
 	{
 		const sf::Texture* texture;   // what to draw
-		sf::IntRect screen_rect;      // where on screen 
+		sf::FloatRect screen_rect;      // where on screen 
 		int z_height = 0;                // draw order
 	};
 
@@ -27,8 +27,10 @@ public:
 	void setBackgroundColor(const sf::Color& color);
 	sf::Color& getbackgroundColour();
 
-	void setScreenRect(sf::IntRect new_rect);
-	const sf::IntRect getScreenRect();
+	void setScreenRect(sf::FloatRect new_rect);
+	void setScreenRect(float left, float top, float width, float height);
+	const sf::FloatRect getScreenRect();
+	const sf::FloatRect getScreenRectRelativeToWindow();
 
 	void setTextureSize(sf::Vector2i size);
 	sf::Vector2i getTextureSize();
@@ -36,12 +38,12 @@ public:
 	const sf::RenderTexture& getRenderTexture();
 
 	sf::Vector2f convertScreenToWorld(sf::Vector2i pos);
-	
+
 
 protected:
 	sf::RenderTexture render_tex;
 	std::unique_ptr<sf::View> view;
-	sf::IntRect screen_rect; // where to draw onto the window. 
+	sf::FloatRect screen_rect; // where to draw onto the window. TODO: move this to be relative e.g 0,0,1,1 for fullscreen  
 	sf::Color background_col = sf::Color::Transparent;
 	float screen_z_height = 1.0f;
 };

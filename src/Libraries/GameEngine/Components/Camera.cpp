@@ -38,7 +38,7 @@ const Camera::CameraOutput Camera::getRenderOutput()
 {
 	CameraOutput output;
 	output.texture = &render_tex.getTexture();
-	output.screen_rect = screen_rect;
+	output.screen_rect = getScreenRectRelativeToWindow();
 	output.z_height = screen_z_height; // might move this to a camera specific variable as this is worldspace rather than screenspace.
 	return output;
 }
@@ -58,14 +58,32 @@ sf::Color& Camera::getbackgroundColour()
 	return background_col;
 }
 
-void Camera::setScreenRect(sf::IntRect new_rect)
+void Camera::setScreenRect(sf::FloatRect new_rect)
 {
 	screen_rect = new_rect;
 }
 
-const sf::IntRect Camera::getScreenRect()
+void Camera::setScreenRect(float left, float top, float width, float height)
+{
+	setScreenRect(sf::FloatRect(left, top, width, height));
+}
+
+const sf::FloatRect Camera::getScreenRect()
 {
 	return screen_rect;
+}
+
+const sf::FloatRect Camera::getScreenRectRelativeToWindow() {
+	sf::Vector2u window_size = GameSystem::get()->getWindow()->getSize();
+	sf::FloatRect rect = getScreenRect();
+	sf::FloatRect return_rect;
+
+	return_rect.left = rect.left * window_size.x;
+	return_rect.width = rect.width * window_size.x;
+	return_rect.top = rect.top * window_size.y;
+	return_rect.height = rect.height * window_size.y;
+
+	return return_rect;
 }
 
 
@@ -95,7 +113,7 @@ sf::Vector2f Camera::convertScreenToWorld(sf::Vector2i pos)
 	sf::Vector2f mousePixel = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
 	// Camera screen rectangle (pixels)
-	sf::IntRect rect = getScreenRect();
+	sf::FloatRect rect = getScreenRectRelativeToWindow();
 
 	// Reject if mouse is outside camera's area on screen
 	if (!rect.contains(
