@@ -1,30 +1,31 @@
 #include "Animator.h"
 #include "../GameObject.h"
-#include <iostream>
 #include <ranges>
 
+#include "../Tools/AssetDatabase.h"
+#include "SFML/System/String.hpp"
 
-Animator::Animator(const Animation &anim)
-{
-	addAnimation(anim);
+void Animator::start() {
+	addAnimation("EngineCore/Missing_Animation");
 }
 
-Animator::Animator(const std::vector<Animation> &animations)
+Animator::Animator(const std::string &anim_id)
 {
-	addAnimation(animations);
+	addAnimation(anim_id);
 }
 
-// TODO: to assetDatabase:
-void Animator::addAnimation(Animation anim)
-{
-	// TODO: some logic to check if anim actually exists. 
-	animations.emplace(anim.getAnimationId(), anim);
+Animator::Animator(const std::vector<std::string> &animation_ids) {
+	addAnimation(animation_ids);
 }
 
-// TODO: Move to assetDatabase:
-void Animator::addAnimation(const std::vector<Animation> &animations)
-{
-	for (const Animation& animation : animations)
+Animation &Animator::addAnimation(const std::string &anim_id) {
+	Animation new_animation = AssetDatabase::getAnimation(anim_id);
+	animation_array.insert({anim_id, new_animation});
+	return getAnimation(anim_id);
+}
+
+void Animator::addAnimation(const std::vector<std::string> &animation_ids) {
+	for (sf::String animation : animation_ids)
 	{
 		addAnimation(animation);
 	}
@@ -37,14 +38,19 @@ bool Animator::playAnimation(const std::string &animation_id)
 
 bool Animator::playAnimation(const std::string &animation_id, bool exit_gracefully)
 {
-	target_animation = { &animations.find(animation_id)->second, exit_gracefully };
-	return true;
+	if (animation_array.contains(animation_id)) {
+		target_animation = { &animation_array.find(animation_id)->second, exit_gracefully };
+		return true;
+	}
+
+	playAnimation("EngineCore/Missing_Animation");
+	return false;
 }
 
 std::vector<std::string> Animator::getAllAnimationIds()
 {
 	std::vector<std::string> id;
-	for (const auto &key: animations | std::views::keys) {
+	for (const auto &key: animation_array | std::views::keys) {
 		id.push_back(key);
 	}
 	return id;
@@ -52,7 +58,7 @@ std::vector<std::string> Animator::getAllAnimationIds()
 
 Animation& Animator::getAnimation(const std::string &animationId)
 {
-	return animations.at(animationId);
+	return animation_array.at(animationId);
 }
 
 void Animator::update(const float dt)
@@ -77,7 +83,7 @@ void Animator::attemptChange()
 		return;
 
 	// if should exit gracefully but cannot yet, return. (waiting until it can)
-	if (target_animation.second) {
+	if (current_animation && target_animation.second) {
 		if (!current_animation->canExitGracefully())
 			return;
 	}

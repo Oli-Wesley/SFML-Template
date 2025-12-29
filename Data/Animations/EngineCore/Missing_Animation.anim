@@ -1,0 +1,6 @@
+framerate : 10
+loop : 0
+frame_count : 1
+texture_id : EngineCore/Missing_tex
+texture_size : 16,16
+start_position : 0,0

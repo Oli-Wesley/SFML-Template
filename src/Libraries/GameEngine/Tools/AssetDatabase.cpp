@@ -14,48 +14,62 @@ AssetDatabase* AssetDatabase::get()
 	return instance;
 }
 
-const sf::Texture& AssetDatabase::getTexture(std::string path)
+const sf::Texture& AssetDatabase::getTexture(const std::string &path)
 {
 	AssetDatabase* asd = get();
 
-	auto it = asd->textures.find(path);
-	if (it != asd->textures.end()) {
+	if (auto it = asd->textures.find(path); it != asd->textures.end()) {
 		return it->second;
 	}
 	std::cout << "Warning: texture file is not found (" << path << ")\n";
 	return (getTexture("EngineCore/Missing_Tex"));
 }
 
-const sf::SoundBuffer& AssetDatabase::getSound(std::string path)
+const sf::SoundBuffer& AssetDatabase::getSound(const std::string &path)
 {
 	AssetDatabase* asd = get();
-	auto it = asd->sounds.find(path);
-	if (it != asd->sounds.end()) {
+	if (auto it = asd->sounds.find(path); it != asd->sounds.end()) {
 		return it->second;
 	}
 	std::cout << "Warning: sound file is not found (" << path << ")\n";
 	return getSound("EngineCore/Missing_Sound");
 }
 
-const sf::Font& AssetDatabase::getFont(std::string path)
+const sf::Font& AssetDatabase::getFont(const std::string &path)
 {
 	AssetDatabase* asd = get();
-	auto it = asd->fonts.find(path);
-	if (it != asd->fonts.end()) {
+	if (auto it = asd->fonts.find(path); it != asd->fonts.end()) {
 		return it->second;
 	}
 	std::cout << "Warning: font file is not found (" << path << ")\n";
 	return getFont("EngineCore/Comic Sans MS"); 
 }
 
+const Animation & AssetDatabase::getAnimation(const std::string &path)
+{
+	AssetDatabase* asd = get();
+	if (const auto it = asd->animations.find(path); it != asd->animations.end()) {
+		return it->second;
+	}
+	std::cout << "Warning: Animation file is not found (" << path << ")\n";
+	return getAnimation("EngineCore/Missing_Animation");
+}
+
 AssetDatabase::AssetDatabase()
 {
-	// load all assets from Data/Images, Data/Fonts, Data/Sounds and their sub directories and store as map with the key being the relative path and the value being the asset itself
+	// load all assets given path, extensions, array to store to, and a label for outputting to console
 	loadAssets<sf::Texture>(
 		"../Data/Textures",
 		{ "png", "jpg" },
 		textures,
 		"Texture"
+	);
+
+	loadAssets<Animation>(
+		"../Data/Animations/",
+		{ "anim" },
+		animations,
+		"Animation"
 	);
 
 	loadAssets<sf::SoundBuffer>(
@@ -73,8 +87,7 @@ AssetDatabase::AssetDatabase()
 	);
 }
 
-
-std::vector<std::string> AssetDatabase::getAllPathsInDirectory(std::string directory)
+std::vector<std::string> AssetDatabase::getAllPathsInDirectory(const std::string &directory)
 {
 	std::vector<std::string> all_paths;
 
@@ -91,6 +104,5 @@ std::vector<std::string> AssetDatabase::getAllPathsInDirectory(std::string direc
 
 void AssetDatabase::print(std::string string)
 {
-	if (GameSystem::get()->isDebug())
 		std::cout << string;
 }

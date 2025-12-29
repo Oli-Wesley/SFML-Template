@@ -11,15 +11,13 @@ public:
 		PAUSED, 
 		STOPPED
 	};
-
-	explicit Animation(const std::string &anim_id);
+	explicit Animation() = default;
 	~Animation() = default;
 
 	void updateAnimation(float dt); 
 	sf::IntRect getCurrentFrameRect() const;
 	bool canExitGracefully();
 	std::string getTextureId();
-	std::string getAnimationId();
 
 	bool loadFromFile(std::string path);
 
@@ -42,8 +40,6 @@ public:
 	void restart(); // re-starts the animation
 
 private:
-	std::string animation_id; // name of the animation
-
 	int framerate = 24;
 	bool is_looping = false;
 	float speed = 1.0f;

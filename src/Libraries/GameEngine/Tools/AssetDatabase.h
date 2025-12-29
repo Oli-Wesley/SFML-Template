@@ -8,6 +8,8 @@
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Font.hpp>
 
+#include "../Animation/Animation.h"
+
 
 class AssetDatabase
 {
@@ -17,19 +19,22 @@ public:
 	static AssetDatabase* get();
 
 	// Get Texture from path starting in images folder, with the extension removed.
-	static const sf::Texture& getTexture(std::string path);
+	static const sf::Texture& getTexture(const std::string &path);
 	// Get SoundBuffer from path starting in images folder, with the extension removed.
-	static const sf::SoundBuffer& getSound(std::string path);
+	static const sf::SoundBuffer& getSound(const std::string &path);
 	// Get Font from path starting in images folder, with the extension removed.
-	static const sf::Font& getFont(std::string path);
+	static const sf::Font& getFont(const std::string &path);
+	static const Animation& getAnimation(const std::string &path);
 protected:
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, sf::SoundBuffer> sounds;
 	std::unordered_map<std::string, sf::Font> fonts;
+	std::unordered_map<std::string, Animation> animations;
 	static AssetDatabase* instance;
 	AssetDatabase(AssetDatabase const&) = delete;
 	void operator=(AssetDatabase const&) = delete;
-	std::vector < std::string> getAllPathsInDirectory(std::string directory);
+
+	static std::vector < std::string> getAllPathsInDirectory(const std::string &directory);
 	void print(std::string string);
 
 

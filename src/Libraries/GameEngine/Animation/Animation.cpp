@@ -2,12 +2,6 @@
 #include "../Tools/AssetDatabase.h"
 #include "../Tools/FileParser.h"
 
-Animation::Animation(const std::string &anim_id) :
-	animation_id(anim_id)
-{
-	loadFromFile(anim_id);
-}
-
 void Animation::updateAnimation(const float dt)
 {
 	if (current_state != STATE::PLAYING)
@@ -16,7 +10,7 @@ void Animation::updateAnimation(const float dt)
 	just_finished = false;
 	time += dt * speed;
 
-	int new_frame = static_cast<int>(time / time_per_frame);
+	const int new_frame = static_cast<int>(time / time_per_frame);
 
 	if (new_frame >= total_frames)
 	{
@@ -49,7 +43,7 @@ sf::IntRect Animation::getCurrentFrameRect() const {
 
 bool Animation::canExitGracefully()
 {
-	return just_finished || getState() == STATE::STOPPED; // if stopped or just finished return true
+		return just_finished || getState() == STATE::STOPPED; // if stopped or just finished return true
 }
 
 std::string Animation::getTextureId()
@@ -57,22 +51,16 @@ std::string Animation::getTextureId()
 	return texture_id;
 }
 
-std::string Animation::getAnimationId()
-{
-	return animation_id;
-}
-
-// path relative to the Animations folder with extensions removed 
+// path relative to the Animations folder with extensions removed
 bool Animation::loadFromFile(std::string path)
 {
-	path = "../Data/Animations/" + path + ".anim";
 	FileParser file;
 	if (!file.loadFromFile(path))
 		return false;
 
 	setFramerate(file.getValue<int>("framerate", framerate));
 	setLooping(file.getValue<bool>("loop", is_looping));
-	texture_id = file.getValue<std::string>("texture_id", "");
+ 	texture_id = file.getValue<std::string>("texture_id", "");
 	texture_size = file.getValue<sf::Vector2i>("texture_size", texture_size); // size of each animation frame in the image. 
 	start_position = file.getValue<sf::Vector2i>("start_position", start_position);
 	total_frames = file.getValue<int>("frame_count", 0);
