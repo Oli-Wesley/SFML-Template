@@ -2,17 +2,13 @@
 #include "../Tools/AssetDatabase.h"
 #include "../Tools/FileParser.h"
 
-Animation::Animation(std::string anim_id) : 
+Animation::Animation(const std::string &anim_id) :
 	animation_id(anim_id)
 {
 	loadFromFile(anim_id);
 }
 
-Animation::~Animation()
-{
-}
-
-void Animation::updateAnimation(float dt)
+void Animation::updateAnimation(const float dt)
 {
 	if (current_state != STATE::PLAYING)
 		return;
@@ -43,13 +39,12 @@ void Animation::updateAnimation(float dt)
 	}
 }
 
-sf::IntRect Animation::getCurrentFrameRect()
-{
-	return sf::IntRect(
+sf::IntRect Animation::getCurrentFrameRect() const {
+	return {
 		start_position.x + std::min(current_frame, total_frames - 1) * texture_size.x,
 		start_position.y,
 		texture_size.x,
-		texture_size.y);
+		texture_size.y};
 }
 
 bool Animation::canExitGracefully()
@@ -75,8 +70,6 @@ bool Animation::loadFromFile(std::string path)
 	if (!file.loadFromFile(path))
 		return false;
 
-	std::string animation_id; // name of the animation
-
 	setFramerate(file.getValue<int>("framerate", framerate));
 	setLooping(file.getValue<bool>("loop", is_looping));
 	texture_id = file.getValue<std::string>("texture_id", "");
@@ -87,12 +80,11 @@ bool Animation::loadFromFile(std::string path)
 	return true;
 }
 
-int Animation::getCurrentFrameCount()
-{
+int Animation::getCurrentFrameCount() const {
 	return current_frame;
 }
 
-void Animation::setCurrentFrame(int frame_number)
+void Animation::setCurrentFrame(const int frame_number)
 {
 	if (frame_number <= total_frames)
 		current_frame = frame_number;
@@ -102,40 +94,35 @@ void Animation::setCurrentFrame(int frame_number)
 		current_frame = total_frames;
 }
 
-int Animation::getFramerate()
-{
+int Animation::getFramerate() const {
 	return framerate;
 }
 
-void Animation::setFramerate(int fps)
+void Animation::setFramerate(const int fps)
 {
 	framerate = fps;
-	time_per_frame = 1.0f / static_cast<float>(fps); // seconds per frame.  
-
+	time_per_frame = 1.0f / static_cast<float>(fps); // seconds per frame.
 }
 
-float Animation::getSpeed()
-{
+float Animation::getSpeed() const {
 	return speed;
 }
 
-void Animation::setSpeed(float new_speed)
+void Animation::setSpeed(const float new_speed)
 {
 	speed = new_speed;
 }
 
-void Animation::setLooping(bool should_loop)
+void Animation::setLooping(const bool should_loop)
 {
 	is_looping = should_loop;
 }
 
-bool Animation::isLooping()
-{
+bool Animation::isLooping() const {
 	return is_looping;
 }
 
-Animation::STATE Animation::getState()
-{
+Animation::STATE Animation::getState() const {
 	return current_state;
 }
 

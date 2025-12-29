@@ -6,7 +6,7 @@
 #include <iostream>
 
 // constructor requires a name
-GameObject::GameObject(std::string _name)
+GameObject::GameObject(const std::string &_name)
 {
 	// make transform object and set name
 	transform = std::make_unique<Transform>();
@@ -21,19 +21,18 @@ GameObject::~GameObject()
 		std::cout << "Destroyed GameObject with name: [" << name << "]\n";
 }
 
-// update physics with given timestep (affects all children aswell)
+// update physics with given timestep (affects all children as well)
 void GameObject::physicsUpdate(float timestep)
 {
 	// if enabled update
 	if (is_active) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			IPhysicsObject* physics = dynamic_cast<IPhysicsObject*>(comp.get());
-			if (physics) {
+			if (IPhysicsObject* physics = dynamic_cast<IPhysicsObject*>(comp.get())) {
 				physics->physicsUpdate(timestep);
 			}
 		}
-		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : childeren) {
+		// call on all children
+		for (const std::unique_ptr<GameObject>& child : children) {
 			child->physicsUpdate(timestep);
 		}
 	}
@@ -43,13 +42,12 @@ void GameObject::fixedUpdate(float timestep)
 {
 	if (is_active) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			IScriptableBehaviour* scriptable = dynamic_cast<IScriptableBehaviour*>(comp.get());
-			if (scriptable) {
+			if (IScriptableBehaviour* scriptable = dynamic_cast<IScriptableBehaviour*>(comp.get())) {
 				scriptable->fixedUpdate(timestep);
 			}
 		}
-		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : childeren) {
+		// call on all children
+		for (const std::unique_ptr<GameObject>& child : children) {
 			child->fixedUpdate(timestep);
 		}
 	}
@@ -62,7 +60,7 @@ void GameObject::update(float dt)
 			comp->update(dt);
 		}
 		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : childeren) {
+		for (std::unique_ptr<GameObject>& child : children) {
 			child->update(dt);
 		}
 	}
@@ -75,7 +73,7 @@ void GameObject::lateUpdate(float dt)
 			comp->lateUpdate(dt);
 		}
 		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : childeren) {
+		for (std::unique_ptr<GameObject>& child : children) {
 			child->lateUpdate(dt);
 		}
 	}
@@ -92,7 +90,7 @@ std::vector<IRenderable*> GameObject::render()
 			}
 		}
 		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : childeren) {
+		for (std::unique_ptr<GameObject>& child : children) {
 			std::vector<IRenderable*> childRenderables = child->render();
 			result.insert(result.end(), childRenderables.begin(), childRenderables.end());
 		}
@@ -113,7 +111,7 @@ GameObject* GameObject::addChild(std::unique_ptr<GameObject> _game_obj)
 	rawPtr->setParent(this);
 
 	// Move ownership into the vector
-	childeren.push_back(std::move(_game_obj));
+	children.push_back(std::move(_game_obj));
 
 	return rawPtr;
 }
@@ -124,17 +122,17 @@ std::unique_ptr<GameObject> GameObject::releaseChild(GameObject* child_to_releas
 	if (!child_to_release) return nullptr;
 
 	// Find the unique_ptr holding the raw pointer
-	auto it = std::find_if(childeren.begin(), childeren.end(),
+	auto it = std::find_if(children.begin(), children.end(),
 		[&](const std::unique_ptr<GameObject>& ptr) {
 			return ptr.get() == child_to_release;
 		});
 
-	if (it != childeren.end()) {
+	if (it != children.end()) {
 		// Use std::move to transfer ownership out of the childrens list
 		std::unique_ptr<GameObject> released_ptr = std::move(*it);
 
 		// Erase the now empty unique_ptr slot from the vector
-		childeren.erase(it);
+		children.erase(it);
 
 		// Reset the parent pointer
 		released_ptr->parent = nullptr;
@@ -193,16 +191,16 @@ std::vector<IComponent*> GameObject::getAllComponents()
 }
 
 // returns all children, including childeren of childeren. 
-std::vector<GameObject*> GameObject::getAllChilderen()
+std::vector<GameObject*> GameObject::getAllChildren()
 {
 	std::vector<GameObject*> result;
 
-	for (const std::unique_ptr<GameObject>& child : childeren) {
+	for (const std::unique_ptr<GameObject>& child : children) {
 		// child is a unique_ptr, use .get() to push raw pointer
 		result.push_back(child.get());
 
 		// get all children from the child (this recursively returns vector<GameObject*>)
-		std::vector<GameObject*> sub_children = child->getAllChilderen();
+		std::vector<GameObject*> sub_children = child->getAllChildren();
 		result.insert(result.end(), sub_children.begin(), sub_children.end());
 	}
 
@@ -219,18 +217,17 @@ Transform* GameObject::getTransform()
 sf::FloatRect GameObject::getGlobalBounds()
 {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			IRenderable* renderable = dynamic_cast<IRenderable*>(comp.get());
-			if (renderable) {
+			if (auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
 				return renderable->getGlobalBounds();
 			}
 		}
-	return sf::FloatRect(0,0,0,0);
+	return {0,0,0,0};
 }
 
 
-sf::FloatRect GameObject::getGlobalBoundsWithChilderen()
+sf::FloatRect GameObject::getGlobalBoundsWithChildren()
 {
-	std::vector<IRenderable*> all_active_child_renderables = render();
+	const std::vector<IRenderable*> all_active_child_renderables = render();
 	sf::FloatRect size(0, 0, 0, 0);
 	for (IRenderable* i : all_active_child_renderables) {
 		size = helpers::growRectToFit(size, i->getGlobalBounds());
@@ -242,8 +239,7 @@ bool GameObject::wasRenderedLastFrame()
 {
 	if (is_drawn) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			IRenderable* renderable = dynamic_cast<IRenderable*>(comp.get());
-			if (renderable) {
+			if (auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
 				return renderable->wasRenderedLastFrame();
 			}
 		}
@@ -251,7 +247,7 @@ bool GameObject::wasRenderedLastFrame()
 	return false;
 }
 
-bool GameObject::wasRenderedLastFrameWithChilderen()
+bool GameObject::wasRenderedLastFrameWithChildren()
 {
 	std::vector<IRenderable*> all_active_child_renderables = render();
 	for (IRenderable* i : all_active_child_renderables) {
@@ -261,19 +257,19 @@ bool GameObject::wasRenderedLastFrameWithChilderen()
 	return false;
 }
 
-std::vector<GameObject*> GameObject::getChilderen()
+std::vector<GameObject*> GameObject::getChildren()
 {
 	std::vector<GameObject*> result;
-	for (const std::unique_ptr<GameObject>& child : childeren) {
+	for (const std::unique_ptr<GameObject>& child : children) {
 		result.push_back(child.get());
 	}
 	return result;
 }
 
 // gets the first child with the name specified
-GameObject* GameObject::getChildByName(std::string name)
+GameObject* GameObject::getChildByName(const std::string &name)
 {
-	for (std::unique_ptr<GameObject>& child : childeren) {
+	for (const std::unique_ptr<GameObject>& child : children) {
 		if (child->getName() == name)
 			return child.get();
 	}
@@ -295,7 +291,7 @@ std::string GameObject::getName()
 	return name;
 }
 
-void GameObject::setName(std::string _name)
+void GameObject::setName(const std::string &_name)
 {
 	name = _name;
 }
@@ -308,7 +304,7 @@ void GameObject::outputChildrenTree()
 }
 
 
-void GameObject::outputChildrenTree(std::string prefix)
+void GameObject::outputChildrenTree(const std::string &prefix)
 {
 	// if first element, just display name
 	if (prefix.empty()) {
@@ -316,12 +312,12 @@ void GameObject::outputChildrenTree(std::string prefix)
 	}
 
 	// go through all children
-	for (size_t i = 0; i < childeren.size(); ++i) {
-		const auto& child = childeren[i];
+	for (size_t i = 0; i < children.size(); ++i) {
+		const auto& child = children[i];
 		if (!child) continue;
 
 		// Check if this is the last child in the current list
-		bool is_last_child = (i == childeren.size() - 1);
+		bool is_last_child = (i == children.size() - 1);
 
 		// Define the current line's connector ('L' for last, '|' otherwise)
 		std::string connector = is_last_child ? "L-" : "|-";

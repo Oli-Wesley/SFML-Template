@@ -15,7 +15,8 @@ void TitleScene::load()
 	// setup second camera (exact same view, just different screen position)
 	GameObject* camera2 = scene_root->addChild(std::make_unique<GameObject>("Camera"));
 	Camera* camera_comp2 = camera2->addComponent<Camera>(sf::Vector2i(960, 540));
-	camera2->getTransform()->setGlobalPosition(960 / 2, 540 / 2); // set to middle of screen (0,0 = top left)
+	camera2->getTransform()->setGlobalPosition(960 / 4, 540 / 2);
+	camera_comp2->setBackgroundColor(sf::Color::Black);
 	camera_comp2->setScreenRect(0.5, 0.5, 0.5, 0.5); // set to half the screen size and placed in bottom right
 
 	// background

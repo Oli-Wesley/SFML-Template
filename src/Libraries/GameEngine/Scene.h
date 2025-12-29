@@ -10,18 +10,19 @@ class GameObject;
 class Scene
 {
 public:
-	Scene();
-	~Scene();
+	Scene()= default;
+	virtual ~Scene() = default;
+
 	std::unique_ptr<GameObject> scene_root = nullptr; // Empty GameObject at 0,0 where everything starts
 	// from.
 	std::unique_ptr<GameObject> dont_destroy = nullptr;
 
-	std::unique_ptr<GameObject> unload(); // Returns Game Objects with Persistance between scenes
-	// (and their childeren)
+	std::unique_ptr<GameObject> unload(); // Returns Game Objects with Persistence between scenes
+	// (and their children)
 
 	virtual void load(std::unique_ptr<GameObject> dont_destroy);
 
-	sf::Color getSceneColor() { return scene_background_color; };
+	sf::Color getSceneColor() const { return scene_background_color; };
 
 	void onWindowResize(sf::Vector2i new_size);
 

@@ -28,5 +28,5 @@ public:
 	virtual void onStopHover() {}; // called once when mouse leaves collider
 
 protected:
-	GameObject* game_object; // useful for accessing other components on the gameObject. such as rotation or scale.
+	GameObject* game_object = nullptr; // useful for accessing other components on the gameObject. such as rotation or scale.
 };

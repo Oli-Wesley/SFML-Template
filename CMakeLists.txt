@@ -13,14 +13,14 @@ FetchContent_Declare(   # Fetches SFML from github and puts it in the build dire
     GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b    # Makes sure to fetch SFML version 2.6.1
 )
 
-FetchContent_MakeAvailable(SFML)    # Makes sure SFML and its dependencies are avaiable for the project
+FetchContent_MakeAvailable(SFML)    # Makes sure SFML and its dependencies are available for the project
 
 #---- File management & .exe creation ----#
 
-file(GLOB_RECURSE LIBRARY_FILES "src/Libraries/*.cpp" "src/Libraries/*.h", "src/Libraries/*.hpp")
-file(GLOB_RECURSE GAME_OBJECTS "src/GameObjects/*.cpp" "src/GameObjects/*.h", "src/GameObjects/*.hpp")
-file(GLOB_RECURSE SCENES "src/Scenes/*.cpp" "src/Scenes/*.h", "src/Scenes/*.hpp")
-file(GLOB_RECURSE SCRIPTS "src/Scripts/*.cpp" "src/Scripts/*.h", "src/Scripts/*.hpp")
+file(GLOB_RECURSE LIBRARY_FILES "src/Libraries/*.cpp" "src/Libraries/*.h" "src/Libraries/*.hpp")
+file(GLOB_RECURSE GAME_OBJECTS "src/GameObjects/*.cpp" "src/GameObjects/*.h" "src/GameObjects/*.hpp")
+file(GLOB_RECURSE SCENES "src/Scenes/*.cpp" "src/Scenes/*.h" "src/Scenes/*.hpp")
+file(GLOB_RECURSE SCRIPTS "src/Scripts/*.cpp" "src/Scripts/*.h" "src/Scripts/*.hpp")
 set(SOURCE_FILES "src/main.cpp" )  # Sets variable SOURCE_FILES to hold names & locations of files that need to be compiled into the application
 
 set (ALL_FILES  ${LIBRARY_FILES} ${SOURCE_FILES} ${GAME_OBJECTS} ${SCENES} ${SCRIPTS})

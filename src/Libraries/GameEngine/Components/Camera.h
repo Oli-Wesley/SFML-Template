@@ -10,30 +10,32 @@
 
 class Camera : public IComponent {
 public:
-	Camera(sf::Vector2i size);
+	explicit Camera(sf::Vector2i size);
 	struct CameraOutput
 	{
-		const sf::Texture* texture;   // what to draw
+		const sf::Texture* texture{};   // what to draw
 		sf::FloatRect screen_rect;      // where on screen 
 		int z_height = 0;                // draw order
 	};
 
 	void render(const std::vector<IRenderable*>& renderables); // take in a sorted list of all renderables and render it. 
 
-	const CameraOutput getRenderOutput();
+	CameraOutput getRenderOutput();
 
 	const std::unique_ptr<sf::View>& getView();
 
 	void setBackgroundColor(const sf::Color& color);
-	sf::Color& getbackgroundColour();
+	sf::Color& getBackgroundColour();
 
 	void setScreenRect(sf::FloatRect new_rect);
 	void setScreenRect(float left, float top, float width, float height);
-	const sf::FloatRect getScreenRect();
-	const sf::FloatRect getScreenRectRelativeToWindow();
+
+	sf::FloatRect getScreenRect() const;
+
+	sf::FloatRect getScreenRectRelativeToWindow() const;
 
 	void setTextureSize(sf::Vector2i size);
-	sf::Vector2i getTextureSize();
+	sf::Vector2i getTextureSize() const;
 
 	const sf::RenderTexture& getRenderTexture();
 

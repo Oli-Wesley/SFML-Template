@@ -1,15 +1,6 @@
 #include "../Scene.h"
 #include "../GameObject.h"
 
-Scene::Scene()
-{
-}
-
-Scene::~Scene()
-{
-
-}
-
 std::unique_ptr<GameObject> Scene::unload()
 {
 	onUnload(); // call each scene's onUnload functions.
@@ -20,7 +11,7 @@ std::unique_ptr<GameObject> Scene::unload()
 
 void Scene::load(std::unique_ptr<GameObject> _dont_destroy)
 {
-	// make or move dont destroy if it exists
+	// make or move don't destroy if it exists
 	if (_dont_destroy == nullptr) {
 		dont_destroy = std::make_unique<GameObject>("Dont_Destroy");
 	}
@@ -77,8 +68,8 @@ std::vector<Camera::CameraOutput> Scene::render()
 std::vector<Camera*> Scene::getAllCameras()
 {
 	// get all cameras
-	std::vector<GameObject*> objs = scene_root->getAllChilderenWithComponent<Camera>();
-	std::vector<GameObject*> objs2 = dont_destroy->getAllChilderenWithComponent<Camera>();
+	std::vector<GameObject*> objs = scene_root->getAllChildrenWithComponent<Camera>();
+	std::vector<GameObject*> objs2 = dont_destroy->getAllChildrenWithComponent<Camera>();
 	// merge both into one list
 	objs.insert(objs.end(), objs2.begin(), objs2.end());
 	// get camera component

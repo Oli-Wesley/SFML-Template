@@ -17,7 +17,7 @@ GameSystem* GameSystem::get()
 	return instance;
 }
 
-void GameSystem::start(std::string start_scene)
+void GameSystem::start(const std::string &start_scene)
 {
 	std::cout << "PRESS F1 To Show scene_root Tree\n";
 	std::cout << "PRESS F2 To Show dont_destroy Tree\n";
@@ -40,10 +40,11 @@ void GameSystem::start(std::string start_scene)
 				{
 					// unload current scene
 					currentScene->unload();
-					// destroy dont_destroy to allow anything attatched to it to run its unload functions.
+					// destroy dont_destroy to allow anything attached to it to run its unload functions.
 					currentScene->dont_destroy = nullptr;
 				}
 				// close the window.
+				AudioSystem::clearPlayers();
 				window->close();
 				return;
 			}
@@ -145,9 +146,9 @@ void GameSystem::setFramerate(float _framerate)
 		window->setFramerateLimit(framerate);
 }
 
-void GameSystem::setPhysicsTimestep(float tickspersecond)
+void GameSystem::setPhysicsTimestep(float ticks_per_second)
 {
-	physics_timestep = 1.0f / tickspersecond;
+	physics_timestep = 1.0f / ticks_per_second;
 }
 
 bool GameSystem::isDebug()
@@ -177,7 +178,7 @@ void GameSystem::runPhysics(float timestep)
 	{
 		currentScene->scene_root->physicsUpdate(timestep);
 		PhysiscsSystem::get()->handleCollisions(
-			currentScene->scene_root->getAllChilderenWithComponent<BoxCollider>());
+			currentScene->scene_root->getAllChildrenWithComponent<BoxCollider>());
 	}
 }
 

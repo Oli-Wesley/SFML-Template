@@ -3,23 +3,23 @@
 #include "SpriteRenderer.h"
 #include "../Tools/AssetDatabase.h"
 
-Texture::Texture(std::string _path)
+Texture::Texture(const std::string &_path)
 {
 	tex_path = _path;
 }
 
 void Texture::start()
 {
-	if (tex_path != "")
+	if (!tex_path.empty())
 		setTexture(tex_path);
 }
 
-bool Texture::setTexture(std::string _path)
+bool Texture::setTexture(const std::string &_path)
 {
 	return setTexture(AssetDatabase::getTexture(_path));
 }
 
-bool Texture::setTexture(sf::Texture _texture)
+bool Texture::setTexture(const sf::Texture &_texture)
 {
 	if (game_object->hasComponent<SpriteRenderer>())
 	{

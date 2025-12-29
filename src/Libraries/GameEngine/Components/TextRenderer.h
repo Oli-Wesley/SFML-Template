@@ -7,7 +7,7 @@ class TextRenderer : public IRenderable
 {
 public:
 	void render(sf::RenderTarget* target) override;
-	const sf::FloatRect getGlobalBounds() override;
+	sf::FloatRect getGlobalBounds() override;
 
 	sf::Text* getText();
 	int text_size = 10;

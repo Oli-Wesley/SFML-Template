@@ -9,11 +9,13 @@ class IRenderable : public IComponent
 {
 public:
 	virtual void render(sf::RenderTarget* target) = 0;
-	virtual const sf::FloatRect getGlobalBounds() = 0;
+	virtual sf::FloatRect getGlobalBounds() = 0;
 	virtual float getRenderOrder();
-	virtual ~IRenderable() = default;
+
+	virtual  ~IRenderable() override = default;
 	void resetBeforeRender();
-	const bool wasRenderedLastFrame();
+
+	bool wasRenderedLastFrame() const;
 
 protected:
 	bool was_rendered = false;

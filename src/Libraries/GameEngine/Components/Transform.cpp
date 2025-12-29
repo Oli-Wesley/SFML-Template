@@ -2,12 +2,12 @@
 #include "../GameObject.h"
 #include <cmath>
 
-void Transform::setGlobalPosition(float _x, float _y)
+void Transform::setGlobalPosition(const float _x, const float _y)
 {
 	setGlobalPosition(sf::Vector2(_x, _y));
 }
 
-void Transform::setGlobalPosition(sf::Vector2f _position)
+void Transform::setGlobalPosition(const sf::Vector2f _position)
 {
 	if (game_object == nullptr || game_object->getParent() == nullptr) {
 		setLocalPosition(_position);
@@ -24,28 +24,26 @@ sf::Vector2f Transform::getGlobalPosition()
 {
 	// recursively from the root find the position.
 	if (game_object->getParent() == nullptr) {
-		return sf::Vector2f(position.x, position.y);
+		return {position.x, position.y};
 	}
 	else {
 		sf::Vector2f parent_global = game_object->getParent()->getTransform()->getGlobalPosition();
 		sf::Vector2f this_local = getLocalPosition();
-		return sf::Vector2f(this_local.x + parent_global.x, this_local.y + parent_global.y);
+		return {this_local.x + parent_global.x, this_local.y + parent_global.y};
 	}
 }
 
-sf::Vector2f Transform::getLocalPosition()
-{
-	sf::Vector2f parent_scale = game_object->getParent()->getTransform()->getGlobalScale();
-	return sf::Vector2f(position.x * parent_scale.x, position.y * parent_scale.y);
-
+sf::Vector2f Transform::getLocalPosition() const {
+	const sf::Vector2f parent_scale = game_object->getParent()->getTransform()->getGlobalScale();
+	return {position.x * parent_scale.x, position.y * parent_scale.y};
 }
 
-void Transform::setLocalZheight(float _z)
+void Transform::setLocalZheight(const float _z)
 {
 	z_height = _z;
 }
 
-void Transform::setGlobalZheight(float _z)
+void Transform::setGlobalZheight(const float _z)
 {
 	if (game_object == nullptr || game_object->getParent() == nullptr) {
 		setLocalZheight(_z);
@@ -72,29 +70,29 @@ float Transform::getGlobalZheight()
 	}
 }
 
-void Transform::setLocalPosition(float _x, float _y)
+void Transform::setLocalPosition(const float _x, const float _y)
 {
 	setLocalPosition(sf::Vector2f(_x, _y));
 }
 
-void Transform::setLocalPosition(sf::Vector2f _position)
+void Transform::setLocalPosition(const sf::Vector2f _position)
 {
 	position = _position;
 }
 
-void Transform::move(float _x, float _y)
+void Transform::move(const float _x, const float _y)
 {
 	move(sf::Vector2f(_x, _y));
 }
 
-void Transform::move(sf::Vector2f _distance)
+void Transform::move(const sf::Vector2f _distance)
 {
 	// make sure distance is not 0
 	if (sqrt(_distance.x * _distance.x + _distance.y * _distance.y) >= 0.0000000001)
 		position += _distance;
 }
 
-void Transform::setGlobalScale(float _s)
+void Transform::setGlobalScale(const float _s)
 {
 	setGlobalScale(sf::Vector2f(_s, _s));
 }
@@ -104,7 +102,7 @@ void Transform::setGlobalScale(float _s_x, float _s_y)
 	setGlobalScale(sf::Vector2f(_s_x, _s_y));
 }
 
-void Transform::setGlobalScale(sf::Vector2f _scale)
+void Transform::setGlobalScale(const sf::Vector2f _scale)
 {
 	if (game_object == nullptr || game_object->getParent() == nullptr) {
 		setLocalScale(_scale.x, _scale.y);
@@ -123,7 +121,7 @@ sf::Vector2f Transform::getGlobalScale()
 	}
 	else {
 		sf::Vector2f parent_global = game_object->getParent()->getTransform()->getGlobalScale();
-		return sf::Vector2f(scale.x * parent_global.x, scale.y * parent_global.y);
+		return {scale.x * parent_global.x, scale.y * parent_global.y};
 	}
 }
 
@@ -132,45 +130,46 @@ sf::Vector2f Transform::getLocalScale()
 	return scale;
 }
 
-void Transform::setLocalScale(float _s)
+void Transform::setLocalScale(const float _s)
 {
 	setLocalScale(sf::Vector2f(_s, _s));
 }
 
-void Transform::setLocalScale(float _s_x, float _s_y)
+void Transform::setLocalScale(const float _s_x, const float _s_y)
 {
 	setLocalScale(sf::Vector2f(_s_x, _s_y));
 }
 
-void Transform::setLocalScale(sf::Vector2f _scale)
+void Transform::setLocalScale(const sf::Vector2f _scale)
 {
 	scale = _scale;
 }
 
-void Transform::modifyScale(float _s_x, float _s_y)
+void Transform::modifyScale(const float _s_x, const float _s_y)
 {
 	modifyScale(sf::Vector2f(_s_x, _s_y));
 }
 
-void Transform::modifyScale(sf::Vector2f _scale)
+void Transform::modifyScale(const sf::Vector2f _scale)
 {
 	sf::Vector2f current = getLocalScale();
 	setLocalScale(current + _scale);
 }
 
-void Transform::rotateAroundPoint(float angle)
+void Transform::rotateAroundPoint(const float angle)
 {
 	rotateAroundPoint(angle, getGlobalPosition());
 }
 
-void Transform::rotateAroundPoint(float angle, sf::Vector2f point)
+//TODO: Fix this
+void Transform::rotateAroundPoint(const float angle, const sf::Vector2f point)
 {
 	sf::Vector2f globalPos = getGlobalPosition();
 	float radians = angle * (3.14159265f / 180.0f);
 
-	sf::Vector2f offset = globalPos - point;
-	float rotatedX = offset.x * cos(radians) - offset.y * sin(radians);
-	float rotatedY = offset.x * sin(radians) + offset.y * cos(radians);
+	const sf::Vector2f offset = globalPos - point;
+	float rotatedX = offset.x * std::cos(radians) - offset.y * std::sin(radians);
+	float rotatedY = offset.x * std::sin(radians) + offset.y * std::cos(radians);
 
 	setGlobalPosition(point.x + rotatedX, point.y + rotatedY);
 	setGlobalRotation(getGlobalRotation() + angle);
@@ -179,7 +178,7 @@ void Transform::rotateAroundPoint(float angle, sf::Vector2f point)
 void Transform::setLocalRotation(float angle) { rotation = angle; }
 float Transform::getLocalRotation() { return rotation; }
 
-void Transform::setGlobalRotation(float angle)
+void Transform::setGlobalRotation(const float angle)
 {
 	if (!game_object || !game_object->getParent()) {
 		setLocalRotation(angle);

@@ -8,7 +8,7 @@ class SpriteRenderer : public IRenderable
 public:
 	void start() override;
 	void render(sf::RenderTarget* target) override;
-	const sf::FloatRect getGlobalBounds() override;
+	sf::FloatRect getGlobalBounds() override;
 	sf::Sprite& getSprite();
 
 

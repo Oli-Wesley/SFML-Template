@@ -75,7 +75,7 @@ void BoxCollider::render(sf::RenderTarget* target)
 	}
 }
 
-const sf::FloatRect BoxCollider::getGlobalBounds()
+sf::FloatRect BoxCollider::getGlobalBounds()
 {
 	return getCollider(); // just return collider here. 
 }

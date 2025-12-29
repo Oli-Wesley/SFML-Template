@@ -1,6 +1,6 @@
 #include "AudioSystem.h"
 #include "../Tools/AssetDatabase.h"
-#include <iostream>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 AudioSystem* AudioSystem::instance = nullptr;
 
@@ -13,24 +13,25 @@ AudioSystem* AudioSystem::get()
 	return instance;
 }
 
-// plays a sound sound id as path without file extension e.g playerSounds/hit
-bool AudioSystem::playSound(std::string sound_id, int volume)
+// plays a sound id as path without file extension e.g playerSounds/hit
+bool AudioSystem::playSound(const std::string &sound_id, const float volume)
 {
     //setup info and move to sound queue.
     SoundInfo info;
     info.id = sound_id;
     info.volume = volume;
     get()->sound_queue.push_back(std::move(info));
-    return true;
+    return true; // TODO: check if sound actually exists.
 }
 
-bool AudioSystem::playSound(std::string sound_id)
+
+bool AudioSystem::playSound(const std::string &sound_id)
 {
 	return playSound(sound_id, 50); // if no volume given, presume 50;
 }
 
 // currently untested
-bool AudioSystem::playMusic(std::string sound_id, bool loop, int volume)
+bool AudioSystem::playMusic(const std::string &sound_id, bool loop, float volume)
 {
     std::string music_path = "../Data/Music/";
     MusicInfo music_info;
@@ -46,7 +47,7 @@ bool AudioSystem::playMusic(std::string sound_id, bool loop, int volume)
     return true;
 }
 
-bool AudioSystem::playMusic(std::string sound_id, bool loop)
+bool AudioSystem::playMusic(const std::string &sound_id, bool loop)
 {
     return playMusic(sound_id, loop, 50);
 }
@@ -85,5 +86,20 @@ void AudioSystem::setupPlayers()
         {
             asy->music.erase(asy->music.begin() + i);
         }
+    }
+}
+
+void AudioSystem::clearPlayers() {
+    AudioSystem* asy = get();
+    // remove players that have finished playing.
+    for (int i = asy->audio_players.size() - 1; i >= 0; --i)
+    {
+            asy->audio_players.erase(asy->audio_players.begin() + i);
+    }
+
+    // remove Music Players that have finished Playing.
+    for (int i = asy->music.size() - 1; i >= 0; --i)
+    {
+            asy->music.erase(asy->music.begin() + i);
     }
 }

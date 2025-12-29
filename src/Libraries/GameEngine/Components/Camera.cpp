@@ -3,7 +3,7 @@
 #include "../Systems/GameSystem.h"
 #include <iostream>
 
-Camera::Camera(sf::Vector2i size)
+Camera::Camera(const sf::Vector2i size)
 {
 	view = std::make_unique<sf::View>();
 	view->setSize(size.x, size.y);
@@ -19,7 +19,7 @@ void Camera::render(const std::vector<IRenderable*>& renderables)
 	render_tex.setView(*view);
 	render_tex.clear(background_col);
 
-	sf::FloatRect viewBounds(view->getCenter().x - view->getSize().x / 2.f,
+	const sf::FloatRect viewBounds(view->getCenter().x - view->getSize().x / 2.f,
 		view->getCenter().y - view->getSize().y / 2.f,
 		view->getSize().x,
 		view->getSize().y);
@@ -29,17 +29,16 @@ void Camera::render(const std::vector<IRenderable*>& renderables)
 	{
 		obj->resetBeforeRender(); // reset was_rendered
 		if (obj->getGlobalBounds().intersects(viewBounds))
-			obj->render(&render_tex); // rended to a texture. 
+			obj->render(&render_tex); // render to a texture.
 	}
 	render_tex.display();
 }
 
-const Camera::CameraOutput Camera::getRenderOutput()
-{
+Camera::CameraOutput Camera::getRenderOutput() {
 	CameraOutput output;
 	output.texture = &render_tex.getTexture();
 	output.screen_rect = getScreenRectRelativeToWindow();
-	output.z_height = screen_z_height; // might move this to a camera specific variable as this is worldspace rather than screenspace.
+	output.z_height = screen_z_height; // might move this to a camera specific variable as this is worldspace rather than screenspace
 	return output;
 }
 
@@ -53,29 +52,28 @@ void Camera::setBackgroundColor(const sf::Color& color)
 	background_col = color;
 }
 
-sf::Color& Camera::getbackgroundColour()
+sf::Color& Camera::getBackgroundColour()
 {
 	return background_col;
 }
 
-void Camera::setScreenRect(sf::FloatRect new_rect)
+void Camera::setScreenRect(const sf::FloatRect new_rect)
 {
 	screen_rect = new_rect;
 }
 
-void Camera::setScreenRect(float left, float top, float width, float height)
+void Camera::setScreenRect(const float left, const float top, const float width, const float height)
 {
 	setScreenRect(sf::FloatRect(left, top, width, height));
 }
 
-const sf::FloatRect Camera::getScreenRect()
-{
+sf::FloatRect Camera::getScreenRect() const {
 	return screen_rect;
 }
 
-const sf::FloatRect Camera::getScreenRectRelativeToWindow() {
-	sf::Vector2u window_size = GameSystem::get()->getWindow()->getSize();
-	sf::FloatRect rect = getScreenRect();
+sf::FloatRect Camera::getScreenRectRelativeToWindow() const {
+	const sf::Vector2u window_size = GameSystem::get()->getWindow()->getSize();
+	const sf::FloatRect rect = getScreenRect();
 	sf::FloatRect return_rect;
 
 	return_rect.left = rect.left * window_size.x;
@@ -87,13 +85,12 @@ const sf::FloatRect Camera::getScreenRectRelativeToWindow() {
 }
 
 
-void Camera::setTextureSize(sf::Vector2i size)
+void Camera::setTextureSize(const sf::Vector2i size)
 {
 	render_tex.create(size.x, size.y);
 }
 
-sf::Vector2i Camera::getTextureSize()
-{
+sf::Vector2i Camera::getTextureSize() const {
 	sf::Vector2i size;
 	size.x = render_tex.getSize().x;
 	size.y = render_tex.getSize().y;
@@ -107,13 +104,13 @@ const sf::RenderTexture& Camera::getRenderTexture()
 
 sf::Vector2f Camera::convertScreenToWorld(sf::Vector2i pos)
 {
-	sf::RenderWindow* window = GameSystem::get()->getWindow();
+	const sf::RenderWindow* window = GameSystem::get()->getWindow();
 
 	// Mouse in window pixels
-	sf::Vector2f mousePixel = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+	const sf::Vector2f mousePixel = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
 	// Camera screen rectangle (pixels)
-	sf::FloatRect rect = getScreenRectRelativeToWindow();
+	const sf::FloatRect rect = getScreenRectRelativeToWindow();
 
 	// Reject if mouse is outside camera's area on screen
 	if (!rect.contains(
@@ -123,13 +120,13 @@ sf::Vector2f Camera::convertScreenToWorld(sf::Vector2i pos)
 		return { -1.f, -1.f }; // invalid
 	}
 
-	// Convert window pixel to camera view pixel (area realtive to it on screen)
+	// Convert window pixel to camera view pixel (area relative to it on screen)
 	sf::Vector2i cameraPixel;
 	cameraPixel.x = static_cast<int>(mousePixel.x - rect.left);
 	cameraPixel.y = static_cast<int>(mousePixel.y - rect.top);
 
 	// Scale to render texture resolution
-	sf::Vector2i texSize = getTextureSize();
+	const sf::Vector2i texSize = getTextureSize();
 	cameraPixel.x = static_cast<int>(
 		cameraPixel.x * (texSize.x / rect.width)
 		);

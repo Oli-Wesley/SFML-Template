@@ -1,9 +1,9 @@
 #include "RigidBody.h"
 #include "../GameObject.h"
 #include <cmath>
-void RigidBody::physicsUpdate(float timestep)
+void RigidBody::physicsUpdate(const float timestep)
 {
-	// if isnt static, run physics ticks.
+	// if isn't static, run physics ticks.
 	if (!is_static)
 	{
 		// make sure timestep cant be NAN
@@ -14,7 +14,7 @@ void RigidBody::physicsUpdate(float timestep)
 
 		velocity.y += gravity_force * timestep;
 
-		// make sure air resitence isnt NAN
+		// make sure air residence isn't NAN
 		if (!std::isfinite(air_resistance))
 		{
 			air_resistance = 0.0f; // fail-safe

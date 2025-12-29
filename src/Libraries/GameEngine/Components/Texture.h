@@ -8,11 +8,11 @@ class Texture : public IComponent
 public:
 	Texture() = default;
 	// load a texture starting in the Textures folder without the file extension e,g (Player/Player_Default);
-	Texture(std::string _path);
+	Texture(const std::string &_path);
 	void start() override;
-	bool setTexture(std::string _path);
+	bool setTexture(const std::string &_path);
 	// load a texture starting in the Textures folder without the file extension e,g (Player/Player_Default);
-	bool setTexture(sf::Texture _texture);
+	bool setTexture(const sf::Texture &_texture);
 	sf::Texture& getTexture();
 
 private:

@@ -10,14 +10,14 @@ void TextComponent::setString(const std::string& str)
 	updateRenderer();
 }
 
-void TextComponent::setFont(std::string path)
+void TextComponent::setFont(const std::string &path)
 {
 	font = AssetDatabase::getFont(path);
 }
 
-void TextComponent::setCharacterSize(unsigned int size)
+void TextComponent::setCharacterSize(const unsigned int size)
 {
-	charSize = size;
+	char_size = size;
 	updateRenderer();
 }
 
@@ -27,7 +27,7 @@ void TextComponent::setFillColor(const sf::Color& color)
 	updateRenderer();
 }
 
-void TextComponent::setStyle(sf::Text::Style style)
+void TextComponent::setStyle(const sf::Text::Style style)
 {
 	textStyle = style;
 	updateRenderer();
@@ -43,7 +43,7 @@ sf::Font& TextComponent::getFont()
 }
 unsigned int TextComponent::getCharacterSize() const
 {
-	return charSize;
+	return char_size;
 }
 sf::Color TextComponent::getFillColor() const
 {
@@ -56,14 +56,14 @@ sf::Text::Style TextComponent::getStyle() const
 
 void TextComponent::updateRenderer()
 {
-	TextRenderer* renderer = game_object->getComponent<TextRenderer>();
+	auto* renderer = game_object->getComponent<TextRenderer>();
 	if (!renderer)
 		return;
 
 	sf::Text* renderText = renderer->getText();
 	renderText->setString(text);
 	renderText->setFont(font);
-	renderer->text_size = charSize;
+	renderer->text_size = char_size;
 	renderText->setFillColor(fillColor);
 	renderText->setStyle(textStyle);
 }

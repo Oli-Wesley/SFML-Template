@@ -13,7 +13,7 @@
 
 class GameObject {
 public:
-    GameObject(std::string _name);
+    GameObject(const std::string &_name);
     ~GameObject();
     // lifecycle events
     void fixedUpdate(float timestep);
@@ -29,7 +29,7 @@ public:
     // usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS. ;
     template<typename T, typename... Args>
     T* addComponent(Args&&... args) {
-        static_assert(std::is_base_of<IComponent, T>::value, "T must derive from Component");
+        static_assert(std::is_base_of_v<IComponent, T>, "T must derive from Component");
 
         // Check if component already exists
         for (const auto& comp : components) {
@@ -59,15 +59,14 @@ public:
                     return casted;
             }
 
-            // special case for transform as it isnt in the components list (best to use getTransform)
+            // special case for transform as it isn't in the components list (best to use getTransform)
             if constexpr (std::is_same_v<T, Transform>)
                 return getTransform();
         }
         // case to get scripts from the scriptable behaviour. 
         else
         {
-            IScriptableBehaviour* iscript = getComponent<IScriptableBehaviour>();
-            if (iscript) {
+            if (IScriptableBehaviour* iscript = getComponent<IScriptableBehaviour>()) {
                 return iscript->getScript<T>();
             }
         }
@@ -75,9 +74,9 @@ public:
     }
 
     template<typename T>
-    std::vector<GameObject*> getAllChilderenWithComponent() {
+    std::vector<GameObject*> getAllChildrenWithComponent() {
         // Get all children as raw pointers
-        std::vector<GameObject*> all_children = getAllChilderen();
+        std::vector<GameObject*> all_children = getAllChildren();
 
         // remove elements from the list that do not have the asked for component.
         all_children.erase(
@@ -101,7 +100,7 @@ public:
         return false;
     }
 
-    // attatch a script to the gameObject
+    // attach a script to the gameObject
     template<typename T, typename... Args>
     T* addScript(Args&&... args) {
         static_assert(std::is_base_of<ScriptableBehaviour, T>::value,
@@ -139,8 +138,8 @@ public:
     // Returns raw pointers for observation
     std::vector<IComponent*> getAllComponents();
 
-    // get all children (including childeren of childeren)
-    std::vector<GameObject*> getAllChilderen();
+    // get all children (including children of children)
+    std::vector<GameObject*> getAllChildren();
 
     Transform* getTransform();
 
@@ -150,36 +149,36 @@ public:
     sf::FloatRect getGlobalBounds();
 
     // gets the Local bounds of all renderable objects on the gameObject and its children
-    // sf::FloatRect getLocalBoundsWithChilderen();
+    // sf::FloatRect getLocalBoundsWithChildren();
     // gets the Global bounds of all renderable objects on the gameObject and its children
-    sf::FloatRect getGlobalBoundsWithChilderen();
+    sf::FloatRect getGlobalBoundsWithChildren();
 
     // checks if any of the renderable objects on this object was rendered last frame
     bool wasRenderedLastFrame();
     // checks if any of the renderable objects on this object or children were rendered last frame
-    bool wasRenderedLastFrameWithChilderen();
+    bool wasRenderedLastFrameWithChildren();
 
-    std::vector<GameObject*> getChilderen();
+    std::vector<GameObject*> getChildren();
 
-    GameObject* getChildByName(std::string name);
+    GameObject* getChildByName(const std::string &name);
 
     GameObject* getParent();
     void setParent(GameObject*);
 
     std::string getName();
-    void setName(std::string _name);
+    void setName(const std::string &_name);
 
-    bool isPendingDestroy() { return pending_destroy; };
+    bool isPendingDestroy() const { return pending_destroy; };
 
     void outputChildrenTree();
 protected:
-    void outputChildrenTree(std::string prefix);
+    void outputChildrenTree(const std::string &prefix);
     std::string name;
     std::vector<std::unique_ptr<IComponent>> components;
     bool is_active = true;
     bool is_drawn = true;
     bool pending_destroy = false;
-    std::vector<std::unique_ptr<GameObject>> childeren;
+    std::vector<std::unique_ptr<GameObject>> children;
     std::unique_ptr<Transform> transform;
 
     // CHANGED: Must be a raw pointer (weak reference) to avoid circular ownership memory leaks.

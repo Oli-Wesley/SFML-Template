@@ -6,7 +6,7 @@
 void SpriteRenderer::start()
 {
 	if (game_object->hasComponent<Texture>()) {
-		sf::Texture tex = game_object->getComponent<Texture>()->getTexture();
+		const sf::Texture tex = game_object->getComponent<Texture>()->getTexture();
 		sprite.setTexture(tex);
 	}
 }
@@ -18,7 +18,7 @@ void SpriteRenderer::render(sf::RenderTarget* target)
 	target->draw(sprite);
 }
 
-const sf::FloatRect SpriteRenderer::getGlobalBounds()
+sf::FloatRect SpriteRenderer::getGlobalBounds()
 {
 	updateSprite();
 	return sprite.getGlobalBounds();
@@ -31,7 +31,7 @@ sf::Sprite& SpriteRenderer::getSprite()
 
 void SpriteRenderer::updateSprite()
 {
-	// update sprite position based onGameobject
+	// update sprite position based on Game object
 	Transform* transform = game_object->getTransform();
 	sprite.setPosition(transform->getGlobalPosition());
 	sprite.setScale(transform->getGlobalScale());

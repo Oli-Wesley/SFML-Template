@@ -1,5 +1,3 @@
-#pragma once
-
 #include "IRenderable.h"
 #include "../GameObject.h"
 
@@ -15,7 +13,6 @@ void IRenderable::resetBeforeRender()
 	was_rendered = false;
 }
 
-const bool IRenderable::wasRenderedLastFrame()
-{
+bool IRenderable::wasRenderedLastFrame() const {
 	return was_rendered;
 }

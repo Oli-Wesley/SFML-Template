@@ -24,5 +24,6 @@ protected:
 	bool was_mouse_pressed = 0;
 	bool is_hovering = 0;
 	bool is_mouse_pressed = 0;
-	bool checkPointCol(sf::FloatRect bounds, sf::Vector2f _pos);
+
+	static bool checkPointCol(sf::FloatRect bounds, sf::Vector2f _pos);
 };

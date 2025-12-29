@@ -1,13 +1,12 @@
 #include "Draggable.h"
 #include "../Systems/GameSystem.h"
 
-void Draggable::update(float dt)
+void Draggable::update(const float dt)
 {
 	Clickable::update(dt); // call clickable update
 
 	// I THINK THIS WILL BREAK IF DRAGGING BETWEEN 2 CAMERAS, TODO: test and fix
-	std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras();
-	for (Camera* cam : cameras)
+	for (const std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras(); Camera* cam : cameras)
 	{
 		sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow()));
 		if (mouse_pos == sf::Vector2f(-1.f, -1.f))
@@ -15,7 +14,7 @@ void Draggable::update(float dt)
 
 		// was clicked this frame.
 		if (!was_mouse_pressed && is_mouse_pressed) {
-			sf::Vector2f object_pos = game_object->getTransform()->getGlobalPosition();
+			const sf::Vector2f object_pos = game_object->getTransform()->getGlobalPosition();
 			relative_mouse_pos = sf::Vector2f(object_pos.x - mouse_pos.x, object_pos.y - mouse_pos.y);
 		}
 

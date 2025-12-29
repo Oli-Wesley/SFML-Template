@@ -58,7 +58,7 @@ void Clickable::update(float dt)
 
 void Clickable::lateUpdate(float dt)
 {
-	// update on late update so childeren can actually check if it was just pressed on this frame.
+	// update on late update so children can actually check if it was just pressed on this frame.
 	was_hovered = is_hovering;
 	was_mouse_pressed = is_mouse_pressed;
 }
@@ -70,20 +70,17 @@ bool Clickable::isClicked()
 
 bool Clickable::isHovered()
 {
-	BoxCollider* collider = game_object->getComponent<BoxCollider>();
-	// if any of the needed components dont exist, return.
+	auto* collider = game_object->getComponent<BoxCollider>();
+	// if any of the needed components don't exist, return.
 	if (!game_object->isActive() || collider == nullptr)
-		return false; 
+		return false;
 
-	std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras();
-
+	// check if it is hovering on all cameras
 	is_hovering = false;
-
-	for (Camera* cam : cameras) {
+	for (const std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras(); Camera* cam : cameras) {
 		// get mouse pos and convert to screen space
-		sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow()));
 		// check its valid
-		if (mouse_pos == sf::Vector2f(-1.f, -1.f))
+		if (sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow())); mouse_pos == sf::Vector2f(-1.f, -1.f))
 			continue;
 		// set hovering if hovering.
 		else if (checkPointCol(collider->getCollider(), mouse_pos))
@@ -92,7 +89,7 @@ bool Clickable::isHovered()
 	return is_hovering;
 }
 
-bool Clickable::checkPointCol(sf::FloatRect bounds, sf::Vector2f _pos)
+bool Clickable::checkPointCol(const sf::FloatRect bounds, const sf::Vector2f _pos)
 {
 	return (
 		bounds.left <= _pos.x && _pos.x <= bounds.left + bounds.width &&
