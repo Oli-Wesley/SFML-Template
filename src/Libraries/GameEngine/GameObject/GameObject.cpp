@@ -22,12 +22,12 @@ GameObject::~GameObject()
 }
 
 // update physics with given timestep (affects all children as well)
-void GameObject::physicsUpdate(float timestep)
+void GameObject::physicsUpdate(const float timestep)
 {
 	// if enabled update
 	if (is_active) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			if (IPhysicsObject* physics = dynamic_cast<IPhysicsObject*>(comp.get())) {
+			if (auto* physics = dynamic_cast<IPhysicsObject*>(comp.get())) {
 				physics->physicsUpdate(timestep);
 			}
 		}
@@ -38,11 +38,11 @@ void GameObject::physicsUpdate(float timestep)
 	}
 }
 
-void GameObject::fixedUpdate(float timestep)
+void GameObject::fixedUpdate(const float timestep)
 {
 	if (is_active) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			if (IScriptableBehaviour* scriptable = dynamic_cast<IScriptableBehaviour*>(comp.get())) {
+			if (const auto* scriptable = dynamic_cast<IScriptableBehaviour*>(comp.get())) {
 				scriptable->fixedUpdate(timestep);
 			}
 		}
@@ -53,27 +53,25 @@ void GameObject::fixedUpdate(float timestep)
 	}
 }
 
-void GameObject::update(float dt)
-{
+void GameObject::update(const float dt) const {
 	if (is_active) {
-		for (std::unique_ptr<IComponent>& comp : components) {
+		for (const std::unique_ptr<IComponent>& comp : components) {
 			comp->update(dt);
 		}
-		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : children) {
+		// call on all children
+		for (const std::unique_ptr<GameObject>& child : children) {
 			child->update(dt);
 		}
 	}
 }
 
-void GameObject::lateUpdate(float dt)
-{
+void GameObject::lateUpdate(const float dt) const {
 	if (is_active) {
-		for (std::unique_ptr<IComponent>& comp : components) {
+		for (const std::unique_ptr<IComponent>& comp : components) {
 			comp->lateUpdate(dt);
 		}
-		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : children) {
+		// call on all children
+		for (const std::unique_ptr<GameObject>& child : children) {
 			child->lateUpdate(dt);
 		}
 	}
@@ -84,13 +82,12 @@ std::vector<IRenderable*> GameObject::render()
 	std::vector<IRenderable*> result;
 	if (is_drawn) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			IRenderable* renderable = dynamic_cast<IRenderable*>(comp.get());
-			if (renderable) {
+			if (auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
 				result.push_back(renderable);
 			}
 		}
-		// call on all childeren
-		for (std::unique_ptr<GameObject>& child : children) {
+		// call on all children
+		for (const std::unique_ptr<GameObject>& child : children) {
 			std::vector<IRenderable*> childRenderables = child->render();
 			result.insert(result.end(), childRenderables.begin(), childRenderables.end());
 		}
@@ -113,19 +110,20 @@ GameObject* GameObject::addChild(std::unique_ptr<GameObject> _game_obj)
 	// Move ownership into the vector
 	children.push_back(std::move(_game_obj));
 
+	// ReSharper disable once CppDFALocalValueEscapesFunction
 	return rawPtr;
 }
 
-// used for moving children between objects (get this then addchild to another object) 
-std::unique_ptr<GameObject> GameObject::releaseChild(GameObject* child_to_release)
+// used for moving children between objects (get this then add child to another object)
+std::unique_ptr<GameObject> GameObject::releaseChild(const GameObject* child_to_release)
 {
 	if (!child_to_release) return nullptr;
 
 	// Find the unique_ptr holding the raw pointer
-	auto it = std::find_if(children.begin(), children.end(),
-		[&](const std::unique_ptr<GameObject>& ptr) {
-			return ptr.get() == child_to_release;
-		});
+	const auto it = std::ranges::find_if(children,
+	                               [&](const std::unique_ptr<GameObject>& ptr) {
+		                               return ptr.get() == child_to_release;
+	                               });
 
 	if (it != children.end()) {
 		// Use std::move to transfer ownership out of the childrens list
@@ -142,12 +140,11 @@ std::unique_ptr<GameObject> GameObject::releaseChild(GameObject* child_to_releas
 	return nullptr;
 }
 
-bool GameObject::isActive()
-{
+bool GameObject::isActive() const {
 	return is_active;
 }
 
-void GameObject::setActive(bool val)
+void GameObject::setActive(const bool val)
 {
 	// if val is different to what is currently, call onEnable or disable
 	if (val != is_active)
@@ -155,30 +152,28 @@ void GameObject::setActive(bool val)
 		is_active = val;
 
 		if (val) {
-			for (std::unique_ptr<IComponent>& comp : components) {
+			for (const std::unique_ptr<IComponent>& comp : components) {
 				comp->onEnable();
 			}
 		}
 		else {
-			for (std::unique_ptr<IComponent>& comp : components) {
+			for (const std::unique_ptr<IComponent>& comp : components) {
 				comp->onDisable();
 			}
 		}
 	}
 }
 
-bool GameObject::isDrawn()
-{
+bool GameObject::isDrawn() const {
 	return is_drawn;
 }
 
-void GameObject::setDrawn(bool val)
+void GameObject::setDrawn(const bool val)
 {
 	is_drawn = val;
 }
 
-std::vector<IComponent*> GameObject::getAllComponents()
-{
+std::vector<IComponent*> GameObject::getAllComponents() const {
 	// Construct a new vector of raw pointers from the owning unique_ptrs
 	std::vector<IComponent*> rawComponents;
 	rawComponents.reserve(components.size());
@@ -190,9 +185,8 @@ std::vector<IComponent*> GameObject::getAllComponents()
 	return rawComponents;
 }
 
-// returns all children, including childeren of childeren. 
-std::vector<GameObject*> GameObject::getAllChildren()
-{
+// returns all children, including children of children.
+std::vector<GameObject*> GameObject::getAllChildren() const {
 	std::vector<GameObject*> result;
 
 	for (const std::unique_ptr<GameObject>& child : children) {
@@ -208,8 +202,7 @@ std::vector<GameObject*> GameObject::getAllChildren()
 	return result;
 }
 
-Transform* GameObject::getTransform()
-{
+Transform* GameObject::getTransform() const {
 	return transform.get();
 }
 
@@ -239,7 +232,7 @@ bool GameObject::wasRenderedLastFrame()
 {
 	if (is_drawn) {
 		for (std::unique_ptr<IComponent>& comp : components) {
-			if (auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
+			if (const auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
 				return renderable->wasRenderedLastFrame();
 			}
 		}
@@ -249,16 +242,15 @@ bool GameObject::wasRenderedLastFrame()
 
 bool GameObject::wasRenderedLastFrameWithChildren()
 {
-	std::vector<IRenderable*> all_active_child_renderables = render();
-	for (IRenderable* i : all_active_child_renderables) {
+	const std::vector<IRenderable*> all_active_child_renderables = render();
+	for (const IRenderable* i : all_active_child_renderables) {
 		if (i->wasRenderedLastFrame())
 			return true;
 	}
 	return false;
 }
 
-std::vector<GameObject*> GameObject::getChildren()
-{
+std::vector<GameObject*> GameObject::getChildren() const {
 	std::vector<GameObject*> result;
 	for (const std::unique_ptr<GameObject>& child : children) {
 		result.push_back(child.get());
@@ -267,17 +259,15 @@ std::vector<GameObject*> GameObject::getChildren()
 }
 
 // gets the first child with the name specified
-GameObject* GameObject::getChildByName(const std::string &name)
-{
+GameObject* GameObject::getChildByName(const std::string &child_name) const {
 	for (const std::unique_ptr<GameObject>& child : children) {
-		if (child->getName() == name)
+		if (child->getName() == child_name)
 			return child.get();
 	}
 	return nullptr;
 }
 
-GameObject* GameObject::getParent()
-{
+GameObject* GameObject::getParent() const {
 	return parent;
 }
 

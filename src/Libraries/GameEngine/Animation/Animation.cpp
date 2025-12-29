@@ -41,8 +41,7 @@ sf::IntRect Animation::getCurrentFrameRect() const {
 		texture_size.y};
 }
 
-bool Animation::canExitGracefully()
-{
+bool Animation::canExitGracefully() const {
 		return just_finished || getState() == STATE::STOPPED; // if stopped or just finished return true
 }
 

@@ -5,7 +5,7 @@
 void TitleScene::load()
 {
 	PrefabRegistry* pref = PrefabRegistry::get();
-	scene_background_color = sf::Color(255, 0, 255);
+	scene_background_color = sf::Color(69, 40, 69);
 
 	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
 	auto* camera_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));

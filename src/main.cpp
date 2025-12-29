@@ -2,7 +2,6 @@
 
 #include "Libraries/GameEngine/Components.h"
 #include "Scenes/TitleScene.h"
-#include "Libraries/GameEngine/Systems/PrefabRegistry.h"
 #include "Libraries/GameEngine/Tools/AssetDatabase.h"
 #include "Prefabs/PrefabLoader.h" // need to include as this registers all the prefabs.
 

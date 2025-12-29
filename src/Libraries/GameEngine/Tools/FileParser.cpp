@@ -55,8 +55,6 @@ void FileParser::lowerString(std::string& s)
     }
 }
 
-
-
 // Specific type returns.
 template<>
 const int FileParser::getValue<int> (const std::string& key, int defaultValue)

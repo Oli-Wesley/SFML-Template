@@ -16,7 +16,7 @@ public:
 
 	void updateAnimation(float dt); 
 	sf::IntRect getCurrentFrameRect() const;
-	bool canExitGracefully();
+	bool canExitGracefully() const;
 	std::string getTextureId();
 
 	bool loadFromFile(std::string path);

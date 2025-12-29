@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <memory>       // Required for std::unique_ptr, std::make_unique
-#include <typeindex>
 #include <stdexcept>    // Required for std::runtime_error
 #include <algorithm>    // Required for std::remove_if
 #include "Components/IComponent.h"  
@@ -13,20 +12,20 @@
 
 class GameObject {
 public:
-    GameObject(const std::string &_name);
+    explicit GameObject(const std::string &_name);
     ~GameObject();
     // lifecycle events
     void fixedUpdate(float timestep);
     void physicsUpdate(float timestep);
-    void update(float dt);
-    void lateUpdate(float dt);
+    void update(float dt) const;
+    void lateUpdate(float dt) const;
     std::vector<IRenderable*> render();
     void destroy();
 
 
-    // Template functions so have to go here bc I dont understand how to make them work elsewhere...
+    // Template functions for all template function definitions
 
-    // usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS. ;
+    // usage: addComponent<ComponentType>(args)  CONSTRUCTOR OF THE COMPONENT MUST HAVE CORRESPONDING ARGUMENTS.
     template<typename T, typename... Args>
     T* addComponent(Args&&... args) {
         static_assert(std::is_base_of_v<IComponent, T>, "T must derive from Component");
@@ -66,7 +65,7 @@ public:
         // case to get scripts from the scriptable behaviour. 
         else
         {
-            if (IScriptableBehaviour* iscript = getComponent<IScriptableBehaviour>()) {
+            if (auto* iscript = getComponent<IScriptableBehaviour>()) {
                 return iscript->getScript<T>();
             }
         }
@@ -81,7 +80,7 @@ public:
         // remove elements from the list that do not have the asked for component.
         all_children.erase(
             std::remove_if(all_children.begin(), all_children.end(),
-                [](GameObject* child) {
+                [](const GameObject* child) {
                     return !child->hasComponent<T>();
                 }),
             all_children.end()
@@ -92,7 +91,7 @@ public:
 
     // returns the component on this gameObject with type.
     template<typename T>
-    bool hasComponent() {
+    bool hasComponent() const {
         for (const auto& comp : components) {
             if (dynamic_cast<T*>(comp.get()))
                 return true;
@@ -103,11 +102,11 @@ public:
     // attach a script to the gameObject
     template<typename T, typename... Args>
     T* addScript(Args&&... args) {
-        static_assert(std::is_base_of<ScriptableBehaviour, T>::value,
+        static_assert(std::is_base_of_v<ScriptableBehaviour, T>,
             "T must derive from ScriptableBehaviour");
 
         // Check if the GameObject already has a Scriptable interface
-        IScriptableBehaviour* script_interface = getComponent<IScriptableBehaviour>();
+        auto* script_interface = getComponent<IScriptableBehaviour>();
         
         // If not found, add one
         if (!script_interface) {
@@ -127,21 +126,21 @@ public:
 
     // Takes ownership of the child
     GameObject* addChild(std::unique_ptr<GameObject> _game_obj);
-    std::unique_ptr<GameObject> releaseChild(GameObject* child_to_release);
+    std::unique_ptr<GameObject> releaseChild(const GameObject* child_to_release);
 
-    bool isActive();
+    bool isActive() const;
     void setActive(bool);
 
-    bool isDrawn();
+    bool isDrawn() const;
     void setDrawn(bool);
 
     // Returns raw pointers for observation
-    std::vector<IComponent*> getAllComponents();
+    std::vector<IComponent*> getAllComponents() const;
 
     // get all children (including children of children)
-    std::vector<GameObject*> getAllChildren();
+    std::vector<GameObject*> getAllChildren() const;
 
-    Transform* getTransform();
+    Transform* getTransform() const;
 
     // gets the Local bounds of all renderable objects on the gameObject
     // sf::FloatRect getLocalBounds(); 
@@ -158,11 +157,11 @@ public:
     // checks if any of the renderable objects on this object or children were rendered last frame
     bool wasRenderedLastFrameWithChildren();
 
-    std::vector<GameObject*> getChildren();
+    std::vector<GameObject*> getChildren() const;
 
-    GameObject* getChildByName(const std::string &name);
+    GameObject* getChildByName(const std::string &child_name) const;
 
-    GameObject* getParent();
+    GameObject* getParent() const;
     void setParent(GameObject*);
 
     std::string getName();

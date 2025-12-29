@@ -17,12 +17,12 @@ void S_Button::update(float dt) {
             was_released = false;
             std::random_device rd;
             std::mt19937 g(rd());
-            std::vector<std::string> animations;
-            if (animator_comp)
-                animations = animator_comp->getAllAnimationIds();
-            std::ranges::shuffle(animations, g);
-            if (animator_comp) animator_comp->playAnimation(animations[0], true);
-            std::cout << "Playing Animation: " << animations[0] << "\n";
+            if (animator_comp) {
+                std::vector<std::string> animations = animator_comp->getAllAnimationIds();
+                std::ranges::shuffle(animations, g);
+                animator_comp->playAnimation(animations[0], true);
+                std::cout << "Playing Animation: " << animations[0] << "\n";
+            }
             AudioSystem::playSound("Buttons/Soft_Click");
         }
         return;
