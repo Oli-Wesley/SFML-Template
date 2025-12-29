@@ -1,16 +1,11 @@
 #include "Clickable.h"
+#include "Camera.h"
 #include "../Systems/GameSystem.h"
 
 void Clickable::update(float dt)
-{
-	BoxCollider* collider = game_object->getComponent<BoxCollider>();
-	// if any of the needed components dont exist, return.
-	if (!game_object->isActive() || collider == nullptr)
-		return;
+{	
+	isHovered(); // check if is hovered
 
-	sf::Vector2f mouse_pos = getMousePos();
-
-	is_hovering = checkPointCol(collider->getCollider(), mouse_pos);
 	is_mouse_pressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	// Hover enter
 	if (is_hovering && !was_hovered)
@@ -63,7 +58,7 @@ void Clickable::update(float dt)
 
 void Clickable::lateUpdate(float dt)
 {
-	// update on late update so childeren can actually check if it was just pressed on this frame.
+	// update on late update so children can actually check if it was just pressed on this frame.
 	was_hovered = is_hovering;
 	was_mouse_pressed = is_mouse_pressed;
 }
@@ -75,19 +70,28 @@ bool Clickable::isClicked()
 
 bool Clickable::isHovered()
 {
+	auto* collider = game_object->getComponent<BoxCollider>();
+	// if any of the needed components don't exist, return.
+	if (!game_object->isActive() || collider == nullptr)
+		return false;
+
+	// check if it is hovering on all cameras
+	is_hovering = false;
+	for (const std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras(); Camera* cam : cameras) {
+		// get mouse pos and convert to screen space
+		// check its valid
+		if (sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow())); mouse_pos == sf::Vector2f(-1.f, -1.f))
+			continue;
+		// set hovering if hovering.
+		else if (checkPointCol(collider->getCollider(), mouse_pos))
+			is_hovering = true;
+	}
 	return is_hovering;
 }
 
-bool Clickable::checkPointCol(sf::FloatRect bounds, sf::Vector2f _pos)
+bool Clickable::checkPointCol(const sf::FloatRect bounds, const sf::Vector2f _pos)
 {
 	return (
 		bounds.left <= _pos.x && _pos.x <= bounds.left + bounds.width &&
 		bounds.top <= _pos.y && _pos.y <= bounds.top + bounds.height);
-}
-
-sf::Vector2f Clickable::getMousePos()
-{
-	sf::RenderWindow* window = GameSystem::get()->getWindow();
-	return window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-
 }

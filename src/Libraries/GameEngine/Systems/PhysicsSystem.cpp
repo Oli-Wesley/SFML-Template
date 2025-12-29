@@ -2,6 +2,7 @@
 #include "../ComponentInterfaces.h"
 #include "../Components.h"
 #include "../GameObject.h"
+#include <cmath>
 
 // Define the static member variable
 PhysiscsSystem* PhysiscsSystem::instance = nullptr;
@@ -219,7 +220,7 @@ void PhysiscsSystem::resolveCollision(
 
 	// calculate bounce.
 	float restitution =
-		std::min(rbA ? rbA->bouncyness : 0.0f, rbB ? rbB->bouncyness : 0.0f);
+		std::min(rbA ? rbA->bounciness : 0.0f, rbB ? rbB->bounciness : 0.0f);
 
 	float invMassA = (rbA && !rbA->is_static) ? 1.0f / rbA->mass : 0.0f;
 	float invMassB = (rbB && !rbB->is_static) ? 1.0f / rbB->mass : 0.0f;

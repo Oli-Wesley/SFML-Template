@@ -7,6 +7,18 @@ void TitleScene::load()
 	PrefabRegistry* pref = PrefabRegistry::get();
 	scene_background_color = sf::Color(255, 0, 255);
 
+	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
+	Camera* camera_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
+	camera->getTransform()->setGlobalPosition(960 / 2, 540 / 2); // set to middle of screen (0,0 = top left);
+	camera_comp->setScreenRect(0, 0, 0.5, 0.5); // set to half the screen size
+
+	// setup second camera (exact same view, just different screen position)
+	GameObject* camera2 = scene_root->addChild(std::make_unique<GameObject>("Camera"));
+	Camera* camera_comp2 = camera2->addComponent<Camera>(sf::Vector2i(960, 540));
+	camera2->getTransform()->setGlobalPosition(960 / 4, 540 / 2);
+	camera_comp2->setBackgroundColor(sf::Color::Black);
+	camera_comp2->setScreenRect(0.5, 0.5, 0.5, 0.5); // set to half the screen size and placed in bottom right
+
 	// background
 	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
 	Transform* background_transform = background->getTransform();
@@ -32,19 +44,19 @@ void TitleScene::load()
 	// add animations
 	Animator* animator = animation_test->addComponent<Animator>(std::vector<Animation>{
 		Animation("Player/Idle"),
-		Animation("Player/Walk"),
-		Animation("Player/Attack1"),
-		Animation("Player/Attack2"),
-		Animation("Player/Attack3"),
-		Animation("Player/Jump"),
-		Animation("Player/Cry"),
-		Animation("Player/Die"),
-		Animation("Baby/Drink"),
-		Animation("Baby/Idle"),
-		Animation("Baby/Poop"),
-		Animation("Baby/Sit"),
-		Animation("Baby/Walk"),
-		baby_anim // give animator animation by variable 
+			Animation("Player/Walk"),
+			Animation("Player/Attack1"),
+			Animation("Player/Attack2"),
+			Animation("Player/Attack3"),
+			Animation("Player/Jump"),
+			Animation("Player/Cry"),
+			Animation("Player/Die"),
+			Animation("Baby/Drink"),
+			Animation("Baby/Idle"),
+			Animation("Baby/Poop"),
+			Animation("Baby/Sit"),
+			Animation("Baby/Walk"),
+			baby_anim // give animator animation by variable 
 	});
 
 	animator->playAnimation("Player/Idle"); // play animation

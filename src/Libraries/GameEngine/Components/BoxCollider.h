@@ -22,7 +22,8 @@ public:
 	void setSize(float _x, float _y);
 
 	// debug rendering
-	void render(sf::RenderWindow* window) override;
+	void render(sf::RenderTarget* target) override;
+	sf::FloatRect getGlobalBounds() override;
 	float getRenderOrder() override;
 
 protected:

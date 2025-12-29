@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Text.hpp>
 #include <string>
 
+#include "SFML/Graphics/Text.hpp"
+
 class TextRenderer; // Forward declaration
 
 class TextComponent : public IComponent
@@ -13,7 +15,7 @@ public:
 	TextComponent() = default;
 
 	void setString(const std::string& str);
-	void setFont(std::string path);
+	void setFont(const std::string &path);
 	void setCharacterSize(unsigned int size);
 	void setFillColor(const sf::Color& color);
 	void setStyle(sf::Text::Style style);
@@ -29,7 +31,7 @@ private:
 
 	std::string text;
 	sf::Font font;
-	unsigned int charSize;
+	unsigned int char_size = 10;
 	sf::Color fillColor;
-	sf::Text::Style textStyle;
+	sf::Text::Style textStyle = sf::Text::Style::Regular;
 };

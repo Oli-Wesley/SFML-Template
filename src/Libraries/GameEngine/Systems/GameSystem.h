@@ -9,7 +9,7 @@ class GameSystem
 {
 public:
 	static GameSystem* get();
-	void start(std::string start_scene);
+	void start(const std::string &start_scene);
 	void switchScene(std::string);
 	void addScene(Scene* scene, std::string scene_name);
 	Scene* getCurrentScene();
@@ -22,7 +22,7 @@ public:
 	void setResolution(int x, int y);
 	void setFullscreen(bool state);
 	void setFramerate(float framerate);
-	void setPhysicsTimestep(float tickspersecond);
+	void setPhysicsTimestep(float ticks_per_second);
 
 	bool isDebug();
 	void setDebug(bool flag);
@@ -31,13 +31,16 @@ public:
 
 	void addToDestroyQueue(GameObject* obj);
 
+	// Delete copy constructor and assignment operator
+	GameSystem(GameSystem const&) = delete;
+	void operator=(GameSystem const&) = delete;
 protected:
 	static GameSystem* instance;
 
 	// Scenes
 	std::unordered_map<std::string, Scene*> scenes;
 	std::string target_scene;
-	Scene* currentScene;
+	Scene* currentScene = nullptr;
 	std::vector<GameObject*> destroy_queue;
 
 	// window settings.
@@ -62,10 +65,7 @@ protected:
 	void lateUpdate(float dt);
 	void render();
 	void changeScene(); // changeScene last so objects can finish the update loop without breaking.
-	void flushDestroyQueue(); // clear objects that were destroyed this game tick. (done at end so any objects with refrences to them can finish running)
+	void flushDestroyQueue(); // clear objects that were destroyed this game tick. (done at end so any objects with references to them can finish running)
 
-// Delete copy constructor and assignment operator
 	GameSystem() = default; // only allow creation of class within itself
-	GameSystem(GameSystem const&) = delete;
-	void operator=(GameSystem const&) = delete;
 };

@@ -1,41 +1,41 @@
 #include "Animator.h"
 #include "../GameObject.h"
 #include <iostream>
+#include <ranges>
 
-Animator::Animator()
-{
-}
 
-Animator::Animator(Animation anim)
+Animator::Animator(const Animation &anim)
 {
 	addAnimation(anim);
 }
 
-Animator::Animator(std::vector<Animation> anims)
+Animator::Animator(const std::vector<Animation> &animations)
 {
-	addAnimation(anims);
+	addAnimation(animations);
 }
 
+// TODO: to assetDatabase:
 void Animator::addAnimation(Animation anim)
 {
 	// TODO: some logic to check if anim actually exists. 
 	animations.emplace(anim.getAnimationId(), anim);
 }
 
-void Animator::addAnimation(std::vector<Animation> anims)
+// TODO: Move to assetDatabase:
+void Animator::addAnimation(const std::vector<Animation> &animations)
 {
-	for (Animation anim : anims)
+	for (const Animation& animation : animations)
 	{
-		addAnimation(anim);
+		addAnimation(animation);
 	}
 }
 
-bool Animator::playAnimation(std::string animation_id)
+bool Animator::playAnimation(const std::string &animation_id)
 {
 	return playAnimation(animation_id, false);
 }
 
-bool Animator::playAnimation(std::string animation_id, bool exit_gracefully)
+bool Animator::playAnimation(const std::string &animation_id, bool exit_gracefully)
 {
 	target_animation = { &animations.find(animation_id)->second, exit_gracefully };
 	return true;
@@ -44,20 +44,19 @@ bool Animator::playAnimation(std::string animation_id, bool exit_gracefully)
 std::vector<std::string> Animator::getAllAnimationIds()
 {
 	std::vector<std::string> id;
-	for (std::pair<const std::string, Animation>& anim : animations) {
-		id.push_back(anim.first);
+	for (const auto &key: animations | std::views::keys) {
+		id.push_back(key);
 	}
 	return id;
 }
 
-Animation& Animator::getAnimation(std::string animationId)
+Animation& Animator::getAnimation(const std::string &animationId)
 {
 	return animations.at(animationId);
 }
 
-void Animator::update(float dt)
+void Animator::update(const float dt)
 {
-
 	// if cant find either texture or sprite component return.
 	if (!getComponents())
 		return;
@@ -73,11 +72,11 @@ void Animator::update(float dt)
 
 void Animator::attemptChange()
 {
-	// return if current is the same as target or target animation doesnt exist yet.
+	// return if current is the same as target or target animation doesn't exist yet.
 	if (current_animation == target_animation.first || !target_animation.first)
 		return;
 
-	// if should exit gracefully but cannot yet, return. (waiting untill it can)
+	// if should exit gracefully but cannot yet, return. (waiting until it can)
 	if (target_animation.second) {
 		if (!current_animation->canExitGracefully())
 			return;
@@ -89,7 +88,6 @@ void Animator::attemptChange()
 	current_animation = target_animation.first;
 	texture_component->setTexture(current_animation->getTextureId());
 	current_animation->play();
-	return;
 }
 
 bool Animator::getComponents()

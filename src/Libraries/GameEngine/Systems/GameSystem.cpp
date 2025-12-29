@@ -3,6 +3,7 @@
 #include "PhysicsSystem.h"
 #include <iostream>
 #include "AudioSystem.h"
+#include "../Components/Camera.h"
 
 // Define the static member variable
 GameSystem* GameSystem::instance = nullptr;
@@ -16,7 +17,7 @@ GameSystem* GameSystem::get()
 	return instance;
 }
 
-void GameSystem::start(std::string start_scene)
+void GameSystem::start(const std::string &start_scene)
 {
 	std::cout << "PRESS F1 To Show scene_root Tree\n";
 	std::cout << "PRESS F2 To Show dont_destroy Tree\n";
@@ -39,10 +40,11 @@ void GameSystem::start(std::string start_scene)
 				{
 					// unload current scene
 					currentScene->unload();
-					// destroy dont_destroy to allow anything attatched to it to run its unload functions.
+					// destroy dont_destroy to allow anything attached to it to run its unload functions.
 					currentScene->dont_destroy = nullptr;
 				}
 				// close the window.
+				AudioSystem::clearPlayers();
 				window->close();
 				return;
 			}
@@ -60,6 +62,12 @@ void GameSystem::start(std::string start_scene)
 				}
 				else if (e.key.code == sf::Keyboard::F3)
 					setDebug(!isDebug());
+			}
+			else if (e.type == sf::Event::Resized)
+			{
+				// update the view to the new size of the window
+				sf::FloatRect visibleArea(0, 0, e.size.width, e.size.height);
+				window->setView(sf::View(visibleArea));
 			}
 		}
 		runGameLoop(clock.restart().asSeconds()); // pass time since last frame as
@@ -138,9 +146,9 @@ void GameSystem::setFramerate(float _framerate)
 		window->setFramerateLimit(framerate);
 }
 
-void GameSystem::setPhysicsTimestep(float tickspersecond)
+void GameSystem::setPhysicsTimestep(float ticks_per_second)
 {
-	physics_timestep = 1.0f / tickspersecond;
+	physics_timestep = 1.0f / ticks_per_second;
 }
 
 bool GameSystem::isDebug()
@@ -170,7 +178,7 @@ void GameSystem::runPhysics(float timestep)
 	{
 		currentScene->scene_root->physicsUpdate(timestep);
 		PhysiscsSystem::get()->handleCollisions(
-			currentScene->scene_root->getAllChilderenWithComponent<BoxCollider>());
+			currentScene->scene_root->getAllChildrenWithComponent<BoxCollider>());
 	}
 }
 
@@ -196,14 +204,13 @@ void GameSystem::fixedUpdate(float dt)
 		accumulator -= physics_timestep;
 	}
 }
-
+	
 void GameSystem::update(float dt)
 {
 	if (currentScene != nullptr) {
 		currentScene->scene_root->update(dt);
 		currentScene->dont_destroy->update(dt);
 	}
-
 }
 
 void GameSystem::lateUpdate(float dt)
@@ -221,35 +228,30 @@ void GameSystem::render()
 		return;
 	}
 	window->clear(currentScene->getSceneColor());
-	// get all renderables from the scene (scene_root and dont_destroy)
-	std::vector<IRenderable*> renderables = currentScene->scene_root->render();
-	std::vector<IRenderable*> other = currentScene->dont_destroy->render();
-	renderables.insert(renderables.end(), other.begin(), other.end());
-	// simple bubble sort, sort the list based on layer. (kinda slow but its fast enough for this..)
-	bool changed = 1;
-	IRenderable* hold;
-	int length = renderables.size();
-	while (changed)
+
+	// render current scene and keep outputs of all cameras
+	std::vector<Camera::CameraOutput> outputs = currentScene->render();
+	
+	// sort the list
+	std::sort(outputs.begin(), outputs.end(), [](Camera::CameraOutput a, Camera::CameraOutput b)
 	{
-		changed = 0;
-		for (int index = 0; index < length - 1; index++)
-		{
-			if (
-				renderables[index]->getRenderOrder() >
-				renderables[index + 1]->getRenderOrder())
-			{
-				hold = renderables[index];
-				renderables[index] = renderables[index + 1];
-				renderables[index + 1] = hold;
-				changed = 1;
-			}
-		}
-	}
-	// render now sorted list
-	for (IRenderable* var : renderables)
+		return a.z_height > b.z_height;
+	});
+
+	// display what the scene just rendered to the display
+	for (Camera::CameraOutput& var : outputs)
 	{
-		var->render(getWindow());
+		sf::Sprite sprite(*var.texture);
+
+		sprite.setPosition(var.screen_rect.left, var.screen_rect.top);
+		sprite.setScale(
+			static_cast<float>(var.screen_rect.width) / static_cast<float>(var.texture->getSize().x),
+			static_cast<float>(var.screen_rect.height) / static_cast<float>(var.texture->getSize().y)
+		);
+
+		window->draw(sprite);
 	}		
+	// actually display to screen
 	window->display();
 }
 
@@ -269,8 +271,6 @@ void GameSystem::changeScene()
 			currentScene->load(std::move(dont_destroy));
 		else
 			std::cout << "FAILED TO LOAD SCENE, SCENE EXISTS BUT RETURNS NULLPTR";
-		// resize to window size.
-		currentScene->onWindowResize(sf::Vector2i(resolution.width, resolution.height));
 	}
 }
 

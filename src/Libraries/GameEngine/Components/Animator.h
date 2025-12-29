@@ -9,19 +9,21 @@
 class Animator : public IComponent
 {
 public:
-	Animator();
-	Animator(Animation anim);
-	Animator(std::vector<Animation> anims);
+	Animator() = default;
+
+	explicit Animator(const Animation &anim);
+
+	explicit Animator(const std::vector<Animation> &animations);
 	
 	void addAnimation(Animation anim);
-	void addAnimation(std::vector<Animation> anims);
+	void addAnimation(const std::vector<Animation> &animations);
 
 
-	bool playAnimation(std::string animation_id);
-	bool playAnimation(std::string animation_id, bool exit_gracefully);
+	bool playAnimation(const std::string &animation_id);
+	bool playAnimation(const std::string &animation_id, bool exit_gracefully);
 
 	std::vector<std::string> getAllAnimationIds();
-	Animation& getAnimation(std::string animationId);
+	Animation& getAnimation(const std::string &animationId);
 
 	void update(float dt) override;
 

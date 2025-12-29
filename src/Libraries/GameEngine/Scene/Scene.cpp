@@ -1,15 +1,6 @@
 #include "../Scene.h"
 #include "../GameObject.h"
 
-Scene::Scene()
-{
-}
-
-Scene::~Scene()
-{
-
-}
-
 std::unique_ptr<GameObject> Scene::unload()
 {
 	onUnload(); // call each scene's onUnload functions.
@@ -20,7 +11,7 @@ std::unique_ptr<GameObject> Scene::unload()
 
 void Scene::load(std::unique_ptr<GameObject> _dont_destroy)
 {
-	// make or move dont destroy if it exists
+	// make or move don't destroy if it exists
 	if (_dont_destroy == nullptr) {
 		dont_destroy = std::make_unique<GameObject>("Dont_Destroy");
 	}
@@ -34,25 +25,58 @@ void Scene::load(std::unique_ptr<GameObject> _dont_destroy)
 // UNUSED CURRENTLY (does work though)
 void Scene::onWindowResize(sf::Vector2i new_size)
 {
-	// Calculate scale 
-	float scale_x = float(new_size.x) / target_resolution.x;
-	float scale_y = float(new_size.y) / target_resolution.y;
-	float uniform_scale = std::min(scale_x, scale_y);
+	//// Calculate scale 
+	//float scale_x = float(new_size.x) / target_resolution.x;
+	//float scale_y = float(new_size.y) / target_resolution.y;
+	//float uniform_scale = std::min(scale_x, scale_y);
 
-	// apply scale
-	scene_root->getTransform()->setLocalScale(uniform_scale, uniform_scale);
-	dont_destroy->getTransform()->setLocalScale(uniform_scale, uniform_scale);
+	//// apply scale
+	//scene_root->getTransform()->setLocalScale(uniform_scale, uniform_scale);
+	//dont_destroy->getTransform()->setLocalScale(uniform_scale, uniform_scale);
 
-	// Calculate position to center the scene
-	float offset_x = (new_size.x - target_resolution.x * uniform_scale) / 2.f;
-	float offset_y = (new_size.y - target_resolution.y * uniform_scale) / 2.f;
+	//// Calculate position to center the scene
+	//float offset_x = (new_size.x - target_resolution.x * uniform_scale) / 2.f;
+	//float offset_y = (new_size.y - target_resolution.y * uniform_scale) / 2.f;
 
-	scene_root->getTransform()->setLocalPosition(offset_x, offset_y);
-	dont_destroy->getTransform()->setLocalPosition(offset_x, offset_y);
+	//scene_root->getTransform()->setLocalPosition(offset_x, offset_y);
+	//dont_destroy->getTransform()->setLocalPosition(offset_x, offset_y);
 }
 
-//std::vector<sf::RenderTexture> Scene::render(const std::vector<IRenderable*> renderables)
-//{
-//	// iterate over cameras 
-//	return std::vector<>();
-//}
+std::vector<Camera::CameraOutput> Scene::render()
+{
+	// get all renderable objects
+	std::vector<IRenderable*> renderables = scene_root->render();
+	std::vector<IRenderable*> other = dont_destroy->render();
+	renderables.insert(renderables.end(), other.begin(), other.end());
+
+	// sort renderables list
+	std::sort(renderables.begin(), renderables.end(), [](IRenderable* a, IRenderable* b)
+		{
+			return a->getRenderOrder() < b->getRenderOrder();
+		});
+
+	// get all cameras then render to them. 
+	std::vector<Camera*> cameras = getAllCameras();
+	std::vector<Camera::CameraOutput> outputs;
+	for (Camera* cam : cameras){
+			cam->render(renderables);
+			outputs.push_back(cam->getRenderOutput());
+	}	
+	return outputs;
+}
+
+std::vector<Camera*> Scene::getAllCameras()
+{
+	// get all cameras
+	std::vector<GameObject*> objs = scene_root->getAllChildrenWithComponent<Camera>();
+	std::vector<GameObject*> objs2 = dont_destroy->getAllChildrenWithComponent<Camera>();
+	// merge both into one list
+	objs.insert(objs.end(), objs2.begin(), objs2.end());
+	// get camera component
+	std::vector<Camera*> cameras;
+	for (GameObject* game_obj : objs) {
+		if (Camera* cam = game_obj->getComponent<Camera>())
+			cameras.push_back(cam);
+	}
+	return cameras;
+}

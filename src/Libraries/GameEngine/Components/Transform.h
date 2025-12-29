@@ -7,7 +7,7 @@
 class Transform : public IComponent {
 public:
 
-	// passing into 2 seperate x and y floats just converts to vector2f then calls the same function there.
+	// passing into 2 separate x and y floats just converts to vector2f then calls the same function there.
 
 	// Position
 	void setGlobalPosition(float _x, float _y);
@@ -20,7 +20,7 @@ public:
 	void move(sf::Vector2f _distance);
 
 	sf::Vector2f getGlobalPosition();
-	sf::Vector2f getLocalPosition();
+	sf::Vector2f getLocalPosition() const;
 
 	// Zheight is used for render order
 	void setLocalZheight(float _z);

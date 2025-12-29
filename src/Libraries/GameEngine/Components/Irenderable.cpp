@@ -1,5 +1,3 @@
-#pragma once
-
 #include "IRenderable.h"
 #include "../GameObject.h"
 
@@ -8,4 +6,13 @@
 float IRenderable::getRenderOrder()
 {
 	return game_object->getTransform()->getGlobalZheight();
+}
+
+void IRenderable::resetBeforeRender()
+{
+	was_rendered = false;
+}
+
+bool IRenderable::wasRenderedLastFrame() const {
+	return was_rendered;
 }

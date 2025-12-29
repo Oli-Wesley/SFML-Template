@@ -24,33 +24,32 @@ public:
     // register prefabs to the prefab registry map to be loaded elsewhere. 
     // CHANGE 1: Constructor now returns std::unique_ptr<GameObject>
     void RegisterPrefab(
-        const std::string& name, std::function<std::unique_ptr<GameObject>()> constructor);
+        const std::string& name, const std::function<std::unique_ptr<GameObject>()> &constructor);
 
     // instantiate prefab with given name 
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name);
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name);
 
     // instantiate prefab with given name at coords specified
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name, sf::Vector2f position);
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name, sf::Vector2f position);
 
     // instantiate prefab with given name at coords specified
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name, float x, float y);
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name, float x, float y);
 
     // instantiate prefab with given name and override the name on the gameObject.
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name, std::string new_name);
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name, const std::string &new_name);
 
     // instantiate prefab with given name at coords specified and override the name on the gameObject.
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name, std::string new_name, sf::Vector2f position);
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name, const std::string &new_name, sf::Vector2f position);
 
     // instantiate prefab with given name at coords specified and override the name on the gameObject.
-    std::unique_ptr<GameObject> InstantiatePrefab(std::string name, std::string new_name, float x, float y);
-
+    std::unique_ptr<GameObject> InstantiatePrefab(const std::string &name, const std::string &new_name, float x, float y);
+    PrefabRegistry(PrefabRegistry const&) = delete;
+    void operator=(PrefabRegistry const&) = delete;
 protected:
-    PrefabRegistry() {}
+    PrefabRegistry() = default;
 
     // map for storing prefabs and their constructor functions
     std::unordered_map<std::string, std::function<std::unique_ptr<GameObject>()>> prefabRegistry;
 
 	static PrefabRegistry* instance;
-	PrefabRegistry(PrefabRegistry const&) = delete;
-	void operator=(PrefabRegistry const&) = delete;
 };

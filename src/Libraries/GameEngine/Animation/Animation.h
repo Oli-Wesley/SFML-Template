@@ -12,30 +12,30 @@ public:
 		STOPPED
 	};
 
-	Animation(std::string anim_id);
-	~Animation();
+	explicit Animation(const std::string &anim_id);
+	~Animation() = default;
 
 	void updateAnimation(float dt); 
-	sf::IntRect getCurrentFrameRect();
+	sf::IntRect getCurrentFrameRect() const;
 	bool canExitGracefully();
 	std::string getTextureId();
 	std::string getAnimationId();
 
 	bool loadFromFile(std::string path);
 
-	int getCurrentFrameCount();
+	int getCurrentFrameCount() const;
 	void setCurrentFrame(int frame_number);
 
-	int getFramerate();
+	int getFramerate() const;
 	void setFramerate(int fps); // Framerate in fps (60 = 60fps);
 
-	float getSpeed();
+	float getSpeed() const;
 	void setSpeed(float new_speed); // speed override 1 = default speed 
 
-	bool isLooping();
+	bool isLooping() const;
 	void setLooping(bool should_loop);
 
-	STATE getState();
+	STATE getState() const;
 	void play(); // plays animation
 	void pause(); // pauses animation, re-playing after pausing will remember which frame it was on
 	void stop(); // stops animation, allowing to exit gracefully and forgetting which frame its on
@@ -50,7 +50,7 @@ private:
 
 	sf::Vector2i texture_size = { 16,16 }; // size of each animation frame in the image. 
 	sf::Vector2i start_position = { 0,0 }; // start position of the animation (if multiple animations are in the same texture)
-	std::string texture_id = "";
+	std::string texture_id;
 
 	bool just_finished = false;
 	float time_per_frame = 0.04166666666f; // time per frame at 24fps.

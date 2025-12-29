@@ -2,13 +2,14 @@
 #include "IComponent.h"
 #include "../ScriptableBehaviour.h"
 #include <memory>
+#include <vector>
 
 class IScriptableBehaviour : public IComponent {
 private:
 	// array of all scripts on a gameObject.
 	std::vector<std::unique_ptr<ScriptableBehaviour>> scripts;
 public:
-	virtual ~IScriptableBehaviour() {
+	~IScriptableBehaviour() override {
 		for (std::unique_ptr<ScriptableBehaviour>& s : scripts) {
 			s->onDestroy(); 
 		}
@@ -32,27 +33,27 @@ public:
 
 	// all functions that are scriptable. 
 	// Called when the component is enabled
-	void onEnable() override { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onEnable(); }
+	void onEnable() override { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onEnable(); }
 	// Called every frame
-	void update(float dt) override { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->update(dt); }
+	void update(const float dt) override { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->update(dt); }
 	// called after update
-	void lateUpdate(float dt) override { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->lateUpdate(dt); }
+	void lateUpdate(const float dt) override { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->lateUpdate(dt); }
 	// Called when the GameObject is disabled 
-	void onDisable() override { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onDisable(); }
+	void onDisable() override { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onDisable(); }
 	// Called when the component is destroyed
-	void onDestroy() override { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onDestroy(); }
+	void onDestroy() override { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onDestroy(); }
 	// called at fixed intervals. (physics tick)
-	void fixedUpdate(float timestep) { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->fixedUpdate(timestep); }
+	void fixedUpdate(const float timestep) const { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->fixedUpdate(timestep); }
 
 	// Physics stuff.
 	// Called when entering a trigger.
-	void onTriggerEnter(GameObject* obj) { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerEnter(obj); }
+	void onTriggerEnter(GameObject* obj) const { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerEnter(obj); }
 	// Called every frame inside a trigger.
-	void onTriggerStay(GameObject* obj) { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerStay(obj); }
+	void onTriggerStay(GameObject* obj) const { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerStay(obj); }
 	// Called when exiting a trigger.
-	void onTriggerExit(GameObject* obj) { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerExit(obj); }
+	void onTriggerExit(GameObject* obj) const { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onTriggerExit(obj); }
 	// Called when colliding with another object.
-	void onCollision(GameObject* obj) { for (std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onCollision(obj); }
+	void onCollision(GameObject* obj) const { for (const std::unique_ptr<ScriptableBehaviour>& s : scripts) s->onCollision(obj); }
 
 	// Clickable stuff (needs clickable component)
 	// Called when this object is clicked
