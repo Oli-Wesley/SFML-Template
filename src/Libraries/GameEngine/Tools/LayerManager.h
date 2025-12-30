@@ -11,6 +11,8 @@ public:
     int addLayer(const std::string &layer);
 
     static int getLayerIndex(const std::string &layer);
+
+    static std::string getLayerName(int index);
     void debugLayers() const;
 private:
     static LayerManager* instance;

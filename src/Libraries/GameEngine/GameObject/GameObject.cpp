@@ -108,6 +108,7 @@ GameObject* GameObject::addChild(std::unique_ptr<GameObject> _game_obj)
 {
 	GameObject* rawPtr = _game_obj.get(); // Grab the raw pointer before moving so it can be returned
 	rawPtr->setParent(this);
+	rawPtr->setLayer(getLayer()); // set to same layer as parent by default.
 
 	// Move ownership into the vector
 	children.push_back(std::move(_game_obj));
@@ -296,15 +297,36 @@ void GameObject::outputChildrenTree()
 }
 
 void GameObject::setLayer(const std::string &layer_name) {
+	setLayer(layer_name, false);
+}
+
+void GameObject::setLayer(const std::string &layer_name, const bool include_children) {
 	if (const int new_layer = LayerManager::getLayerIndex(layer_name); new_layer  != -1) {
-		layer = new_layer;
+		setLayer(new_layer, include_children);
 		return;
 	}
 	std::cout << "WARNING: layer (" << layer_name <<") Does not exist\n";
 }
 
+void GameObject::setLayer(const int layer_id) {
+	layer = layer_id;
+}
+
+void GameObject::setLayer(const int layer_id, const bool include_children) {
+	setLayer(layer_id);
+	if (include_children) {
+		for (const std::unique_ptr<GameObject>& child : children) {
+			child->setLayer(layer_id, true);
+		}
+	}
+}
+
 int GameObject::getLayer() const {
 	return layer;
+}
+
+std::string GameObject::getLayerId() const {
+	return LayerManager::getLayerName(getLayer());
 }
 
 

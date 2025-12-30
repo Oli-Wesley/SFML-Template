@@ -40,6 +40,16 @@ int LayerManager::getLayerIndex(const std::string &layer) {
     return -1;
 }
 
+std::string LayerManager::getLayerName(const int index) {
+    const LayerManager* lm = get();
+    for (const auto& it : lm->layer_map) {
+        if (it.second == index) {
+            return it.first;
+        }
+    }
+    return "";
+}
+
 void LayerManager::debugLayers() const {
     std::cout << "LAYERS:  " << std::endl;
     for (auto & it : layer_map) {

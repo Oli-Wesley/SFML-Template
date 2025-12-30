@@ -172,7 +172,11 @@ public:
     void outputChildrenTree();
 
     void setLayer(const std::string &layer_name);
+    void setLayer(const std::string &layer_name, bool include_children);
+    void setLayer(int layer_id);
+    void setLayer(int layer_id, bool include_children);
     int getLayer() const;
+    std::string getLayerId() const;
 
 protected:
     void outputChildrenTree(const std::string &prefix);

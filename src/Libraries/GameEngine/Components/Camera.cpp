@@ -12,6 +12,7 @@ Camera::Camera(const sf::Vector2i size)
 	screen_rect.width = size.x; // default screen_rect to same size as texture;
 	screen_rect.height = size.y;
 	render_tex.create(size.x, size.y);
+	setLayer("Default", true); // default render layer
 }
 
 void Camera::render(const std::vector<IRenderable*>& renderables)
