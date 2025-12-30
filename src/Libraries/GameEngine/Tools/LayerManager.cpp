@@ -25,9 +25,9 @@ LayerManager * LayerManager::get() {
 int LayerManager::addLayer(const std::string &layer) {
     std::string key = toLower(layer);
     LayerManager* lm = get();
-    if (!lm->layer_map.contains(key) && next_layer_index < 32)
+    if (!lm->layer_map.contains(key) && lm->next_layer_index < 32)
     {
-        lm->layer_map.insert({key, next_layer_index});
+        lm->layer_map.insert({key, lm->next_layer_index});
         lm->next_layer_index++;
     }
     return lm->layer_map[key];

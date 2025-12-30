@@ -8,7 +8,7 @@ public:
     LayerManager(LayerManager const&) = delete;
     void operator=(LayerManager const&) = delete;
 
-    int addLayer(const std::string &layer);
+    static int addLayer(const std::string &layer);
 
     static int getLayerIndex(const std::string &layer);
 
