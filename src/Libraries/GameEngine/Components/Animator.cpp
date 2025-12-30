@@ -49,11 +49,12 @@ bool Animator::playAnimation(const std::string &animation_id, bool exit_graceful
 
 std::vector<std::string> Animator::getAllAnimationIds()
 {
-	std::vector<std::string> id;
+	std::vector<std::string> ids;
 	for (const auto &key: animation_array | std::views::keys) {
-		id.push_back(key);
+		if (key != "EngineCore/Missing_Animation") // dont return default missing animation.
+			ids.push_back(key);
 	}
-	return id;
+	return ids;
 }
 
 Animation& Animator::getAnimation(const std::string &animationId)
