@@ -18,6 +18,7 @@ public:
 	virtual void onDestroy() {}          // Called when the component is destroyed
 
 	void setGameObject(GameObject* _game_object) { game_object = _game_object; };
+	GameObject* getGameObject() const {return game_object; };
 
 protected:
 	GameObject* game_object = nullptr;

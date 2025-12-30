@@ -20,7 +20,7 @@ public:
 
 	void render(const std::vector<IRenderable*>& renderables); // take in a sorted list of all renderables and render it. 
 
-	CameraOutput getRenderOutput();
+	CameraOutput getRenderOutput() const;
 
 	const std::unique_ptr<sf::View>& getView();
 
@@ -41,11 +41,15 @@ public:
 
 	sf::Vector2f convertScreenToWorld(sf::Vector2i pos);
 
+	void setLayer(const std::string &layer_name,bool should_view);
+	bool canSee(const GameObject *obj) const;
 
 protected:
 	sf::RenderTexture render_tex;
 	std::unique_ptr<sf::View> view;
-	sf::FloatRect screen_rect; // where to draw onto the window. TODO: move this to be relative e.g 0,0,1,1 for fullscreen  
+	sf::FloatRect screen_rect; // where to draw onto the window.
 	sf::Color background_col = sf::Color::Transparent;
 	float screen_z_height = 1.0f;
+
+	uint32_t viewMask = 0; // Layer bitmask
 };

@@ -3,6 +3,8 @@
 #include "../Systems/GameSystem.h"
 #include <iostream>
 
+#include "../Tools/LayerManager.h"
+
 Camera::Camera(const sf::Vector2i size)
 {
 	view = std::make_unique<sf::View>();
@@ -10,6 +12,7 @@ Camera::Camera(const sf::Vector2i size)
 	screen_rect.width = size.x; // default screen_rect to same size as texture;
 	screen_rect.height = size.y;
 	render_tex.create(size.x, size.y);
+	setLayer("Default", true); // default render layer
 }
 
 void Camera::render(const std::vector<IRenderable*>& renderables)
@@ -28,13 +31,13 @@ void Camera::render(const std::vector<IRenderable*>& renderables)
 	for (IRenderable* obj : renderables)
 	{
 		obj->resetBeforeRender(); // reset was_rendered
-		if (obj->getGlobalBounds().intersects(viewBounds))
+		if (obj->getGlobalBounds().intersects(viewBounds) && canSee(obj->getGameObject()))
 			obj->render(&render_tex); // render to a texture.
 	}
 	render_tex.display();
 }
 
-Camera::CameraOutput Camera::getRenderOutput() {
+Camera::CameraOutput Camera::getRenderOutput() const {
 	CameraOutput output;
 	output.texture = &render_tex.getTexture();
 	output.screen_rect = getScreenRectRelativeToWindow();
@@ -144,3 +147,29 @@ sf::Vector2f Camera::convertScreenToWorld(sf::Vector2i pos)
 
 	return coords;
 }
+
+void Camera::setLayer(const std::string &layer_name, const bool should_view) {
+
+	// special case for setting view to all, or none;
+	if (layer_name == "ALL") {
+		if (should_view)
+			viewMask = 0xFFFFFFFF; // sets everything to 1
+		else
+			viewMask = 0; // sets everything to 0
+		return;
+	}
+
+	const int target_id = LayerManager::getLayerIndex(layer_name);
+	if (target_id == -1)
+		return;
+
+	if (should_view) {
+		viewMask |= (1U << target_id);  // Set bit at index to 1 for layer is rendered by camera
+	} else {
+		viewMask &= ~(1U << target_id); // Set bit at index to 0 for layer is rendered by camera
+	}
+}
+
+bool Camera::canSee(const GameObject* obj) const {
+		return (viewMask & (1U << obj->getLayer())) != 0; // if bit at the index given is 1
+	}

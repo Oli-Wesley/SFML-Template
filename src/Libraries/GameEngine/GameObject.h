@@ -170,6 +170,14 @@ public:
     bool isPendingDestroy() const { return pending_destroy; };
 
     void outputChildrenTree();
+
+    void setLayer(const std::string &layer_name);
+    void setLayer(const std::string &layer_name, bool include_children);
+    void setLayer(int layer_id);
+    void setLayer(int layer_id, bool include_children);
+    int getLayer() const;
+    std::string getLayerId() const;
+
 protected:
     void outputChildrenTree(const std::string &prefix);
     std::string name;
@@ -177,6 +185,7 @@ protected:
     bool is_active = true;
     bool is_drawn = true;
     bool pending_destroy = false;
+    int layer = 0;
     std::vector<std::unique_ptr<GameObject>> children;
     std::unique_ptr<Transform> transform;
 

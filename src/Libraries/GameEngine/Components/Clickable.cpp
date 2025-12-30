@@ -77,10 +77,15 @@ bool Clickable::isHovered()
 
 	// check if it is hovering on all cameras
 	is_hovering = false;
-	for (const std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras(); Camera* cam : cameras) {
+	const std::vector<Camera*> cameras = GameSystem::get()->getCurrentScene()->getAllCameras();
+	for (Camera* cam : cameras) {
+		// if camera cannot see this object.
+		if (!cam->canSee(game_object))
+			continue;
 		// get mouse pos and convert to screen space
 		// check its valid
-		if (sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow())); mouse_pos == sf::Vector2f(-1.f, -1.f))
+		sf::Vector2f mouse_pos = cam->convertScreenToWorld(sf::Mouse::getPosition(*GameSystem::get()->getWindow()));
+		if (mouse_pos == sf::Vector2f(-1.f, -1.f))
 			continue;
 		// set hovering if hovering.
 		else if (checkPointCol(collider->getCollider(), mouse_pos))
