@@ -10,7 +10,10 @@ void TitleScene::load()
 	GameObject* camera = scene_root->addChild(std::make_unique<GameObject>("Camera"));
 	auto* camera_comp = camera->addComponent<Camera>(sf::Vector2i(960, 540));
 	camera->getTransform()->setGlobalPosition(960.0f / 2, 540.0f / 2); // set to middle of screen (0,0 = top left);
+	camera_comp->setBackgroundColor(sf::Color::Black);
 	camera_comp->setScreenRect(0, 0, 0.5, 0.5); // set to half the screen size
+	camera_comp->setLayer("Default", true);
+	camera_comp->setLayer("Player", true);
 
 	// setup second camera (exact same view, just different screen position)
 	GameObject* camera2 = scene_root->addChild(std::make_unique<GameObject>("Camera"));
@@ -18,6 +21,7 @@ void TitleScene::load()
 	camera2->getTransform()->setGlobalPosition(960.0f / 4, 540.0f / 2);
 	camera_comp2->setBackgroundColor(sf::Color::Black);
 	camera_comp2->setScreenRect(0.5, 0.5, 0.5, 0.5); // set to half the screen size and placed in bottom right
+	camera_comp2->setLayer("Player", true);
 
 	// background
 	GameObject* background = scene_root->addChild(pref->InstantiatePrefab("P_RenderableObject", "Background"));
@@ -36,6 +40,7 @@ void TitleScene::load()
 
 	animation_test->addComponent<Texture>();
 	animation_test->addComponent<SpriteRenderer>();
+	animation_test->setLayer("Player");
 
 	// add animations
 	const auto animator = animation_test->addComponent<Animator>(std::vector<std::string>{

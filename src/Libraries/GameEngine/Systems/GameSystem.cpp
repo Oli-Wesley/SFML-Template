@@ -4,6 +4,7 @@
 #include <iostream>
 #include "AudioSystem.h"
 #include "../Components/Camera.h"
+#include "../Tools/LayerManager.h"
 
 // Define the static member variable
 GameSystem* GameSystem::instance = nullptr;
@@ -22,6 +23,7 @@ void GameSystem::start(const std::string &start_scene)
 	std::cout << "PRESS F1 To Show scene_root Tree\n";
 	std::cout << "PRESS F2 To Show dont_destroy Tree\n";
 	std::cout << "PRESS F3 To Toggle Debug\n";
+	std::cout << "PRESS F4 To Show Layers\n";
 
 	switchScene(start_scene); // change target scene.
 	changeScene();            // actually change into the scene.
@@ -62,6 +64,8 @@ void GameSystem::start(const std::string &start_scene)
 				}
 				else if (e.key.code == sf::Keyboard::F3)
 					setDebug(!isDebug());
+				else if (e.key.code == sf::Keyboard::F4)
+					LayerManager::get()->debugLayers();
 			}
 			else if (e.type == sf::Event::Resized)
 			{

@@ -4,6 +4,7 @@
 #include "../Systems/GameSystem.h"
 #include <memory>
 #include <iostream>
+#include "../Tools/LayerManager.h"
 
 // constructor requires a name
 GameObject::GameObject(const std::string &_name)
@@ -12,6 +13,7 @@ GameObject::GameObject(const std::string &_name)
 	transform = std::make_unique<Transform>();
 	transform->setGameObject(this);
 	setName(_name);
+	setLayer("Default"); // set to default layer
 }
 
 GameObject::~GameObject()
@@ -291,6 +293,18 @@ void GameObject::outputChildrenTree()
 	std::cout << "----------------------------------------\n";
 	outputChildrenTree("");
 	std::cout << "----------------------------------------\n";
+}
+
+void GameObject::setLayer(const std::string &layer_name) {
+	if (const int new_layer = LayerManager::getLayerIndex(layer_name); new_layer  != -1) {
+		layer = new_layer;
+		return;
+	}
+	std::cout << "WARNING: layer (" << layer_name <<") Does not exist\n";
+}
+
+int GameObject::getLayer() const {
+	return layer;
 }
 
 
