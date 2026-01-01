@@ -1,0 +1,37 @@
+[GAMEOBJECT]
+{
+    Position(10,10)
+    [COMPONENTS]
+    {
+        [Animator]
+        {
+            Animations(Player/Idle, Player/Walk, Player/Jump)
+        }
+        [Script(MovementScript)]
+        {
+            Speed(10.0)
+            JumpPower(5.0)
+        }
+        [Script(HealthManager)]
+        {
+            Health(100.0)
+	        Resistance(30.0)
+        }
+    }
+    [CHILDREN]
+    {
+        [GAMEOBJECT(Sword)]
+        {
+            Position(1, 0)
+            [Animator]
+            {
+                Animations(Idle, Walk)
+            }
+            [Script(AttackScript)]
+            {
+                Speed(10.0)
+                JumpPower(5.0)
+            }
+        }
+    }
+}
