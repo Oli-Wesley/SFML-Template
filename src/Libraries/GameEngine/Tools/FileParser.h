@@ -1,20 +1,32 @@
 #pragma once
+#include <map>
+#include <sstream>
 #include <string>
-#include <unordered_map>
+#include "ValueNode.h"
 
 class FileParser {
 public:
-	FileParser();
-	FileParser(std::string path);;
-	// load from filepath (from root, no special folders here).
-	bool loadFromFile(std::string path);
-
-	template<typename T>
-	const T getValue(const std::string& key, T defaultValue);
-
+    ValueNode loadFromFile(const std::string &path);
 protected:
-	std::unordered_map<std::string, std::string> data;
+    std::string file;
+    int cursor = 0;
+    std::vector<ValueNode*> node_stack;
 
-	void trimString(std::string& string_to_trim);
-	void lowerString(std::string& string_to_lower);
+    // logic for parsing node
+    ValueNode parseNode();
+
+    // navigation functions
+    char peek() const; // read next character without moving cursor forwards
+    char consume(); // get next character and move cursor forwards
+    void skipWhitespace(); // move cursor forwards until no more whitespace
+    bool isAtEnd() const;
+
+    // reads until reaching the given character.
+    std::string readUntil(char char_to_reach);
+
+    static std::string loadStringFromFile(const std::string &path);
+
+    static void trimString(std::string& string_to_trim);
+
+    static void lowerString(std::string& string_to_lower);
 };

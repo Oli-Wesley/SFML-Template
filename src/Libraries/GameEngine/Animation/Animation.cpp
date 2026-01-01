@@ -50,21 +50,21 @@ std::string Animation::getTextureId()
 	return texture_id;
 }
 
-// path relative to the Animations folder with extensions removed
+// path relative to the Animations folder with extensions removed TODO: fix this to use new parser
 bool Animation::loadFromFile(std::string path)
 {
-	FileParser file;
-	if (!file.loadFromFile(path))
-		return false;
+	// FileParser file;
+	// if (!file.loadFromFile(path))
+	// 	return false;
+	//
+	// setFramerate(file.getValue<int>("framerate", framerate));
+	// setLooping(file.getValue<bool>("loop", is_looping));
+ // 	texture_id = file.getValue<std::string>("texture_id", "");
+	// texture_size = file.getValue<sf::Vector2i>("texture_size", texture_size); // size of each animation frame in the image.
+	// start_position = file.getValue<sf::Vector2i>("start_position", start_position);
+	// total_frames = file.getValue<int>("frame_count", 0);
 
-	setFramerate(file.getValue<int>("framerate", framerate));
-	setLooping(file.getValue<bool>("loop", is_looping));
- 	texture_id = file.getValue<std::string>("texture_id", "");
-	texture_size = file.getValue<sf::Vector2i>("texture_size", texture_size); // size of each animation frame in the image. 
-	start_position = file.getValue<sf::Vector2i>("start_position", start_position);
-	total_frames = file.getValue<int>("frame_count", 0);
-
-	return true;
+	return false;
 }
 
 int Animation::getCurrentFrameCount() const {
