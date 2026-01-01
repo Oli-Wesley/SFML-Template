@@ -19,9 +19,9 @@ int main() {
 	// save data in file to node.
 	ValueNode node = parser.loadFromFile("../Data/TestData/SquareRoom.odf");
 
-	//AssetDatabase::get(); // get asset database (first time getting loads all the assets)
+	AssetDatabase::get(); // get asset database (first time getting loads all the assets)
 	// start game (anything after this in main will not be called until the game is stopped).
-	// sys->start("TitleScene");
+	sys->start("TitleScene");
 
 	return 0;
 }

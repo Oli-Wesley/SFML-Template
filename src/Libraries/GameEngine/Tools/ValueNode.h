@@ -19,6 +19,13 @@ struct ValueNode {
 
 	// template function for converting the string stored in data to a specific type.
 	template<typename T>
-	T getValue(T defaultValue = T()) const;
+	T getValue(T defaultValue) const;
 
+	template<typename T>
+	T getPropetyWithName(std::string name, T defaultValue) {
+		const ValueNode* child = findChild("PROPERTY", name);
+		if (child == nullptr)
+			return defaultValue;
+		return child->getValue<T>(defaultValue);
+	}
 };
