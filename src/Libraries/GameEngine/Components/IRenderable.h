@@ -10,6 +10,7 @@ class IRenderable : public IComponent
 public:
 	virtual void render(sf::RenderTarget* target) = 0;
 	virtual sf::FloatRect getGlobalBounds() = 0;
+	virtual sf::FloatRect getLocalBounds() = 0;
 	virtual float getRenderOrder();
 
 	virtual  ~IRenderable() override = default;

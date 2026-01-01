@@ -1,5 +1,7 @@
 #include "PrefabRegistry.h"
 
+#include <iostream>
+
 // Define the static member variable
 PrefabRegistry* PrefabRegistry::instance = nullptr;
 
@@ -24,6 +26,7 @@ std::unique_ptr<GameObject> PrefabRegistry::InstantiatePrefab(const std::string 
 	{
 		return it->second(); // Call the prefab constructor function
 	}
+	std::cout << "NO PREFAB: " << name << std::endl;
 	return nullptr;
 }
 

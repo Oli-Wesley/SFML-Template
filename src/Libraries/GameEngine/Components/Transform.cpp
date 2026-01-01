@@ -19,6 +19,22 @@ void Transform::setGlobalPosition(const sf::Vector2f _position)
 	}
 }
 
+void Transform::setOrigin(float _x, float _y) {
+	setOrigin({_x, _y});
+}
+
+void Transform::setOrigin(sf::Vector2f _origin) {
+	origin = _origin;
+}
+
+void Transform::centerOrigin() {
+	sf::FloatRect bounds = game_object->getLocalBounds();
+	setOrigin({bounds.width / 2.0f, bounds.height / 2.0f});
+}
+
+sf::Vector2f Transform::getOrigin() {
+	return origin;
+}
 
 sf::Vector2f Transform::getGlobalPosition()
 {
@@ -33,9 +49,19 @@ sf::Vector2f Transform::getGlobalPosition()
 	}
 }
 
+void Transform::setGlobalTopLeft(const sf::Vector2f _topLeft) {
+	sf::FloatRect currentBounds = game_object->getGlobalBoundsWithChildren();
+
+	float deltaX = _topLeft.x - currentBounds.left;
+	float deltaY = _topLeft.y - currentBounds.top;
+
+	sf::Vector2f currentPos = getGlobalPosition();
+
+	setGlobalPosition(currentPos.x + deltaX, currentPos.y + deltaY);
+}
+
 sf::Vector2f Transform::getLocalPosition() const {
-	const sf::Vector2f parent_scale = game_object->getParent()->getTransform()->getGlobalScale();
-	return {position.x * parent_scale.x, position.y * parent_scale.y};
+	return position;
 }
 
 void Transform::setLocalZheight(const float _z)
@@ -161,16 +187,38 @@ void Transform::rotateAroundPoint(const float angle)
 	rotateAroundPoint(angle, getGlobalPosition());
 }
 
-//TODO: Fix this
+void Transform::rotateAroundCenter(const float angle) {
+	sf::Vector2f oldOrigin = origin;
+	sf::FloatRect bounds = game_object->getLocalBounds();
+	sf::Vector2f newOrigin = {bounds.width / 2.0f, bounds.height / 2.0f};
+
+	// Set the new origin
+	origin = newOrigin;
+
+	// Compensate position so the object doesn't jump
+	sf::Vector2f diff = newOrigin - oldOrigin;
+	float rad = getGlobalRotation() * (3.14159265f / 180.0f);
+	float rx = diff.x * std::cos(rad) - diff.y * std::sin(rad);
+	float ry = diff.x * std::sin(rad) + diff.y * std::cos(rad);
+
+	move(rx, ry);
+	setGlobalRotation(angle);
+}
+
 void Transform::rotateAroundPoint(const float angle, const sf::Vector2f point)
 {
 	sf::Vector2f globalPos = getGlobalPosition();
 	float radians = angle * (3.14159265f / 180.0f);
 
 	const sf::Vector2f offset = globalPos - point;
-	float rotatedX = offset.x * std::cos(radians) - offset.y * std::sin(radians);
-	float rotatedY = offset.x * std::sin(radians) + offset.y * std::cos(radians);
 
+	float cosA = std::cos(radians);
+	float sinA = std::sin(radians);
+
+	float rotatedX = offset.x * cosA - offset.y * sinA;
+	float rotatedY = offset.x * sinA + offset.y * cosA;
+
+	// Apply the shift
 	setGlobalPosition(point.x + rotatedX, point.y + rotatedY);
 	setGlobalRotation(getGlobalRotation() + angle);
 }

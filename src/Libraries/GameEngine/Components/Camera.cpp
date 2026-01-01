@@ -50,6 +50,10 @@ const std::unique_ptr<sf::View>& Camera::getView()
 	return view;
 }
 
+void Camera::setViewArea(float width, float height) {
+	view->setSize(width, height);
+}
+
 void Camera::setBackgroundColor(const sf::Color& color)
 {
 	background_col = color;

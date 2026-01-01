@@ -23,6 +23,7 @@ public:
 	CameraOutput getRenderOutput() const;
 
 	const std::unique_ptr<sf::View>& getView();
+	void setViewArea(float width, float height);
 
 	void setBackgroundColor(const sf::Color& color);
 	sf::Color& getBackgroundColour();
@@ -31,7 +32,6 @@ public:
 	void setScreenRect(float left, float top, float width, float height);
 
 	sf::FloatRect getScreenRect() const;
-
 	sf::FloatRect getScreenRectRelativeToWindow() const;
 
 	void setTextureSize(sf::Vector2i size);

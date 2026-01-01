@@ -209,6 +209,15 @@ Transform* GameObject::getTransform() const {
 	return transform.get();
 }
 
+sf::FloatRect GameObject::getLocalBounds() {
+	for (std::unique_ptr<IComponent>& comp : components) {
+		if (auto* renderable = dynamic_cast<IRenderable*>(comp.get())) {
+			return renderable->getLocalBounds();
+		}
+	}
+	return {0,0,0,0};
+}
+
 
 sf::FloatRect GameObject::getGlobalBounds()
 {

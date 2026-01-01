@@ -16,6 +16,11 @@ sf::FloatRect TextRenderer::getGlobalBounds()
 	return text.getGlobalBounds();
 }
 
+sf::FloatRect TextRenderer::getLocalBounds() {
+	updateText();
+	return text.getLocalBounds();
+}
+
 sf::Text* TextRenderer::getText()
 {
 	return &text;

@@ -27,8 +27,6 @@ public:
 	Animation& getAnimation(const std::string &animationId);
 
 	void update(float dt) override;
-
-
 protected:
 	void attemptChange();
 	bool getComponents();

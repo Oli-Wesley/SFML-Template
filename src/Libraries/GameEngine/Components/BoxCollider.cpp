@@ -80,6 +80,10 @@ sf::FloatRect BoxCollider::getGlobalBounds()
 	return getCollider(); // just return collider here. 
 }
 
+sf::FloatRect BoxCollider::getLocalBounds() {
+	return getCollider(); // just return here, just used for keeping compiler happy.
+}
+
 float BoxCollider::getRenderOrder()
 {
 	// returns the renderOrder, used for sorting the render_queue so elements get
@@ -87,4 +91,15 @@ float BoxCollider::getRenderOrder()
 	// are always drawn on top.
 
 	return game_object->getTransform()->getGlobalZheight() + 10000.0f;
+}
+
+bool BoxCollider::checkIntersection(BoxCollider *collider) {
+	const sf::FloatRect a_rect = getCollider();
+	const sf::FloatRect b_rect = collider->getCollider();
+
+	return (
+		a_rect.left < b_rect.left + b_rect.width &&
+		a_rect.left + a_rect.width > b_rect.left &&
+		a_rect.top < b_rect.top + b_rect.height &&
+		a_rect.top + a_rect.height > b_rect.top);
 }

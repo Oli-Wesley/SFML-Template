@@ -143,7 +143,7 @@ public:
     Transform* getTransform() const;
 
     // gets the Local bounds of all renderable objects on the gameObject
-    // sf::FloatRect getLocalBounds(); 
+    sf::FloatRect getLocalBounds();
     // gets the Global bounds of all renderable objects on the gameObject
     sf::FloatRect getGlobalBounds();
 

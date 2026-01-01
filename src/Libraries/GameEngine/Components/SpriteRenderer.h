@@ -9,6 +9,7 @@ public:
 	void start() override;
 	void render(sf::RenderTarget* target) override;
 	sf::FloatRect getGlobalBounds() override;
+	sf::FloatRect getLocalBounds() override;
 	sf::Sprite& getSprite();
 
 

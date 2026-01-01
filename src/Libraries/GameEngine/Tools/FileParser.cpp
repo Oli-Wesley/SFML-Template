@@ -22,7 +22,7 @@ bool FileParser::loadFromFile(std::string path)
 	while (std::getline(file, current_line)) {
 		// remove any whitespace on start or end and continue to the next line if its empty. 
 		trimString(current_line);
-		if (current_line.empty()) continue;
+		if (current_line.empty() || current_line.front() == '#') continue;
 
 		size_t pos = current_line.find(":");
 

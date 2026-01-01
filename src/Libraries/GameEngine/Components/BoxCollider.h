@@ -24,7 +24,9 @@ public:
 	// debug rendering
 	void render(sf::RenderTarget* target) override;
 	sf::FloatRect getGlobalBounds() override;
+	sf::FloatRect getLocalBounds() override;
 	float getRenderOrder() override;
+	bool checkIntersection(BoxCollider* collider);
 
 protected:
 	// box Collider has a seperate position and size than transform, allowing it
