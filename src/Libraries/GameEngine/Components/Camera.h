@@ -1,6 +1,6 @@
 #pragma once
-#include "IComponent.h"
-#include "IRenderable.h"
+#include "../ComponentInterfaces/IComponent.h"
+#include "../ComponentInterfaces/IRenderable.h"
 #include "Transform.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>

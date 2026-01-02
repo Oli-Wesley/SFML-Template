@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRenderable.h"
+#include "../ComponentInterfaces/IRenderable.h"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 

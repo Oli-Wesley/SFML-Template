@@ -4,8 +4,8 @@
 
 #include "../GameObject.h"
 #include "BoxCollider.h"
-#include "IComponent.h"
-#include "IScriptableBehaviour.h"
+#include "../ComponentInterfaces/IComponent.h"
+#include "../ComponentInterfaces/IScriptableBehaviour.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "Camera.h"

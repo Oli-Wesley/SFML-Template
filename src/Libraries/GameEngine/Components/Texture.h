@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IComponent.h"
+#include "../ComponentInterfaces/IComponent.h"
 #include <SFML/Graphics/Texture.hpp>
 
 class Texture : public IComponent

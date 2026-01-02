@@ -4,10 +4,8 @@
 #include <memory>       // Required for std::unique_ptr, std::make_unique
 #include <stdexcept>    // Required for std::runtime_error
 #include <algorithm>    // Required for std::remove_if
-#include "Components/IComponent.h"  
-#include "Components/IRenderable.h"  
+#include "ComponentInterfaces.h"
 #include "Components/Transform.h"
-#include "Components/IScriptableBehaviour.h"
 #include "Tools/Helpers.h"
 
 class GameObject {

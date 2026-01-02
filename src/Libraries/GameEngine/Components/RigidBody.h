@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IPhysicsObject.h"
+#include "../ComponentInterfaces/IPhysicsObject.h"
 #include "SFML/System/Vector2.hpp"
 
 class RigidBody : public IPhysicsObject

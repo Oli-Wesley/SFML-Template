@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRenderable.h"
+#include "../ComponentInterfaces/IRenderable.h"
 #include <SFML/Graphics/Sprite.hpp>
 
 class SpriteRenderer : public IRenderable

@@ -1,5 +1,5 @@
 #pragma once
-#include "IComponent.h"
+#include "../ComponentInterfaces/IComponent.h"
 #include <unordered_map>
 #include <string>
 #include "../Animation/Animation.h"

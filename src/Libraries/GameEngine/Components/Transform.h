@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IComponent.h"
+#include "../ComponentInterfaces/IComponent.h"
 
 #include "SFML/System/Vector2.hpp"
 
