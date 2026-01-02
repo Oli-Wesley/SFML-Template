@@ -20,6 +20,8 @@ public:
 	// CLEAR ASSETS:: WARNING DONT DO AT RUNTIME, DONE IN CLEANUP
 	static void clearAssets();
 
+	static void outputAssets();
+
 	// Get Texture from path starting in images folder, with the extension removed.
 	static const sf::Texture& getTexture(const std::string &path);
 	// Get SoundBuffer from path starting in images folder, with the extension removed.

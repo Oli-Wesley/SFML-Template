@@ -23,6 +23,26 @@ void AssetDatabase::clearAssets() {
     instance = nullptr; // destroy instance so assets can be re-generated if accidentally destroyed at runtime.
 }
 
+void AssetDatabase::outputAssets() {
+    AssetDatabase *asd = get();
+
+    std::cout << "__Textures__\n";
+    for (auto val : asd->textures)
+        {std::cout << val.first  << std::endl;}
+
+    std::cout << "\n__Sounds__\n";
+    for (auto val : asd->sounds)
+        {std::cout << val.first  << std::endl;}
+
+    std::cout << "\n__Fonts__\n";
+    for (auto val : asd->fonts)
+        {std::cout << val.first  << std::endl;}
+
+    std::cout << "\n__Animations__\n";
+    for (auto val : asd->animations)
+        {std::cout << val.first  << std::endl;}
+}
+
 const sf::Texture &AssetDatabase::getTexture(const std::string &path) {
     AssetDatabase *asd = get();
 

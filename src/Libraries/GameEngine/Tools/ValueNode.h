@@ -30,4 +30,6 @@ struct ValueNode {
 			return defaultValue;
 		return child->getValue<T>(defaultValue);
 	}
+	private:
+	static std::string removeCharacters(std::string s, char c);
 };
