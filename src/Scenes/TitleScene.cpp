@@ -57,13 +57,7 @@ void TitleScene::load()
 			"Player/Attack3",
 			"Player/Jump",
 			"Player/Cry",
-			"Player/Die",
-			"Baby/Drink",
-			"Baby/Idle",
-			"Baby/Cry",
-			"Baby/Poop",
-			"Baby/Sit",
-			"Baby/Walk"
+			"Player/Die"
 	});
 
 	animator->playAnimation("Player/Idle"); // play animation

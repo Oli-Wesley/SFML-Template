@@ -1,9 +1,9 @@
 [Animation]
 {
-    framerate(10)
-    loop(1)
-    frame_count(10)
-    texture_id(SpriteSheets/adventurer_sprite_sheet)
-    texture_size(32,32)
-    start_position(0,128)
+    framerate(int|10)
+    loop(bool|1)
+    frame_count(int|10)
+    texture_id(std::string|"SpriteSheets/adventurer_sprite_sheet")
+    texture_size(sf::Vector2i|{32,32})
+    start_position(sf::Vector2i|{0,128})
 }
