@@ -57,6 +57,15 @@ bool Animation::loadFromFile(std::string path)
 	ValueNode node = file.loadFromFile(path);
 	if (node.type == "EMPTY")
 		return false;
+	// check nodes exist
+	if (!(node.findChild("PROPERTY", "framerate")
+		&& node.findChild("PROPERTY", "loop")
+		&& node.findChild("PROPERTY", "texture_id")
+		&& node.findChild("PROPERTY", "texture_size")
+		&& node.findChild("PROPERTY", "start_position")
+		&& node.findChild("PROPERTY", "frame_count")))
+		return false;
+
 	// get values from node.
 	setFramerate(node.getPropetyWithName<int>("framerate", framerate));
 	setLooping(node.getPropetyWithName<bool>("loop",is_looping));
@@ -64,7 +73,6 @@ bool Animation::loadFromFile(std::string path)
 	texture_size = node.getPropetyWithName<sf::Vector2i>("texture_size", texture_size);
 	start_position = node.getPropetyWithName<sf::Vector2i>("start_position", start_position);
 	total_frames = node.getPropetyWithName<int>("frame_count", total_frames);
-
 	return true;
 }
 
