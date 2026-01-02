@@ -4,6 +4,7 @@
 #include <iostream>
 #include "AudioSystem.h"
 #include "../Components/Camera.h"
+#include "../Tools/AssetDatabase.h"
 #include "../Tools/LayerManager.h"
 
 // Define the static member variable
@@ -47,6 +48,7 @@ void GameSystem::start(const std::string &start_scene)
 				}
 				// close the window.
 				AudioSystem::clearPlayers();
+				AssetDatabase::clearAssets();
 				window->close();
 				return;
 			}

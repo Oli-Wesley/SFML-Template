@@ -17,6 +17,8 @@ public:
 	AssetDatabase();
 	// get a pointer to the prefab registry singleton instance
 	static AssetDatabase* get();
+	// CLEAR ASSETS:: WARNING DONT DO AT RUNTIME, DONE IN CLEANUP
+	static void clearAssets();
 
 	// Get Texture from path starting in images folder, with the extension removed.
 	static const sf::Texture& getTexture(const std::string &path);
@@ -36,10 +38,6 @@ protected:
 
 	static std::vector < std::string> getAllPathsInDirectory(const std::string &directory);
 	void print(std::string string);
-
-
-
-
 
 	// load assets in a single function rather than the 3 different ones I had previously, saves repeated code :D. 
 	template <typename T>
@@ -66,21 +64,19 @@ protected:
 					allowed = true;
 
 			if (!allowed) {
-				print("!!! Unallowed File Found: " + file + "\n");
+				print("!!! Unallowed File Found in (" + label + "s): " + file + "\n");
 				continue;
 			}
 
 			T asset;
 			if (asset.loadFromFile(folder + "/" + file)) {
 				array.emplace(name, std::move(asset));
-				print("Loaded " + label + ": " + name + "\n");
 			}
 			else {
 				print("!!! Failed To Load " + label + ": " + file + "\n");
 			}
 		}
-
-		print("---------------------------------------------------\n");
+		print("__Finished Loading " + label + "(s)__:\n");
 	}
 
 };

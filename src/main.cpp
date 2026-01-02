@@ -15,9 +15,6 @@ int main() {
 	sys->setFramerate(120);
 	sys->setTitle("Game Engine");
 	sys->setResolution(960, 540);
-	FileParser parser;
-	// save data in file to node.
-	ValueNode node = parser.loadFromFile("../Data/TestData/SquareRoom.odf");
 
 	AssetDatabase::get(); // get asset database (first time getting loads all the assets)
 	// start game (anything after this in main will not be called until the game is stopped).
