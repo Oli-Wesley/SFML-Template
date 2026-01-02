@@ -9,6 +9,8 @@ struct ValueNode {
 	std::string name;
 	// data stored inside the '()' within name(data);
 	std::string data;
+	// type of data (string, int, sf::vector2 ect...);
+	std::string data_type;
 	// array of all child nodes.
 	std::vector<ValueNode> children;
 

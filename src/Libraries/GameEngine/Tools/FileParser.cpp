@@ -72,7 +72,8 @@ ValueNode FileParser::parseNode() {
         // read the value name until it reaches the opening bracket where the value is stored.
         node.name = readUntil('(');
         consume(); // Eat '('
-
+        node.data_type = readUntil('|');
+        consume(); // eat the colon
         // save the data until it reaches the closing bracket
         node.data = readUntil(')');
         consume(); // Eat ')'

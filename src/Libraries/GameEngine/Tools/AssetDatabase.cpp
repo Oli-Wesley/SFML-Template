@@ -100,7 +100,6 @@ AssetDatabase::AssetDatabase() {
     animation_thread.join();
     sound_thread.join();
     font_thread.join();
-    print("Loaded All Assets \n");
 }
 
 std::vector<std::string> AssetDatabase::getAllPathsInDirectory(const std::string &directory) {
@@ -110,13 +109,13 @@ std::vector<std::string> AssetDatabase::getAllPathsInDirectory(const std::string
         if (entry.is_regular_file()) {
             std::filesystem::path relative_path = std::filesystem::relative(entry.path(), directory);
             std::string entry_s = relative_path.string();
-            std::replace(entry_s.begin(), entry_s.end(), '\\', '/');
+            std::ranges::replace(entry_s, '\\', '/');
             all_paths.push_back(entry_s);
         }
     }
     return all_paths;
 }
 
-void AssetDatabase::print(std::string string) {
+void AssetDatabase::print(const std::string &string) {
     std::cout << string;
 }

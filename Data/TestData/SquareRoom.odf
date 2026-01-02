@@ -1,29 +1,29 @@
 [Room]
 {
-    RoomSize(17,17)
-    RoomPrefab(P_SquareRoom)
+    RoomSize(sf::Vector2i|{17,17})
+    RoomPrefab(std::string|"P_SquareRoom")
     
     # can be used as a room to start the player in?
-    IsStartRoom(false)
-    StartPosition(7,7)
+    IsStartRoom(bool|false)
+    StartPosition(sf::Vector2i|{7,7})
 
     # exits: Directions = N,E,S,W
     [Exits]{
         [Exit]{
-            ExitPosition(3,0) 
-            ExitDirection(N)
+            ExitPosition(sf::Vector2i|{3,0}) 
+            ExitDirection(char|'N')
         }
         [Exit]{
-            ExitPosition(16, 11)
-            ExitDirection(E)
+            ExitPosition(sf::Vector2i|{16, 11})
+            ExitDirection(char|'E')
         }
         [Exit]{
-            ExitPosition(13, 16)
-            ExitDirection(S)
+            ExitPosition(sf::Vector2i|{13, 16})
+            ExitDirection(char|'S')
         }
         [Exit]{
-            ExitPosition(0, 11)
-            ExitDirection(W)
+            ExitPosition(sf::Vector2i|{0, 11})
+            ExitDirection(char|'W')
         }
     }
 }

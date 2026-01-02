@@ -27,18 +27,19 @@ public:
 	// Get Font from path starting in images folder, with the extension removed.
 	static const sf::Font& getFont(const std::string &path);
 	static const Animation& getAnimation(const std::string &path);
+
+	AssetDatabase(AssetDatabase const&) = delete;
+	void operator=(AssetDatabase const&) = delete;
 protected:
 	std::unordered_map<std::string, sf::Texture> textures;
 	std::unordered_map<std::string, sf::SoundBuffer> sounds;
 	std::unordered_map<std::string, sf::Font> fonts;
 	std::unordered_map<std::string, Animation> animations;
 	static AssetDatabase* instance;
-	AssetDatabase(AssetDatabase const&) = delete;
-	void operator=(AssetDatabase const&) = delete;
 
 	static std::vector < std::string> getAllPathsInDirectory(const std::string &directory);
-	void print(std::string string);
 
+	static void print(const std::string &string);
 	// load assets in a single function rather than the 3 different ones I had previously, saves repeated code :D. 
 	template <typename T>
 	void loadAssets(
