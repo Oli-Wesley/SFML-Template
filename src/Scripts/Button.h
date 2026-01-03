@@ -1,10 +1,10 @@
 #pragma once 
-#include "../Libraries/GameEngine/ScriptableBehaviour.h" 
-#include "../Libraries/GameEngine/Components.h"
+#include "../../Libraries/GameEngine/ScriptableBehaviour.h"
+#include "../../Libraries/GameEngine/Components.h"
 
 class GameObject;
 
-class S_Button : public ScriptableBehaviour {
+class Button : public ScriptableBehaviour {
 public:
 	void start() override;
 	void update(float dt) override;

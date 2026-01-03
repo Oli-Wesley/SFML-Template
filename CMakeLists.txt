@@ -21,7 +21,7 @@ FetchContent_MakeAvailable(SFML)    # Makes sure SFML and its dependencies are a
 
 #---- File management & .exe creation ----#
 
-file(GLOB_RECURSE LIBRARY_FILES "src/Libraries/*.cpp" "src/Libraries/*.h" "src/Libraries/*.hpp")
+file(GLOB_RECURSE LIBRARY_FILES "Libraries/*.cpp" "Libraries/*.h" "Libraries/*.hpp")
 file(GLOB_RECURSE GAME_OBJECTS "src/GameObjects/*.cpp" "src/GameObjects/*.h" "src/GameObjects/*.hpp")
 file(GLOB_RECURSE SCENES "src/Scenes/*.cpp" "src/Scenes/*.h" "src/Scenes/*.hpp")
 file(GLOB_RECURSE SCRIPTS "src/Scripts/*.cpp" "src/Scripts/*.h" "src/Scripts/*.hpp")

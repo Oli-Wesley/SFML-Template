@@ -2,8 +2,7 @@
 
 // prototype gameObject so it is happy at compile time.
 class GameObject;
-class IComponent
-{
+class IComponent{
 public:
 	virtual ~IComponent() {
 		onDestroy();

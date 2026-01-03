@@ -1,10 +1,10 @@
-#include "Libraries/GameEngine.h"
+#include "../Libraries/GameEngine.h"
 
-#include "Libraries/GameEngine/Components.h"
+#include "../Libraries/GameEngine/Components.h"
 #include "Scenes/TitleScene.h"
-#include "Libraries/GameEngine/Tools/AssetDatabase.h"
+#include "../Libraries/GameEngine/Tools/AssetDatabase.h"
 #include "Prefabs/PrefabLoader.h" // need to include as this registers all the prefabs.
-#include "Libraries/GameEngine/Tools/FileParser.h"
+#include "../Libraries/GameEngine/Tools/FileParser.h"
 
 int main() {
 	srand(time(nullptr)); // setup random numbers

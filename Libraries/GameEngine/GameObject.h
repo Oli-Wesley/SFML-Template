@@ -177,16 +177,19 @@ public:
     std::string getLayerId() const;
 
 protected:
-    void outputChildrenTree(const std::string &prefix);
+    // variables that are configurable between different gameObjects.
     std::string name;
     std::vector<std::unique_ptr<IComponent>> components;
     bool is_active = true;
     bool is_drawn = true;
-    bool pending_destroy = false;
+
     int layer = 0;
     std::vector<std::unique_ptr<GameObject>> children;
     std::unique_ptr<Transform> transform;
 
-    // CHANGED: Must be a raw pointer (weak reference) to avoid circular ownership memory leaks.
+    // things to never change
+    bool pending_destroy = false;
     GameObject* parent = nullptr;
+
+    void outputChildrenTree(const std::string &prefix);
 };

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Libraries/GameEngine.h"
+#include "../../Libraries/GameEngine.h"
 
 REGISTER_PREFAB(
 	P_RenderableObject,            // name

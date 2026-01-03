@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "../Libraries/GameEngine.h"
-#include "../Libraries/GameEngine/Tools/LayerManager.h"
-#include "../Scripts/S_Button.h"
+#include "../../Libraries/GameEngine.h"
+#include "../../Libraries/GameEngine/Tools/LayerManager.h"
+#include "../Scripts/Button.h"
 
 void TitleScene::load()
 {
@@ -67,5 +67,5 @@ void TitleScene::load()
 	button->getTransform()->setGlobalScale(5, 5);
 	button->getTransform()->setGlobalPosition(420, 400);
 	button->addComponent<BoxCollider>(16, 13)->setPosition(3, 3);
-	button->addScript<S_Button>()->addAnimatorTarget(animator);
+	button->addScript<Button>()->addAnimatorTarget(animator);
 }
