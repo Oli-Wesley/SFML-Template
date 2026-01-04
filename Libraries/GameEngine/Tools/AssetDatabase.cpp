@@ -80,7 +80,7 @@ const Animation &AssetDatabase::getAnimation(const std::string &path) {
     return getAnimation("EngineCore/Missing_Animation");
 }
 
-AssetDatabase::AssetDatabase() {
+AssetDatabase::AssetDatabase(){
     // load all assets given path, extensions, array to store to, and a label for outputting to console
     std::thread animation_thread([&] {
         loadAssets<Animation>(

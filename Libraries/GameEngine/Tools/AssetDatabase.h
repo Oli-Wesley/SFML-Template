@@ -33,13 +33,13 @@ public:
 	AssetDatabase(AssetDatabase const&) = delete;
 	void operator=(AssetDatabase const&) = delete;
 protected:
-	std::unordered_map<std::string, sf::Texture> textures;
-	std::unordered_map<std::string, sf::SoundBuffer> sounds;
-	std::unordered_map<std::string, sf::Font> fonts;
-	std::unordered_map<std::string, Animation> animations;
+	std::map<std::string, sf::Texture> textures;
+	std::map<std::string, sf::SoundBuffer> sounds;
+	std::map<std::string, sf::Font> fonts;
+	std::map<std::string, Animation> animations;
 	static AssetDatabase* instance;
 
-	static std::vector < std::string> getAllPathsInDirectory(const std::string &directory);
+	static std::vector<std::string> getAllPathsInDirectory(const std::string &directory);
 
 	static void print(const std::string &string);
 	// load assets in a single function rather than the 3 different ones I had previously, saves repeated code :D. 
@@ -47,7 +47,7 @@ protected:
 	void loadAssets(
 		const std::string& folder,
 		const std::vector<std::string>& extensions,
-		std::unordered_map<std::string, T>& array,
+		std::map<std::string, T>& array,
 		const std::string& label
 	) 
 	{
