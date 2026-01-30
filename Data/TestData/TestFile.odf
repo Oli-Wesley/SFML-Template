@@ -1,36 +1,60 @@
-[GAMEOBJECT]
+# all values (even ones in components) are optional 
+[GameObject]
 {
-    Position(10,10)
-    [COMPONENTS]
+    layer(std::string|"Default")
+    is_active(bool|true)
+    is_drawn(bool|true)
+    [Transform]
     {
-        [Animator]
+        position(sf::Vector2f|{0,0})
+        scale(sf::Vector2f|{2,2})
+        z_height({float|20})
+    }
+    [Components]
+    {
+        [Component(Animator)]
         {
-            Animations(Player/Idle, Player/Walk, Player/Jump)
+            Animations(std::vector<std::string>|Player/Idle, Player/Walk, Player/Jump)
         }
         [Script(MovementScript)]
         {
-            Speed(10.0)
-            JumpPower(5.0)
+            Speed(float|10.0)
+            JumpPower(float|5.0)
         }
         [Script(HealthManager)]
         {
-            Health(100.0)
-	        Resistance(30.0)
+            Health(float|100.0)
+	        Resistance(float|30.0)
         }
     }
-    [CHILDREN]
+    [Children]
     {
-        [GAMEOBJECT(Sword)]
+        [GameObject(Sword)]
         {
-            Position(1, 0)
-            [Animator]
+            layer(std::string|"Default")
+            is_active(bool|true)
+            is_drawn(bool|true)
+            [Transform]
             {
-                Animations(Idle, Walk)
+                position(sf::Vector2f|{0,0})
+                scale(sf::Vector2f|{2,2})
+                z_height({float|20})
             }
-            [Script(AttackScript)]
+            [Components]
             {
-                Speed(10.0)
-                JumpPower(5.0)
+                [Component(Animator)]
+                {
+                    animations(std::vector<std::string>|Player/Idle, Player/Walk, Player/Jump)
+                }
+                [Script(Attacker)]
+                {
+                    speed(float|10.0)
+                    damage(float|20.0)
+                }
+                [Script(DurabilityManager)]
+                {
+                    durability(float|100.0)
+                }
             }
         }
     }

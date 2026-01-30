@@ -1,17 +1,27 @@
 #include "Camera.h"
+
+#include <cmath>
+
 #include "../GameObject.h"
 #include "../Systems/GameSystem.h"
 #include <iostream>
 
 #include "../Tools/LayerManager.h"
 
+Camera::Camera() {
+	view = std::make_unique<sf::View>();
+	view->setSize(view_size.x, view_size.y);
+	render_tex.create(static_cast<unsigned int>(view_size.x), static_cast<unsigned int>(view_size.y));
+	setLayer("Default", true); // default render layer
+}
+
 Camera::Camera(const sf::Vector2i size)
 {
 	view = std::make_unique<sf::View>();
-	view->setSize(size.x, size.y);
-	screen_rect.width = size.x; // default screen_rect to same size as texture;
-	screen_rect.height = size.y;
-	render_tex.create(size.x, size.y);
+	view_size.x = size.x;
+	view_size.y = size.y;
+	view->setSize(view_size.x, view_size.y);
+	render_tex.create(view_size.x, view_size.y);
 	setLayer("Default", true); // default render layer
 }
 

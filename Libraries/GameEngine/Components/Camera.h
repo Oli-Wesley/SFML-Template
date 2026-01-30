@@ -10,6 +10,7 @@
 
 class Camera : public IComponent {
 public:
+	explicit Camera();
 	explicit Camera(sf::Vector2i size);
 	struct CameraOutput
 	{
@@ -45,11 +46,12 @@ public:
 	bool canSee(const GameObject *obj) const;
 
 protected:
-	sf::RenderTexture render_tex;
-	std::unique_ptr<sf::View> view;
-	sf::FloatRect screen_rect; // where to draw onto the window.
-	sf::Color background_col = sf::Color::Transparent;
+	sf::Vector2f view_size = {1920,1080};
+	sf::FloatRect screen_rect = {1,1,1,1}; // where to draw onto the window.
+	sf::Color background_col = {0,0,0,0};
 	float screen_z_height = 1.0f;
 
 	uint32_t viewMask = 0; // Layer bitmask
+	std::unique_ptr<sf::View> view;
+	sf::RenderTexture render_tex;
 };
